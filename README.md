@@ -2,7 +2,7 @@
 Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Nuget
-[![NuGet](https://img.shields.io/nuget/dt/Askmethat.XForms.Controls.svg)](https://www.nuget.org/packages/Askmethat.XForms.Controls)
+[![NuGet](https://img.shields.io/nuget/dt/Askmethat.Aspnet.JsonLocalize.svg)](https://www.nuget.org/packages/Askmethat.Aspnet.JsonLocalizer)
 
 #### Build
 
