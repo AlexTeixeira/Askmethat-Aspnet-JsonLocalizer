@@ -5,9 +5,11 @@
     <PackageId>Askmethat.Aspnet.JsonLocalizer</PackageId>
     <PackageVersion>$(Version)</PackageVersion>
     <Authors>TEIXEIRA Alexandre</Authors>
-    <Description>Hobbidea Model</Description>
+    <Description>Json Localizer library for .NetStandard and .NetCore Asp.net projects</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>First Release</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer</PackageProjectUrl>
     <Copyright>Copyright 2017 (c) Askmethat Corporation.</Copyright>
     <PackageTags>Json Localizer Globalization</PackageTags>
   </PropertyGroup>
