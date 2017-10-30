@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer.NetStandard\Askmethat.Aspnet.JsonLocalizer.csproj" />
+    <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj" />
     <ProjectReference Include="..\Askmethat.Aspnet.JsonLocalizer.TestSample\Askmethat.Aspnet.JsonLocalizer.TestSample.csproj" />
   </ItemGroup>
 

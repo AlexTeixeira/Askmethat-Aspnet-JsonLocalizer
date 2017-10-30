@@ -22,7 +22,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _memCache = memCache;
         }
 
-        public static string ResourcesRelativePath;
         public JsonStringLocalizerFactory(
                 IHostingEnvironment env,
                 IMemoryCache memCache,

@@ -4,12 +4,9 @@ configuration: Release
 platform: Any CPU
 pull_requests:
   do_not_increment_build_number: true
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+branches:
+  only:
+    - master
 before_build:
   - ps: nuget restore Askmethat.Aspnet.JsonLocalizer.sln
 init:
@@ -28,7 +25,7 @@ build:
   verbosity: minimal
 after_build:
   - ps: >-
-      nuget pack .\Askmethat.Aspnet.JsonLocalizer.NetStandard\ -version $env:APPVEYOR_BUILD_VERSION -IncludeReferencedProjects
+      dotnet pack \Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj -o .\ -c Release /p:Version=$env:APPVEYOR_BUILD_VERSION
 artifacts:
   - path: .\*.nupkg
     name: NuGet

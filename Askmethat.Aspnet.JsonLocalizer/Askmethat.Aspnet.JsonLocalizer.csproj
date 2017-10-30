@@ -12,6 +12,7 @@
     <PackageProjectUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer</PackageProjectUrl>
     <Copyright>Copyright 2017 (c) Askmethat Corporation.</Copyright>
     <PackageTags>Json Localizer Globalization</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
