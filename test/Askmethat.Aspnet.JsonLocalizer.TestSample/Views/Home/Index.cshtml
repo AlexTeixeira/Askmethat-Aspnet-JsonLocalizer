@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@using Askmethat.Aspnet.JsonLocalizer.TestSample
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+
+<h2>Askmethat.Aspnet.JsonLocalizer</h2>
+
+<p>
+    <span>@Localizer["Hello"] User</span>
+</p>
