@@ -24,9 +24,9 @@ build:
   verbosity: minimal
 after_build:
   - ps: >-
-      dotnet pack .\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj -c Release /p:Version=$env:APPVEYOR_BUILD_VERSION
+      dotnet pack .\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj -o .\ -c Release /p:Version=$env:APPVEYOR_BUILD_VERSION
 artifacts:
-  - path: .\*.nupkg
+  - path: .\Askmethat.Aspnet.JsonLocalizer\*.nupkg
     name: NuGet
 environment:
   nuget_key:
