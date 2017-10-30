@@ -6,7 +6,7 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Build
 
-[![Build status](https://ci.appveyor.com/api/projects/status/2bdb22tpe1brbcs3/branch/master?svg=true)](https://ci.appveyor.com/project/AlexTeixeira/askmethat-xforms-controls/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/gt8vg0e2f9gapr2d/branch/master?svg=true)](https://ci.appveyor.com/project/AlexTeixeira/askmethat-aspnet-jsonlocalizer/branch/master)
 
 # Project
 
