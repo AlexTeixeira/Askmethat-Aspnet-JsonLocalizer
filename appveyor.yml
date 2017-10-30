@@ -1,0 +1,48 @@
+version: 1.0.0.{build}-beta
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+pull_requests:
+  do_not_increment_build_number: true
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+  - ps: nuget restore Askmethat.Aspnet.JsonLocalizer.sln
+init:
+  # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
+  - ps: >-
+      if ($env:APPVEYOR_REPO_TAG -eq "true")
+      {
+        Update-AppveyorBuild -Version "$env:APPVEYOR_REPO_TAG_NAME"
+      }
+      else
+      {
+        Update-AppveyorBuild -Version "$env:version"
+      }
+build:
+  project: Askmethat.Aspnet.JsonLocalizer.sln
+  verbosity: minimal
+after_build:
+  - ps: >-
+      nuget pack .\Askmethat.Aspnet.JsonLocalizer.NetStandard\ -version $env:APPVEYOR_BUILD_VERSION -IncludeReferencedProjects
+artifacts:
+  - path: .\*.nupkg
+    name: NuGet
+environment:
+  nuget_key:
+    secure: DDi8FfYEKjULby1vJKBDELwBExLHnsmTl5C1YADPpQVaoQaEYgVlwRaQiOOiGu8E
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: DDi8FfYEKjULby1vJKBDELwBExLHnsmTl5C1YADPpQVaoQaEYgVlwRaQiOOiGu8E
+    on:
+      branch: master
+  - provider: NuGet
+    api_key:
+      secure: DDi8FfYEKjULby1vJKBDELwBExLHnsmTl5C1YADPpQVaoQaEYgVlwRaQiOOiGu8E
+    on:
+appveyor_repo_tag: true
