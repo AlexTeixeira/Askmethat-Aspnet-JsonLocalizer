@@ -1,4 +1,4 @@
-version: 1.0.0.{build}-beta
+version: 1.0.0-CI-{build}
 image: Visual Studio 2017
 configuration: Release
 pull_requests:
@@ -32,11 +32,6 @@ environment:
   nuget_key:
     secure: DDi8FfYEKjULby1vJKBDELwBExLHnsmTl5C1YADPpQVaoQaEYgVlwRaQiOOiGu8E
 deploy:
-  - provider: NuGet
-    api_key:
-      secure: DDi8FfYEKjULby1vJKBDELwBExLHnsmTl5C1YADPpQVaoQaEYgVlwRaQiOOiGu8E
-    on:
-      branch: master
   - provider: NuGet
     api_key:
       secure: DDi8FfYEKjULby1vJKBDELwBExLHnsmTl5C1YADPpQVaoQaEYgVlwRaQiOOiGu8E
