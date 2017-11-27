@@ -34,8 +34,8 @@ services.AddJsonLocalization();
 
 |Platform|Version|
 | -------------------  | :------------------: |
-|NetStandard|2.0.0+|
-|NetCore|2.0.0+|
+|NetStandard|1.1.3+|
+|NetCore|1.1.0+|
 
 # License
 
