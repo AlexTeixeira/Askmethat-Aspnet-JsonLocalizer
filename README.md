@@ -17,7 +17,7 @@ The library is compatible with NetStandard & NetCore
 
 A extension method is available for `IServiceCollection`.
 
-By default the path for the JSON file is : `$"{_env.WebRootPath}Resources/localization.json"`;
+By default the path for the JSON file is : `$"{_env.WebRootPath}/Resources/localization.json"`;
 
 You can customize the path. You should name your file : `localization.json`
 

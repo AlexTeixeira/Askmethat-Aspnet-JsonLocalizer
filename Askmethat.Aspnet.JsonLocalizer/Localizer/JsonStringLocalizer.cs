@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -29,6 +30,21 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _env = env;
             _memCache = memCache;
             _resourcesRelativePath = resourcesRelativePath;
+
+            InitJsonStringLocalizer();
+        }
+
+
+        public JsonStringLocalizer(IHostingEnvironment env, IMemoryCache memCache, IOptions<LocalizationOptions> localizationOptions)
+        {
+            _env = env;
+            _memCache = memCache;
+            _resourcesRelativePath = localizationOptions.Value.ResourcesPath ?? String.Empty;
+
+            InitJsonStringLocalizer();
+        }
+
+        private void InitJsonStringLocalizer(){
 
             string jsonPath = GetJsonRelativePath();
             //read all json file
@@ -55,7 +71,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// <returns>JSON relative path</returns>
         string GetJsonRelativePath()
         {
-            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{_resourcesRelativePath}/localization.json" : $"{_env.WebRootPath}Resources/localization.json";
+            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{_resourcesRelativePath}/localization.json" : $"{_env.ContentRootPath}/Resources/localization.json";
         }
 
         public LocalizedString this[string name]
