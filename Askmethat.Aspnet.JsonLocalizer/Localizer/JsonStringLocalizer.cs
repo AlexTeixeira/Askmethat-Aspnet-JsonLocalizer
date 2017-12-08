@@ -71,9 +71,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// <returns>JSON relative path</returns>
         string GetJsonRelativePath()
         {
-            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{_resourcesRelativePath}/localization.json" : $"{_env.ContentRootPath}/Resources/localization.json";
+            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{GetBuildPath()}/{_resourcesRelativePath}/localization.json" : $"{_env.ContentRootPath}/Resources/localization.json";
         }
 
+        string GetBuildPath(){
+             return AppContext.BaseDirectory;
+        }
         public LocalizedString this[string name]
         {
             get
