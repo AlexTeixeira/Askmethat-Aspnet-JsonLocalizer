@@ -11,15 +11,16 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 # Project
 
 This library allow user to use JSON files instead of RESX in Asp.net application.
+You can have several files in one folder. This allows you to better manage your translations according to your preferences.
 The library is compatible with NetStandard & NetCore
 
 # Sample
 
 A extension method is available for `IServiceCollection`.
 
-By default the path for the JSON file is : `$"{_env.WebRootPath}/Resources/localization.json"`;
+By default the code will look for all JSON file inside this directory : `$"{_env.WebRootPath}/Resources/"`;
 
-You can customize the path. You should name your file : `localization.json`
+You can customize the path. You are free to name your file, they just should have the JSON extension
 
 ``` cs
 //With path
