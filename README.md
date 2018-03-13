@@ -14,9 +14,11 @@ This library allow user to use JSON files instead of RESX in Asp.net application
 You can have several files in one folder. This allows you to better manage your translations according to your preferences.
 The library is compatible with NetStandard & NetCore
 
-# Sample
+# Configuration
 
 A extension method is available for `IServiceCollection`.
+
+## JSON Files
 
 By default the code will look for all JSON file inside this directory : `$"{_env.WebRootPath}/Resources/"`;
 
@@ -27,6 +29,15 @@ You can customize the path. You are free to name your file, they just should hav
 services.AddJsonLocalization(options => options.ResourcesPath = "mypath");
 //Wihtout path
 services.AddJsonLocalization();
+```
+
+## Memory Cache
+
+By default a memory cache of 30 minutes is set to avoid loading all files each needed time.
+
+You can customize this cache duration using a *TimeSpan* like that : 
+``` cs
+services.AddJsonLocalization(options => options.CacheDuration = TimeSpan.FromMinutes(15));
 ```
 
 # Informations
