@@ -13,6 +13,7 @@
     <Copyright>Copyright 2017 (c) Askmethat Corporation.</Copyright>
     <PackageTags>Json Localizer Globalization</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3' OR '$(TargetFramework)'=='netcoreapp1.1'">

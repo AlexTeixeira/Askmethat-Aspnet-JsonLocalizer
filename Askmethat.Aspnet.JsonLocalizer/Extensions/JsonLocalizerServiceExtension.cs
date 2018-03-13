@@ -39,7 +39,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
         public static IServiceCollection AddJsonLocalization(
             this IServiceCollection services,
-            Action<LocalizationOptions> setupAction)
+            Action<JsonLocalizationOptions> setupAction)
         {
             if (services == null)
             {
@@ -72,7 +72,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         /// <param name="setupAction">The <see cref="LocalizationOptions"/> option to change default localization mecanism</param>
         internal static void AddJsonLocalizationServices(
             IServiceCollection services,
-            Action<LocalizationOptions> setupAction)
+            Action<JsonLocalizationOptions> setupAction)
         {
             AddJsonLocalizationServices(services);
             services.Configure(setupAction);

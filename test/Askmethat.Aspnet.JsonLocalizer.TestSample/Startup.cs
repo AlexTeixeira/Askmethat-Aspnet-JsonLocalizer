@@ -31,20 +31,24 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             services.AddMvc().AddViewLocalization();
 
-            services.AddJsonLocalization(options => options.ResourcesPath = "json");
+            services.AddJsonLocalization(options =>
+            {
+                options.ResourcesPath = "json";
+                options.CacheDuration = TimeSpan.FromMinutes(15);
+            });
 
-            services.Configure<RequestLocalizationOptions>(options =>  
-            {  
-                var supportedCultures = new[]  
-                {  
-                        new CultureInfo("en-US"),  
-                        new CultureInfo("fr-FR")  
-                };  
-        
-                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");  
-                options.SupportedCultures = supportedCultures;  
-                options.SupportedUICultures = supportedCultures;  
-            });  
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                        new CultureInfo("en-US"),
+                        new CultureInfo("fr-FR")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
