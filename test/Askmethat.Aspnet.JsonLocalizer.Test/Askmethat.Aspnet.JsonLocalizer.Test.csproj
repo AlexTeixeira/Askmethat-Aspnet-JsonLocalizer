@@ -32,6 +32,15 @@
     <None Update="json\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="multiple\deep\localization.it.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="multiple\localization.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="multiple\localization.pt.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -25,7 +26,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         public JsonStringLocalizerFactory(
                 IHostingEnvironment env,
                 IMemoryCache memCache,
-                IOptions<LocalizationOptions> localizationOptions)
+                IOptions<JsonLocalizationOptions> localizationOptions)
         {
             if (localizationOptions == null)
             {

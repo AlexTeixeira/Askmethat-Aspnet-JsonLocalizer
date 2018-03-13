@@ -1,0 +1,14 @@
+[
+  {
+    "Key": "Name1",
+    "Values": {
+      "pt-PT": "o meu nome 1"
+    }
+  },
+  {
+    "Key": "Name2",
+    "Values": {
+      "pt-PT": "o meu nome 2"
+    }
+  }
+]
