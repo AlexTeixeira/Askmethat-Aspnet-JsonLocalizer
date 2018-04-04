@@ -1,16 +1,15 @@
-﻿using Askmethat.Aspnet.JsonLocalizer.Format;
+﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.Format;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Microsoft.Extensions.Options;
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -57,20 +56,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             // Look for cache key.
             if (!_memCache.TryGetValue(CACHE_KEY, out localization))
             {
-                //be sure that localization is always initialized
-                if (localization == null)
-                {
-                    localization = new List<JsonLocalizationFormat>();
-                }
 
-                //get all files ending by json extension
-                var myFiles = Directory.GetFiles(jsonPath, "*.json", SearchOption.AllDirectories);
-
-                foreach (string file in myFiles)
-                {
-                    localization.AddRange(JsonConvert.DeserializeObject<List<JsonLocalizationFormat>>(File.ReadAllText(file)));
-                }
-
+                ConstructLocalizationObject(jsonPath);
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
@@ -79,6 +66,63 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 // Save data in cache.
                 _memCache.Set(CACHE_KEY, localization, cacheEntryOptions);
             }
+        }
+
+        /// <summary>
+        /// Construct localization object from json files
+        /// </summary>
+        /// <param name="jsonPath">Json file path</param>
+        private void ConstructLocalizationObject(string jsonPath)
+        {
+            //be sure that localization is always initialized
+            if (localization == null)
+            {
+                localization = new List<JsonLocalizationFormat>();
+            }
+
+            //get all files ending by json extension
+            var myFiles = Directory.GetFiles(jsonPath, "*.json", SearchOption.AllDirectories);
+
+            foreach (string file in myFiles)
+            {
+                localization.AddRange(JsonConvert.DeserializeObject<List<JsonLocalizationFormat>>(File.ReadAllText(file)));
+            }
+
+
+            MergeValues();
+
+        }
+
+        private void MergeValues()
+        {
+            var groups = localization.GroupBy(g => g.Key);
+
+            var tempLocalization = new List<JsonLocalizationFormat>();
+
+            foreach (var group in groups)
+            {
+                try
+                {
+                    var jsonValues = group
+                        .Select(s => s.Values)
+                        .SelectMany(dict => dict)
+                        .ToDictionary(t => t.Key, t => t.Value);
+
+                    tempLocalization.Add(new JsonLocalizationFormat()
+                    {
+                        Key = group.Key,
+                        Values = jsonValues
+                    });
+                }
+                catch (Exception e)
+                {
+                    throw new ArgumentException($"{group.Key} could not contains two translation for the same language code", e);
+                }
+
+            }
+
+            //merged values
+            localization = tempLocalization;
         }
 
         /// <summary>
