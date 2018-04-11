@@ -12,5 +12,11 @@
       "en-US": "My Base Name 2",
       "fr-FR": "Mon Nom de Base 2"
     }
+  },
+  {
+    "Key": "NoFrench",
+    "Values": {
+      "en-US": "No more french"
+    }
   }
 ]

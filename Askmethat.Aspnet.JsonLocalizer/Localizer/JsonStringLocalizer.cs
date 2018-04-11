@@ -20,18 +20,20 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal class JsonStringLocalizer : IStringLocalizer
     {
         List<JsonLocalizationFormat> localization = new List<JsonLocalizationFormat>();
-        private readonly IHostingEnvironment _env;
-        private readonly IMemoryCache _memCache;
-        private readonly string _resourcesRelativePath;
-        private readonly TimeSpan _memCacheDuration;
-        private const string CACHE_KEY = "LocalizationBlob";
+        readonly IHostingEnvironment _env;
+        readonly IMemoryCache _memCache;
+        readonly IOptions<JsonLocalizationOptions> _localizationOptions;
+        readonly string _resourcesRelativePath;
+        readonly TimeSpan _memCacheDuration;
+        const string CACHE_KEY = "LocalizationBlob";
 
-        public JsonStringLocalizer(IHostingEnvironment env, IMemoryCache memCache, string resourcesRelativePath)
+        public JsonStringLocalizer(IHostingEnvironment env, IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions)
         {
             _env = env;
             _memCache = memCache;
             _resourcesRelativePath = resourcesRelativePath;
-            _memCacheDuration = TimeSpan.FromMinutes(30);
+            _localizationOptions = localizationOptions;
+            _memCacheDuration = _localizationOptions.Value.CacheDuration;
             InitJsonStringLocalizer();
         }
 
@@ -40,13 +42,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             _env = env;
             _memCache = memCache;
-            _resourcesRelativePath = localizationOptions.Value.ResourcesPath ?? String.Empty;
-            _memCacheDuration = localizationOptions.Value.CacheDuration;
+            _localizationOptions = localizationOptions;
+            _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
+            _memCacheDuration = _localizationOptions.Value.CacheDuration;
 
             InitJsonStringLocalizer();
         }
 
-        private void InitJsonStringLocalizer()
+        void InitJsonStringLocalizer()
         {
 
             string jsonPath = GetJsonRelativePath();
@@ -72,7 +75,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Construct localization object from json files
         /// </summary>
         /// <param name="jsonPath">Json file path</param>
-        private void ConstructLocalizationObject(string jsonPath)
+        void ConstructLocalizationObject(string jsonPath)
         {
             //be sure that localization is always initialized
             if (localization == null)
@@ -93,7 +96,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         }
 
-        private void MergeValues()
+        /// <summary>
+        /// Merge value to avoid duplicate culture in list
+        /// </summary>
+        void MergeValues()
         {
             var groups = localization.GroupBy(g => g.Key);
 
@@ -143,7 +149,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             get
             {
                 var value = GetString(name);
-                return new LocalizedString(name, value ?? name, resourceNotFound: value == null);
+                return new LocalizedString(name, value ?? GetString(name, _localizationOptions.Value.DefaultCulture), resourceNotFound: value == null);
             }
         }
 
@@ -152,7 +158,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             get
             {
                 var format = GetString(name);
-                var value = string.Format(format ?? name, arguments);
+                var value = string.Format(format ?? GetString(name, _localizationOptions.Value.DefaultCulture), arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
@@ -164,7 +170,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath);
+            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
         }
 
         /// <summary>
@@ -172,17 +178,39 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// </summary>
         /// <param name="name">Value name</param>
         /// <returns>Value if thing</returns>
-        private string GetString(string name)
+        string GetString(string name)
         {
-
-            var query = localization.Where(l => l.Values.Keys.Any(lv => lv == CultureInfo.CurrentCulture.Name));
-            var value = query.FirstOrDefault(l => l.Key == name);
-
-            if (value == null)
-                return string.Empty;
-
-            return value.Values[CultureInfo.CurrentCulture.Name];
+            return GetValueString(name, CultureInfo.CurrentCulture);
         }
 
+        /// <summary>
+        /// Get the string from JSON cached file
+        /// </summary>
+        /// <param name="name">Value name</param>
+        /// <returns>Value if thing</returns>
+        string GetString(string name, CultureInfo cultureInfo)
+        {
+            return GetValueString(name, cultureInfo);
+        }
+
+        string GetValueString(string name, CultureInfo cultureInfo)
+        {
+            var query = localization.Where(l => l.Values.Keys.Any(lv => lv == cultureInfo.Name));
+            var value = query.FirstOrDefault(l => l.Key == name);
+
+
+            if (value == null && cultureInfo.Name == _localizationOptions.Value.DefaultCulture.Name)
+            {
+                string msg = $"Any value was found for the Key : {name}";
+                Console.WriteLine(msg);
+                throw new ArgumentException(msg);
+            }
+            else if (value == null)
+            {
+                return null;
+            }
+
+            return value.Values[cultureInfo.Name];
+        }
     }
 }

@@ -4,8 +4,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -14,9 +12,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     /// </summary>
     internal class JsonStringLocalizerFactory : IStringLocalizerFactory
     {
-        private readonly IHostingEnvironment _env;
-        private readonly IMemoryCache _memCache;
-        private readonly string _resourcesRelativePath;
+        readonly IHostingEnvironment _env;
+        readonly IMemoryCache _memCache;
+        readonly IOptions<JsonLocalizationOptions> _localizationOptions;
+
+        readonly string _resourcesRelativePath;
         public JsonStringLocalizerFactory(IHostingEnvironment env, IMemoryCache memCache)
         {
             _env = env;
@@ -34,19 +34,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
             _env = env;
             _memCache = memCache;
-
-            _resourcesRelativePath = localizationOptions.Value.ResourcesPath ?? String.Empty;
+            _localizationOptions = localizationOptions;
+            _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
         }
 
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath);
+            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
-            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath);
+            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
         }
     }
 }
