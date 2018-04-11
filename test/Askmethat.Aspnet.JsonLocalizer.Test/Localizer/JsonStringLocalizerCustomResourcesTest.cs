@@ -6,10 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
@@ -49,7 +46,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Name1()
         {
             // Arrange
-           // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
+            // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
             CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
@@ -61,6 +58,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void Should_Read_NotFound()
         {
             // Arrange

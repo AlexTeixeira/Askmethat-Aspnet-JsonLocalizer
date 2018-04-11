@@ -1,17 +1,12 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.TestSample;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
@@ -65,6 +60,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void Should_Read_Base_NotFound()
         {
             // Arrange
@@ -73,8 +69,20 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             var localizer = factory.Create(typeof(IStringLocalizer));
 
             var result = localizer.GetString("Nop");
+        }
 
-            Assert.AreEqual(String.Empty, result);
+        [TestMethod]
+        public void Should_Read_Base_UseDefault()
+        {
+            // Arrange
+            var sp = services.BuildServiceProvider();
+            var factory = sp.GetService<IStringLocalizerFactory>();
+            var localizer = factory.Create(typeof(IStringLocalizer));
+            CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+
+            var result = localizer.GetString("NoFrench");
+
+            Assert.AreEqual("No more french", result);
         }
 
         [TestMethod]
