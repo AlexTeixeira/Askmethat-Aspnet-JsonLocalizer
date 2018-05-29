@@ -16,29 +16,24 @@ The library is compatible with NetStandard & NetCore
 
 # Configuration
 
-A extension method is available for `IServiceCollection`.
+An extension method is available for `IServiceCollection`.
 
-## JSON Files
 
-By default the code will look for all JSON file inside this directory : `$"{_env.WebRootPath}/Resources/"`;
+## Options 
 
-You can customize the path. You are free to name your file, they just should have the JSON extension
+A set of options is available, and you can set it when you add JsonLocalization to the your Services.
 
 ``` cs
-//With path
-services.AddJsonLocalization(options => options.ResourcesPath = "mypath");
-//Wihtout path
-services.AddJsonLocalization();
+services.AddJsonLocalization(options => new JsonLocalizationOptions(){
+        CacheDuration = TimeSpan.FromMinutes(15),
+        ResourcesPath = "mypath"
+    });
 ```
 
-## Memory Cache
+### Current Options
 
-By default a memory cache of 30 minutes is set to avoid loading all files each needed time.
-
-You can customize this cache duration using a *TimeSpan* like that : 
-``` cs
-services.AddJsonLocalization(options => options.CacheDuration = TimeSpan.FromMinutes(15));
-```
+- **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files.
+- **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request
 
 # Informations
 
