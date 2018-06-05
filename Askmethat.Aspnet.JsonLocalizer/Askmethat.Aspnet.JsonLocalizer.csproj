@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;netstandard1.4;netstandard1.5;netstandard1.6;netstandard2.0;netcoreapp1.1;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard1.4;netstandard1.5;netstandard1.6;netstandard2.0;netcoreapp1.1;netcoreapp2.0;</TargetFrameworks>
     <PackageId>Askmethat.Aspnet.JsonLocalizer</PackageId>
     <PackageVersion>$(Version)</PackageVersion>
     <Authors>TEIXEIRA Alexandre</Authors>
@@ -54,11 +54,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
+  <!--<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="2.1.0-preview2-final" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>

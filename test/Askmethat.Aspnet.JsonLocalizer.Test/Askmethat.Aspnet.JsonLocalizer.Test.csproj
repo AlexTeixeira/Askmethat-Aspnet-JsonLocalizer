@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
 
@@ -25,10 +25,10 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
+  <!--<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.0-beta2" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version=" 2.1.0-preview2-final" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj" />
@@ -36,6 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="encoding\localization.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="json\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

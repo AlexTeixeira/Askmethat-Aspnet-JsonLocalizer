@@ -24,16 +24,18 @@ An extension method is available for `IServiceCollection`.
 A set of options is available, and you can set it when you add JsonLocalization to the your Services.
 
 ``` cs
-services.AddJsonLocalization(options => new JsonLocalizationOptions(){
-        CacheDuration = TimeSpan.FromMinutes(15),
-        ResourcesPath = "mypath"
+services.AddJsonLocalization(options => {
+        options.CacheDuration = TimeSpan.FromMinutes(15);
+        options.ResourcesPath = "mypath";
+        options.FileEncoding = Encoding.GetEncoding("ISO-8859-1");
     });
 ```
 
 ### Current Options
 
 - **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files.
-- **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request
+- **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request,
+- **FileEncoding** : _default value : UTF8_. Specify the file encoding.
 
 # Informations
 

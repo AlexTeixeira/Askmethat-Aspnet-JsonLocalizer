@@ -1,0 +1,17 @@
+[
+  {
+    "Key": "Name1",
+    "Values": {
+      "en-US": "My Name 1",
+      "fr-FR": "Mon Nom 1",
+      "pt-PT": "Eu so joão"
+    }
+  },
+  {
+    "Key": "Name2",
+    "Values": {
+      "en-US": "My Name 2",
+      "fr-FR": "Mon Nom 2"
+    }
+  }
+]
