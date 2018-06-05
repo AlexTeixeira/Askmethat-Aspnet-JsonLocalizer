@@ -88,7 +88,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             foreach (string file in myFiles)
             {
-                localization.AddRange(JsonConvert.DeserializeObject<List<JsonLocalizationFormat>>(File.ReadAllText(file)));
+                localization.AddRange(JsonConvert.DeserializeObject<List<JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding)));
             }
 
 
