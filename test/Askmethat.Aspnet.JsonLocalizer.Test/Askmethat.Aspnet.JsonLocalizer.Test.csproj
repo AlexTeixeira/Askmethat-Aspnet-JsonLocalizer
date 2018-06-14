@@ -39,6 +39,9 @@
     <None Update="encoding\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="fallback\localization.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="json\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
