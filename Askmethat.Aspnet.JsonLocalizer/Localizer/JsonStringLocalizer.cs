@@ -112,7 +112,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     var jsonValues = group
                         .Select(s => s.Values)
                         .SelectMany(dict => dict)
-                        .ToDictionary(t => t.Key, t => t.Value);
+                        .ToDictionary(t => t.Key, t => t.Value, StringComparer.OrdinalIgnoreCase);
 
                     tempLocalization.Add(new JsonLocalizationFormat()
                     {
@@ -195,7 +195,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         string GetValueString(string name, CultureInfo cultureInfo)
         {
-            var query = localization.Where(l => l.Values.Keys.Any(lv => lv == cultureInfo.Name));
+            var query = localization.Where(l => l.Values.ContainsKey(cultureInfo.Name));
             var value = query.FirstOrDefault(l => l.Key == name);
 
 

@@ -100,5 +100,29 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             Assert.AreEqual("My Base Name 1", result);
         }
+
+        [TestMethod]
+        public void Should_Read_CaseInsensitive_CultureName()
+        {
+            var sp = services.BuildServiceProvider();
+            var factory = sp.GetService<IStringLocalizerFactory>();
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
+            CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+            var result = localizer.GetString("CaseInsensitiveCultureName");
+            Assert.AreEqual("French", result);
+        }
+
+        [TestMethod]
+        public void Should_Read_CaseInsensitive_UseDefault()
+        {
+            var sp = services.BuildServiceProvider();
+            var factory = sp.GetService<IStringLocalizerFactory>();
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
+            CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+            var result = localizer.GetString("CaseInsensitiveCultureName");
+            Assert.AreEqual("US English", result);
+        }
     }
 }
