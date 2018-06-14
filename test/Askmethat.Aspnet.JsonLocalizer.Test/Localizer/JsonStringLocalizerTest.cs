@@ -7,6 +7,8 @@ using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
+using System.Linq;
+
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
@@ -123,6 +125,23 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             CultureInfo.CurrentCulture = new CultureInfo("de-DE");
             var result = localizer.GetString("CaseInsensitiveCultureName");
             Assert.AreEqual("US English", result);
+        }
+        
+        [TestMethod]
+        public void Should_GetAllStrings_ByCaseInsensitiveCultureName()
+        {
+            var sp = services.BuildServiceProvider();
+            var factory = sp.GetService<IStringLocalizerFactory>();
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
+            CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+            var expected = new[] {
+                "Mon Nom de Base 1",
+                "Mon Nom de Base 2",
+                "French"
+            };
+            var results = localizer.GetAllStrings().Select(x => x.Value).ToArray();
+            CollectionAssert.AreEquivalent(expected, results);
         }
     }
 }
