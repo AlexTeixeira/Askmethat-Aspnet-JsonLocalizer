@@ -78,7 +78,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 localization.AddRange(JsonConvert.DeserializeObject<List<JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding)));
             }
-
             MergeValues();
         }
 
@@ -87,7 +86,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// </summary>
         void MergeValues()
         {
-            var groups = localization.GroupBy(g => g.Key);
+                     var groups = localization.GroupBy(g => g.Key);
 
             var tempLocalization = new List<JsonLocalizationFormat>();
 
@@ -98,7 +97,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     var jsonValues = group
                         .Select(s => s.Values)
                         .SelectMany(dict => dict)
-                        .ToDictionary(t => t.Key, t => t.Value);
+                        .ToDictionary(t => t.Key, t => t.Value, StringComparer.OrdinalIgnoreCase);
 
                     tempLocalization.Add(new JsonLocalizationFormat()
                     {
