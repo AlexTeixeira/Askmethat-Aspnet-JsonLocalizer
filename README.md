@@ -48,7 +48,7 @@ services.AddJsonLocalization(options => {
 
 # Contributors
 
-@lethek : PRs : [#14](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+[@lethek](https://github.com/lethek) : PRs : [#14](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
 
 # License
 
