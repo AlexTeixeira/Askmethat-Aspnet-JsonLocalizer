@@ -27,6 +27,80 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
         }
 
+        /// <summary>
+        /// Construct localization object from json files
+        /// </summary>
+        /// <param name="jsonPath">Json file path</param>
+        void ConstructLocalizationObject(string jsonPath)
+        {
+            //be sure that localization is always initialized
+            if (localization == null)
+            {
+                localization = new List<JsonLocalizationFormat>();
+            }
+
+            //get all files ending by json extension
+            var myFiles = Directory.GetFiles(jsonPath, "*.json", SearchOption.AllDirectories);
+
+            foreach (string file in myFiles)
+            {
+                localization.AddRange(JsonConvert.DeserializeObject<List<JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding)));
+            }
+
+
+            MergeValues();
+
+        }
+
+        /// <summary>
+        /// Merge value to avoid duplicate culture in list
+        /// </summary>
+        void MergeValues()
+        {
+            var groups = localization.GroupBy(g => g.Key);
+
+            var tempLocalization = new List<JsonLocalizationFormat>();
+
+            foreach (var group in groups)
+            {
+                try
+                {
+                    var jsonValues = group
+                        .Select(s => s.Values)
+                        .SelectMany(dict => dict)
+                        .ToDictionary(t => t.Key, t => t.Value, StringComparer.OrdinalIgnoreCase);
+
+                    tempLocalization.Add(new JsonLocalizationFormat()
+                    {
+                        Key = group.Key,
+                        Values = jsonValues
+                    });
+                }
+                catch (Exception e)
+                {
+                    throw new ArgumentException($"{group.Key} could not contains two translation for the same language code", e);
+                }
+
+            }
+
+            //merged values
+            localization = tempLocalization;
+        }
+
+        /// <summary>
+        /// Get path of json
+        /// </summary>
+        /// <returns>JSON relative path</returns>
+        string GetJsonRelativePath()
+        {
+            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{GetBuildPath()}/{_resourcesRelativePath}/" : $"{_env.ContentRootPath}/Resources/";
+        }
+
+        string GetBuildPath()
+        {
+            return AppContext.BaseDirectory;
+        }
+
         public LocalizedString this[string name]
         {
             get
@@ -48,7 +122,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return localization.Where(l => l.Values.Keys.Any(lv => lv == CultureInfo.CurrentCulture.Name)).Select(l => new LocalizedString(l.Key, l.Values[CultureInfo.CurrentCulture.Name], true));
+            return localization.Where(l => l.Values.ContainsKey(CultureInfo.CurrentCulture.Name)).Select(l => new LocalizedString(l.Key, l.Values[CultureInfo.CurrentCulture.Name], true));
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -78,7 +152,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         string GetValueString(string name, CultureInfo cultureInfo)
         {
-            var query = localization.Where(l => l.Values.Keys.Any(lv => lv == cultureInfo.Name));
+            var query = localization.Where(l => l.Values.ContainsKey(cultureInfo.Name));
             var value = query.FirstOrDefault(l => l.Key == name);
 
 
