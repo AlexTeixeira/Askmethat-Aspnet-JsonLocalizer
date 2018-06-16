@@ -59,7 +59,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                         }
                     )
                 : localization
-                    .Where(l => l.Values.Keys.Any(lv => lv == CultureInfo.CurrentCulture.Name))
+                    .Where(l => l.Values.ContainsKey(CultureInfo.CurrentCulture.Name))
                     .Select(l => new LocalizedString(l.Key, l.Values[CultureInfo.CurrentCulture.Name], false));
         }
 
