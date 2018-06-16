@@ -1,0 +1,17 @@
+[
+  {
+    "Key": "Color",
+    "Values": {
+      "": "Color (invariant)",
+      "en": "Color (neutral)",
+      "en-AU": "Colour (specific)",
+      "fr": "Couleur (neutral)"
+    }
+  },
+  {
+    "Key": "Empty",
+    "Values": {
+      "en": "Empty"
+    }
+  }
+]
