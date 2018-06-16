@@ -18,5 +18,12 @@
     "Values": {
       "en-US": "No more french"
     }
+  },
+  {
+    "Key": "CaseInsensitiveCultureName",
+    "Values": {
+      "en-us": "US English",
+      "FR-FR": "French"
+    }
   }
 ]
