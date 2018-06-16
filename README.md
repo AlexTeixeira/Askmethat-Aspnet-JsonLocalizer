@@ -37,7 +37,7 @@ services.AddJsonLocalization(options => {
 - **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request,
 - **FileEncoding** : _default value : UTF8_. Specify the file encoding.
 
-# Informations
+# Information
 
 **Platform Support**
 
@@ -45,6 +45,10 @@ services.AddJsonLocalization(options => {
 | -------------------  | :------------------: |
 |NetStandard|1.1.3+|
 |NetCore|1.1.0+|
+
+# Contributors
+
+@lethek : PRs : #14(https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), #20(https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
 
 # License
 
