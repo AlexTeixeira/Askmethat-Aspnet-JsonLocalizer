@@ -46,8 +46,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Name1()
         {
             // Arrange
-            // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
-            CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
@@ -58,7 +57,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Should_Read_NotFound()
         {
             // Arrange
@@ -68,15 +66,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             var result = localizer.GetString("Nop");
 
-            Assert.AreEqual(String.Empty, result);
+            Assert.AreEqual("Nop", result);
         }
 
         [TestMethod]
         public void Should_Read_Name1_US()
         {
             // Arrange
-            //Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            CultureInfo.CurrentUICulture = new CultureInfo("en-US");
 
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();

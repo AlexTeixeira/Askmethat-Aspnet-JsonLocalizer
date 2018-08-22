@@ -86,7 +86,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// </summary>
         void MergeValues()
         {
-                     var groups = localization.GroupBy(g => g.Key);
+            var groups = localization.GroupBy(g => g.Key);
 
             var tempLocalization = new List<JsonLocalizationFormat>();
 

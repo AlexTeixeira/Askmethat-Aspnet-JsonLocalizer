@@ -13,12 +13,9 @@ using System.Linq;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
-    /// <summary>
-    /// Json String localizer
-    /// Used to read JSON File and add it to cache ( default 30 minutes )
-    /// </summary>
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
     {
+
         public JsonStringLocalizer(IHostingEnvironment env, IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions) : base(env, memCache, resourcesRelativePath, localizationOptions)
         {
         }
@@ -32,7 +29,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             get
             {
                 var value = GetString(name);
-                return new LocalizedString(name, value ?? GetString(name, _localizationOptions.Value.DefaultCulture), resourceNotFound: value == null);
+                return new LocalizedString(name, value ?? name, resourceNotFound: value == null);
             }
         }
 
@@ -41,14 +38,25 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             get
             {
                 var format = GetString(name);
-                var value = string.Format(format ?? GetString(name, _localizationOptions.Value.DefaultCulture), arguments);
+                var value = String.Format(format ?? name, arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return localization.Where(l => l.Values.ContainsKey(CultureInfo.CurrentCulture.Name)).Select(l => new LocalizedString(l.Key, l.Values[CultureInfo.CurrentCulture.Name], true));
+            return includeParentCultures
+                ? localization
+                    .Select(
+                        l =>
+                        {
+                            var value = GetString(l.Key);
+                            return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
+                        }
+                    )
+                : localization
+                    .Where(l => l.Values.ContainsKey(CultureInfo.CurrentUICulture.Name))
+                    .Select(l => new LocalizedString(l.Key, l.Values[CultureInfo.CurrentUICulture.Name], false));
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -56,44 +64,45 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
         }
 
-        /// <summary>
-        /// Get the string from JSON cached file
-        /// </summary>
-        /// <param name="name">Value name</param>
-        /// <returns>Value if thing</returns>
-        string GetString(string name)
+        string GetString(string name, CultureInfo cultureInfo = null, bool shouldTryDefaultCulture = true)
         {
-            return GetValueString(name, CultureInfo.CurrentCulture);
-        }
-
-        /// <summary>
-        /// Get the string from JSON cached file
-        /// </summary>
-        /// <param name="name">Value name</param>
-        /// <returns>Value if thing</returns>
-        string GetString(string name, CultureInfo cultureInfo)
-        {
-            return GetValueString(name, cultureInfo);
-        }
-
-        string GetValueString(string name, CultureInfo cultureInfo)
-        {
-            var query = localization.Where(l => l.Values.ContainsKey(cultureInfo.Name));
-            var value = query.FirstOrDefault(l => l.Key == name);
-
-
-            if (value == null && cultureInfo.Name == _localizationOptions.Value.DefaultCulture.Name)
+            if (name == null)
             {
-                string msg = $"Any value was found for the Key : {name}";
-                Console.WriteLine(msg);
-                throw new ArgumentException(msg);
-            }
-            else if (value == null)
-            {
-                return null;
+                throw new ArgumentNullException(nameof(name));
             }
 
-            return value.Values[cultureInfo.Name];
+            if (cultureInfo == null)
+            {
+                cultureInfo = CultureInfo.CurrentUICulture;
+            }
+
+            var valuesSection = localization
+                .Where(l => l.Values.ContainsKey(cultureInfo.Name))
+                .FirstOrDefault(l => l.Key == name);
+
+            if (valuesSection != null)
+            {
+                return valuesSection.Values[cultureInfo.Name];
+            }
+
+            if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
+            {
+                Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
+                //Try the parent culture
+                return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
+            }
+
+            if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
+            {
+                Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
+                //Try the default culture
+                return GetString(name, _localizationOptions.Value.DefaultCulture, false);
+            }
+
+            //advert user that current name string does not 
+            //contains any translation
+            Console.Error.WriteLine($"{name} does not contains any translation");
+            return null;
         }
     }
 }

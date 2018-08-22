@@ -40,7 +40,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void TestReadName1_ISOEncoding()
         {
-            CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
@@ -53,7 +53,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void TestReadName1_ISOEncoding_SpecialChar()
         {
-            CultureInfo.CurrentCulture = new CultureInfo("pt-PT");
+            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
