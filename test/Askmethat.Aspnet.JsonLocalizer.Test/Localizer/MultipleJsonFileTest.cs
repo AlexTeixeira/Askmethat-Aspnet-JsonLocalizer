@@ -37,7 +37,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Name1()
         {
             // Arrange
-            CultureInfo.CurrentCulture = new CultureInfo("fr-FR");
+            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
@@ -54,7 +54,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Name1_PT()
         {
             // Arrange
-            CultureInfo.CurrentCulture = new CultureInfo("pt-PT");
+            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
 
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
@@ -70,7 +70,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Name2_IT()
         {
             // Arrange
-            CultureInfo.CurrentCulture = new CultureInfo("it-IT");
+            CultureInfo.CurrentUICulture = new CultureInfo("it-IT");
 
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();

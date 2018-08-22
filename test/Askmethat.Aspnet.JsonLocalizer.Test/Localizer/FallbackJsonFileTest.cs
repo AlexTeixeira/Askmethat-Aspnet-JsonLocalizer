@@ -173,6 +173,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             => SetCurrentCulture(new CultureInfo(cultureName));
 
         private void SetCurrentCulture(CultureInfo cultureInfo)
-            => CultureInfo.CurrentCulture = cultureInfo;
+            => CultureInfo.CurrentUICulture = cultureInfo;
     }
 }
