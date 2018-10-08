@@ -10,6 +10,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         public TimeSpan CacheDuration { get; set; } = TimeSpan.FromMinutes(30);
         public CultureInfo DefaultCulture { get; set; } = new CultureInfo("en-US");
 
+        public bool IsAbsolutePath { get; set; } = false;
+
         public Encoding FileEncoding { get; set; } = Encoding.UTF8;
     }
 }
