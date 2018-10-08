@@ -122,12 +122,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// <returns>JSON relative path</returns>
         string GetJsonRelativePath()
         {
-            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{GetBuildPath()}/{_resourcesRelativePath}/" : $"{_env.ContentRootPath}/Resources/";
+            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{GetPath()}{_resourcesRelativePath}/" : $"{_env.ContentRootPath}/Resources/";
         }
 
-        string GetBuildPath()
+        string GetPath()
         {
-            return AppContext.BaseDirectory;
+            var path = string.Empty;
+            if(!this._localizationOptions.Value.IsAbsolutePath){
+                path = $"{AppContext.BaseDirectory}/"; 
+            }
+            return path;
         }
 
     }
