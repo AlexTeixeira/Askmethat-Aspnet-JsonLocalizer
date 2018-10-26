@@ -41,12 +41,31 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return  (IStringLocalizer)new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
+            var path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath + "/") : GetJsonRelativePath(_resourcesRelativePath);
+            return  (IStringLocalizer)new JsonStringLocalizer(_memCache, path, _localizationOptions);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
-            return (IStringLocalizer)new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
+            return (IStringLocalizer)new JsonStringLocalizer(_memCache, GetJsonRelativePath($"{location}/"), _localizationOptions, baseName);
+        }
+
+        /// <summary>
+        /// Get path of json
+        /// </summary>
+        /// <returns>JSON relative path</returns>
+        string GetJsonRelativePath(string path)
+        {
+            return !string.IsNullOrEmpty(path) ? $"{GetPath()}{path}" : $"{_env.ContentRootPath}/Resources/";
+        }
+
+        string GetPath()
+        {
+            var path = string.Empty;
+            if(!this._localizationOptions.Value.IsAbsolutePath){
+                path = $"{AppContext.BaseDirectory}/"; 
+            }
+            return path;
         }
     }
 }

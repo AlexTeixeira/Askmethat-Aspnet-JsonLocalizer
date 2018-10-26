@@ -16,11 +16,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
     {
 
-        public JsonStringLocalizer(IHostingEnvironment env, IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions) : base(env, memCache, resourcesRelativePath, localizationOptions)
+        public JsonStringLocalizer(IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions, string baseName = "") : base(memCache, resourcesRelativePath, localizationOptions, baseName)
         {
         }
 
-        public JsonStringLocalizer(IHostingEnvironment env, IMemoryCache memCache, IOptions<JsonLocalizationOptions> localizationOptions) : base(env, memCache, localizationOptions)
+        public JsonStringLocalizer(IMemoryCache memCache, IOptions<JsonLocalizationOptions> localizationOptions) : base(memCache, localizationOptions)
         {
         }
 
@@ -61,7 +61,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new JsonStringLocalizer(_env, _memCache, _resourcesRelativePath, _localizationOptions);
+            return new JsonStringLocalizer(_memCache, _resourcesRelativePath, _localizationOptions);
         }
 
         string GetString(string name, CultureInfo cultureInfo = null, bool shouldTryDefaultCulture = true)
