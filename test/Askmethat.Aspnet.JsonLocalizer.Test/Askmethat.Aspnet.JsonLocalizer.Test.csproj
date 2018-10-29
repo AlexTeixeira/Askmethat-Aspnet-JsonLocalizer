@@ -63,6 +63,12 @@
     <None Update="Resources\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="path\localization.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+     <None Update="factory\*.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

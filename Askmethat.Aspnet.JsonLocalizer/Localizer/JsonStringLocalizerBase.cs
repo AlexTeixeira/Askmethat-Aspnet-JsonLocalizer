@@ -14,26 +14,26 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal class JsonStringLocalizerBase
     {
         protected List<JsonLocalizationFormat> localization = new List<JsonLocalizationFormat>();
-        protected readonly IHostingEnvironment _env;
         protected readonly IMemoryCache _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         protected readonly string _resourcesRelativePath;
+        protected readonly string _baseName;
+
         protected readonly TimeSpan _memCacheDuration;
         protected const string CACHE_KEY = "LocalizationBlob";
 
-        public JsonStringLocalizerBase(IHostingEnvironment env, IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions)
+        public JsonStringLocalizerBase(IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
-            _env = env;
             _memCache = memCache;
             _resourcesRelativePath = resourcesRelativePath;
+            _baseName = baseName;
             _localizationOptions = localizationOptions;
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
             InitJsonStringLocalizer();
         }
 
-        public JsonStringLocalizerBase(IHostingEnvironment env, IMemoryCache memCache, IOptions<JsonLocalizationOptions> localizationOptions)
+        public JsonStringLocalizerBase(IMemoryCache memCache, IOptions<JsonLocalizationOptions> localizationOptions)
         {
-            _env = env;
             _memCache = memCache;
             _localizationOptions = localizationOptions;
             _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
@@ -43,12 +43,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         void InitJsonStringLocalizer()
         {
-            string jsonPath = GetJsonRelativePath();
-
             // Look for cache key.
             if (!_memCache.TryGetValue(CACHE_KEY, out localization))
             {
-                ConstructLocalizationObject(jsonPath);
+                ConstructLocalizationObject(_resourcesRelativePath);
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
@@ -72,7 +70,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
 
             //get all files ending by json extension
-            var myFiles = Directory.GetFiles(jsonPath, "*.json", SearchOption.AllDirectories);
+            var myFiles = Directory.GetFiles(jsonPath, $"{_baseName}*.json", SearchOption.AllDirectories);
 
             foreach (string file in myFiles)
             {
@@ -115,24 +113,5 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             //merged values
             localization = tempLocalization;
         }
-
-        /// <summary>
-        /// Get path of json
-        /// </summary>
-        /// <returns>JSON relative path</returns>
-        string GetJsonRelativePath()
-        {
-            return !string.IsNullOrEmpty(_resourcesRelativePath) ? $"{GetPath()}{_resourcesRelativePath}/" : $"{_env.ContentRootPath}/Resources/";
-        }
-
-        string GetPath()
-        {
-            var path = string.Empty;
-            if(!this._localizationOptions.Value.IsAbsolutePath){
-                path = $"{AppContext.BaseDirectory}/"; 
-            }
-            return path;
-        }
-
     }
 }
