@@ -15,7 +15,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 {
     public class Startup
     {
-#if NETCOREAPP2_0
+#if NETCOREAPP2
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,6 +34,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
             services.AddJsonLocalization(options =>
             {
                 options.ResourcesPath = "json";
+                options.UseBaseName = true;
                 options.CacheDuration = TimeSpan.FromMinutes(15);
             });
 
@@ -59,7 +60,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
+           //app.
             app.UseRequestLocalization();
             app.UseMvc(routes =>
             {

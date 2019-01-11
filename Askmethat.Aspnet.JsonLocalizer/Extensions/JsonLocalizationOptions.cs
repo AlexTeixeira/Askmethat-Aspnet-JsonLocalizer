@@ -13,5 +13,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         public bool IsAbsolutePath { get; set; } = false;
 
         public Encoding FileEncoding { get; set; } = Encoding.UTF8;
+
+        public bool UseBaseName { get; set; } = false;
     }
 }
