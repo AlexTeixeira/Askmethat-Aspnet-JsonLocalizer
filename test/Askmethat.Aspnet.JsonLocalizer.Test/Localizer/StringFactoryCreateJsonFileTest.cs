@@ -25,6 +25,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                                 serv.AddJsonLocalization(opt =>
                                 {
                                     opt.ResourcesPath = $"/factory";
+                                    opt.UseBaseName = true;
                                 });
                                 this.services = serv;
                             })

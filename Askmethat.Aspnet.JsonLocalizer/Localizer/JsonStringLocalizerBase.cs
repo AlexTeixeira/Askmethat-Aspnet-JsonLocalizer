@@ -6,6 +6,9 @@ using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
+#if NETSTANDARD1_6
+using Microsoft.Extensions.DependencyModel;
+#endif
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -26,7 +29,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             _memCache = memCache;
             _resourcesRelativePath = resourcesRelativePath;
-            _baseName = baseName;
+            _baseName = TransformBaseNameToPath(baseName);
             _localizationOptions = localizationOptions;
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
             InitJsonStringLocalizer();
@@ -69,8 +72,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 localization = new List<JsonLocalizationFormat>();
             }
 
+            string pattern = string.IsNullOrWhiteSpace(_baseName) ? "*.json" : $"{_baseName}/*.json";
             //get all files ending by json extension
-            var myFiles = Directory.GetFiles(jsonPath, $"{_baseName}*.json", SearchOption.AllDirectories);
+            var myFiles = Directory.GetFiles(jsonPath, pattern, SearchOption.AllDirectories);
 
             foreach (string file in myFiles)
             {
@@ -78,6 +82,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
             MergeValues();
         }
+
+        string TransformBaseNameToPath(string baseName)
+        {
+            string friendlyName = string.Empty;
+#if NETSTANDARD2_0
+            friendlyName = AppDomain.CurrentDomain.FriendlyName;
+#else
+            friendlyName = DependencyContext.Default.CompileLibraries.ToString();
+#endif
+
+            return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
+        }
+
 
         /// <summary>
         /// Merge value to avoid duplicate culture in list

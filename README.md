@@ -36,6 +36,8 @@ services.AddJsonLocalization(options => {
 - **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files.
 - **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request,
 - **FileEncoding** : _default value : UTF8_. Specify the file encoding.
+- **IsAbsolutePath** : *_default value : false*. Look for an absolute path instead of project path.
+- **UseBaseName** : *_default value : false*. Use base name location for Views and consors like default Resx localization in **ResourcePathFolder**.
 
 # Information
 
@@ -43,8 +45,8 @@ services.AddJsonLocalization(options => {
 
 |Platform|Version|
 | -------------------  | :------------------: |
-|NetStandard|1.1.3+|
-|NetCore|1.1.0+|
+|NetStandard|1.1.6+|
+|NetCore|1.1.1+|
 
 # Contributors
 

@@ -47,7 +47,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(string baseName, string location)
         {
-            return (IStringLocalizer)new JsonStringLocalizer(_memCache, GetJsonRelativePath($"{location}/"), _localizationOptions, baseName);
+            baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
+            return (IStringLocalizer)new JsonStringLocalizer(_memCache, GetJsonRelativePath($"{_resourcesRelativePath}/"), _localizationOptions, baseName);
         }
 
         /// <summary>
