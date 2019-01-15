@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;</TargetFrameworks>
     <Version>1.1.6</Version>
   </PropertyGroup>
   <ItemGroup>
@@ -28,10 +28,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="[2.1,2.2)" />
 
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj" />
