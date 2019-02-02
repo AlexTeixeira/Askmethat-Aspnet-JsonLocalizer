@@ -76,13 +76,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 cultureInfo = CultureInfo.CurrentUICulture;
             }
 
-            var valuesSection = localization
-                .Where(l => l.Values.ContainsKey(cultureInfo.Name))
-                .FirstOrDefault(l => l.Key == name);
+            var keyObject = localization.Find(f => f.Key == name);
 
-            if (valuesSection != null)
+            if (keyObject != null && keyObject.Values.ContainsKey(cultureInfo.Name))
             {
-                return valuesSection.Values[cultureInfo.Name];
+                return keyObject.Values[cultureInfo.Name];
             }
 
             if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))

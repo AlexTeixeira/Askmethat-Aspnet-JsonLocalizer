@@ -7,6 +7,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {
     public class JsonLocalizationOptions : LocalizationOptions
     {
+        public new string ResourcesPath { get; set; } = "Resources";
         public TimeSpan CacheDuration { get; set; } = TimeSpan.FromMinutes(30);
         public CultureInfo DefaultCulture { get; set; } = new CultureInfo("en-US");
 
