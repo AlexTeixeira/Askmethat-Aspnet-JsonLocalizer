@@ -19,6 +19,38 @@ The library is compatible with NetStandard & NetCore
 An extension method is available for `IServiceCollection`.
 
 
+# Breaking Changes
+
+For performance purpose, JSON structure was changes since 2.0.0 from List to Dictionnary.
+So if you move to 1.1.7 or less, please donc forget to change your JSON files.
+
+## 1.1.7-
+
+``` json
+[
+  {
+    "Key": "Name3",
+    "Values": {
+      "en-US": "My Name 3",
+      "fr-FR": "Mon Nom 3"
+    }
+  }
+]
+```
+
+## 2.0.0+
+
+``` json
+{
+  "Name3": {
+    "Values": {
+      "en-US": "My Name 3",
+      "fr-FR": "Mon Nom 3"
+    }
+  }
+}
+```
+
 ## Options 
 
 A set of options is available, and you can set it when you add JsonLocalization to the your Services.
@@ -43,9 +75,18 @@ services.AddJsonLocalization(options => {
 
 **Platform Support**
 
+## 1.1.7
+
 |Platform|Version|
 | -------------------  | :------------------: |
 |NetStandard|1.1.6+|
+|NetCore|1.1.1+|
+
+## 2.0.0+
+
+|Platform|Version|
+| -------------------  | :------------------: |
+|NetStandard|2.0+|
 |NetCore|1.1.1+|
 
 # Performances
@@ -53,6 +94,8 @@ services.AddJsonLocalization(options => {
 After talking with others Devs about my package, they ask my about performance.
 
 So I added a benchmark project and here the last results with some modification, that will be available with 1.1.7
+
+## 1.1.7
 
 ``` ini
 
@@ -68,6 +111,24 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 |-------------- |---------:|----------:|----------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
 | JsonLocalizer | 255.1 ns | 0.7950 ns | 0.7048 ns | 253.3 ns | 256.4 ns |  2.18 |      0.0648 |           - |           - |               136 B |
 |     Localizer | 117.2 ns | 0.2544 ns | 0.2255 ns | 116.8 ns | 117.5 ns |  1.00 |           - |           - |           - |                   - |
+
+
+## 2.0.0+
+
+``` ini
+
+BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
+Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
+.NET Core SDK=2.2.100
+  [Host]     : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT  [AttachedDebugger]
+  DefaultJob : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT
+
+
+```
+|        Method |      Mean |     Error |    StdDev |       Min |       Max | Ratio | RatioSD | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
+|-------------- |----------:|----------:|----------:|----------:|----------:|------:|--------:|------------:|------------:|------------:|--------------------:|
+| JsonLocalizer |  81.74 ns | 2.1128 ns | 2.8205 ns |  78.84 ns |  90.64 ns |  0.70 |    0.03 |      0.0228 |           - |           - |                48 B |
+|     Localizer | 118.42 ns | 0.7853 ns | 0.7345 ns | 117.32 ns | 119.70 ns |  1.00 |    0.00 |           - |           - |           - |                   - |
 
 
 # Contributors

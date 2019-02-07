@@ -16,11 +16,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
     {
 
-        public JsonStringLocalizer(IMemoryCache memCache, string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions, string baseName = "") : base(memCache, resourcesRelativePath, localizationOptions, baseName)
+        public JsonStringLocalizer(string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions, string baseName = "") : base(resourcesRelativePath, localizationOptions, baseName)
         {
         }
 
-        public JsonStringLocalizer(IMemoryCache memCache, IOptions<JsonLocalizationOptions> localizationOptions) : base(memCache, localizationOptions)
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions) : base(localizationOptions)
         {
         }
 
@@ -55,13 +55,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                         }
                     )
                 : localization
-                    .Where(l => l.Values.ContainsKey(CultureInfo.CurrentUICulture.Name))
-                    .Select(l => new LocalizedString(l.Key, l.Values[CultureInfo.CurrentUICulture.Name], false));
+                    .Where(l => l.Value.Values.ContainsKey(CultureInfo.CurrentUICulture.LCID))
+                    .Select(l => new LocalizedString(l.Key, l.Value.Values[CultureInfo.CurrentUICulture.LCID], false));
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new JsonStringLocalizer(_memCache, _resourcesRelativePath, _localizationOptions);
+            return new JsonStringLocalizer(_resourcesRelativePath, _localizationOptions);
         }
 
         string GetString(string name, CultureInfo cultureInfo = null, bool shouldTryDefaultCulture = true)
@@ -76,11 +76,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 cultureInfo = CultureInfo.CurrentUICulture;
             }
 
-            var keyObject = localization.Find(f => f.Key == name);
+            LocalizationFormat keyObject = null;
 
-            if (keyObject != null && keyObject.Values.ContainsKey(cultureInfo.Name))
+            if (localization.TryGetValue(name, out keyObject))
             {
-                return keyObject.Values[cultureInfo.Name];
+                var localizedValue = string.Empty;
+                if (keyObject.Values.TryGetValue(cultureInfo.LCID, out localizedValue))
+                {
+                    return localizedValue;
+                }
             }
 
             if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))

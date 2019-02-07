@@ -21,10 +21,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     {
         IHostingEnvironment env = new HostingEnvironment();
         private const int N = 10000;
-        MemoryCache mem = new MemoryCache(new MemoryCacheOptions
-        {
-        });
-
         JsonStringLocalizerFactory _jsonFactory;
         IStringLocalizer _jsonLocalizer;
 
@@ -34,7 +30,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
                                       .AddLocalization(opts => { opts.ResourcesPath = "Resources"; })
                                      .BuildServiceProvider();
 
-            _jsonFactory = new JsonStringLocalizerFactory(env, mem);
+            _jsonFactory = new JsonStringLocalizerFactory(env);
             _jsonLocalizer = _jsonFactory.Create("", "");
         }
 
@@ -50,7 +46,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     {
         static void Main(string[] args)
         {
+            //IHostingEnvironment env = new HostingEnvironment();
+            //var t = new JsonStringLocalizerFactory(env);
+            //var x = t.Create("", "");
+            //x.GetString("BaseName1");
+            //x.GetString("BaseName2");
             var summary = BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
+
+
         }
     }
 }

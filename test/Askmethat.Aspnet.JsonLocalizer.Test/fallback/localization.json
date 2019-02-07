@@ -1,6 +1,5 @@
-[
-  {
-    "Key": "Color",
+{
+  "Color": {
     "Values": {
       "": "Color (invariant)",
       "en": "Color (neutral)",
@@ -8,10 +7,9 @@
       "fr": "Couleur (neutral)"
     }
   },
-  {
-    "Key": "Empty",
+  "Empty": {
     "Values": {
       "en": "Empty"
     }
   }
-]
+}

@@ -34,7 +34,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [ExpectedException(typeof(ArgumentException))]
         public void MergeBadJson_Test()
         {
-
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
