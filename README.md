@@ -80,14 +80,14 @@ services.AddJsonLocalization(options => {
 |Platform|Version|
 | -------------------  | :------------------: |
 |NetStandard|1.1.6+|
-|NetCore|1.1.1+|
+|NetCore|2.0.0+|
 
 ## 2.0.0+
 
 |Platform|Version|
 | -------------------  | :------------------: |
 |NetStandard|2.0+|
-|NetCore|1.1.1+|
+|NetCore|2.0.0+|
 
 # Performances
 
