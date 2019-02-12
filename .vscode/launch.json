@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/test/Askmethat.Aspnet.JsonLocalizer.TestSample/bin/Debug/netcoreapp1.1/Askmethat.Aspnet.JsonLocalizer.TestSample.dll",
+            "program": "${workspaceFolder}/test/Askmethat.Aspnet.JsonLocalizer.TestSample/bin/Debug/netcoreapp2.0/Askmethat.Aspnet.JsonLocalizer.TestSample.dll",
             "args": [],
             "cwd": "${workspaceFolder}/test/Askmethat.Aspnet.JsonLocalizer.TestSample",
             "stopAtEntry": false,

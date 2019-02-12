@@ -1,9 +1,8 @@
-﻿[
-  {
-    "Key": "Hello",
+﻿{
+  "Hello": {
     "Values": {
       "en-US": "Hello",
       "fr-FR": "Bonjour"
     }
-  } 
-]
+  }
+}

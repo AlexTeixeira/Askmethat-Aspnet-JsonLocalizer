@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocalizer", "Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj", "{0FB2924B-389A-40C3-81D9-8DC74A971E20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocalizer", "Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj", "{0FB2924B-389A-40C3-81D9-8DC74A971E20}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocalizer.Test", "test\Askmethat.Aspnet.JsonLocalizer.Test\Askmethat.Aspnet.JsonLocalizer.Test.csproj", "{592F2830-9D3D-4573-80B2-9AF9F7D4C7BD}"
 EndProject

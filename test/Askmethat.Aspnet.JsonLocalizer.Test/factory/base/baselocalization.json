@@ -1,9 +1,8 @@
-﻿[
-  {
-    "Key": "Name4",
+﻿{
+  "Name4": {
     "Values": {
       "en-US": "My Name 4",
       "fr-FR": "Mon Nom 4"
     }
   }
-]
+}

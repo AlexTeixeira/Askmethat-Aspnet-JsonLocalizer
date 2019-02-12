@@ -8,7 +8,7 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 
 
 ```
-|        Method |     Mean |     Error |    StdDev |      Min |      Max | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|-------------- |---------:|----------:|----------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
-| JsonLocalizer | 255.1 ns | 0.7950 ns | 0.7048 ns | 253.3 ns | 256.4 ns |  2.18 |      0.0648 |           - |           - |               136 B |
-|     Localizer | 117.2 ns | 0.2544 ns | 0.2255 ns | 116.8 ns | 117.5 ns |  1.00 |           - |           - |           - |                   - |
+|        Method |      Mean |     Error |    StdDev |       Min |       Max | Ratio | RatioSD | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
+|-------------- |----------:|----------:|----------:|----------:|----------:|------:|--------:|------------:|------------:|------------:|--------------------:|
+| JsonLocalizer |  81.74 ns | 2.1128 ns | 2.8205 ns |  78.84 ns |  90.64 ns |  0.70 |    0.03 |      0.0228 |           - |           - |                48 B |
+|     Localizer | 118.42 ns | 0.7853 ns | 0.7345 ns | 117.32 ns | 119.70 ns |  1.00 |    0.00 |           - |           - |           - |                   - |

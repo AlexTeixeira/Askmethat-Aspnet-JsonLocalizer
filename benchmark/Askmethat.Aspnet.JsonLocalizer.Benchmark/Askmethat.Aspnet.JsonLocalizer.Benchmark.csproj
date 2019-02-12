@@ -10,9 +10,6 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="Resources\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -29,5 +26,8 @@
     <Compile Update="Resources\SharedResources.Designer.cs">
       <DependentUpon>SharedResources.resx</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj" />
   </ItemGroup>
 </Project>

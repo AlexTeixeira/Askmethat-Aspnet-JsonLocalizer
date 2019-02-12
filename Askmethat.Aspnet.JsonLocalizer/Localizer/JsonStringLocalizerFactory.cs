@@ -13,22 +13,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     public class JsonStringLocalizerFactory : IStringLocalizerFactory
     {
         readonly IHostingEnvironment _env;
-        readonly IMemoryCache _memCache;
         readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
         readonly string _resourcesRelativePath;
 
-        public JsonStringLocalizerFactory(IHostingEnvironment env, IMemoryCache memCache)
+        public JsonStringLocalizerFactory(IHostingEnvironment env)
         {
             _env = env;
-            _memCache = memCache;
             _localizationOptions = Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions { });
             _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
         }
 
         public JsonStringLocalizerFactory(
                 IHostingEnvironment env,
-                IMemoryCache memCache,
                 IOptions<JsonLocalizationOptions> localizationOptions)
         {
             if (localizationOptions == null)
@@ -36,7 +33,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 throw new ArgumentNullException(nameof(localizationOptions));
             }
             _env = env;
-            _memCache = memCache;
             _localizationOptions = localizationOptions;
             _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
         }
@@ -45,13 +41,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         public IStringLocalizer Create(Type resourceSource)
         {
             var path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath + "/") : GetJsonRelativePath(_resourcesRelativePath);
-            return (IStringLocalizer)new JsonStringLocalizer(_memCache, path, _localizationOptions);
+            return (IStringLocalizer)new JsonStringLocalizer(path, _localizationOptions);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return (IStringLocalizer)new JsonStringLocalizer(_memCache, GetJsonRelativePath($"{_resourcesRelativePath}/"), _localizationOptions, baseName);
+            return (IStringLocalizer)new JsonStringLocalizer(GetJsonRelativePath($"{_resourcesRelativePath}/"), _localizationOptions, baseName);
         }
 
         /// <summary>

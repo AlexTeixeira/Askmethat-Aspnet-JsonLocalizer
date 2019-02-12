@@ -1,14 +1,12 @@
-[
-  {
-    "Key": "Name1",
+{
+  "Name1": {
     "Values": {
       "it-IT": "il mio nome 1"
     }
   },
-  {
-    "Key": "Name2",
+  "Name2": {
     "Values": {
       "it-IT": "il mio nome 2"
     }
   }
-]
+}
