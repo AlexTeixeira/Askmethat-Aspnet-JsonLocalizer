@@ -71,6 +71,18 @@ services.AddJsonLocalization(options => {
 - **IsAbsolutePath** : *_default value : false*. Look for an absolute path instead of project path.
 - **UseBaseName** : *_default value : false*. Use base name location for Views and consors like default Resx localization in **ResourcePathFolder**.
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
+- **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
+
+#Pluralization
+
+In version 2.0.0, Pluralization was introduced to be able to manage a singular (left) and plural (rigth) version for the same Key. *PluralSeparator* is used as separator between the two string.
+
+For example : User|Users for key Users
+
+To use plural string you only need to set last parameter as boolean in GetString methods 
+with IStringLocalizer and IViewLocalizer:
+
+**localizer.GetString("Users", true)**;
 
 # Information
 

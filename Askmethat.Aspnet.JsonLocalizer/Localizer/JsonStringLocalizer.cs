@@ -38,11 +38,29 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             get
             {
                 var format = GetString(name);
-                var value = String.Format(format ?? name, arguments);
+                var value = GetPluralLocalization(name, format, arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
 
+        private string GetPluralLocalization(string name, string format, object[] arguments)
+        {
+            var last = arguments.LastOrDefault();
+            string value = string.Empty;
+            if (last != null && last is bool)
+            {
+                bool isPlural = (bool)last;
+                value = GetString(name);
+                int index = (isPlural ? 1 : 0);
+                value = value.Split(_localizationOptions.Value.PluralSeparator)[index];
+            }
+            else
+            {
+                value = String.Format(format ?? name, arguments);
+            }
+
+            return value;
+        }
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             return includeParentCultures
