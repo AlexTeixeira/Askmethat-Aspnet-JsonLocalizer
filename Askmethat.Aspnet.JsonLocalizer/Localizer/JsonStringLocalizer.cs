@@ -63,18 +63,25 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         }
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return includeParentCultures
-                ? localization
+            return includeParentCultures ? localization
                     .Select(
                         l =>
                         {
                             var value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    )
-                : localization
-                    .Where(l => l.Value.Values.ContainsKey(CultureInfo.CurrentUICulture.LCID))
-                    .Select(l => new LocalizedString(l.Key, l.Value.Values[CultureInfo.CurrentUICulture.LCID], false));
+                    ) : 
+                    localization
+                    .Where(w => !w.Value.IsParent)
+                    .Select(
+                        l =>
+                        {
+                            var value = GetString(l.Key);
+                            return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
+                        }
+                    ) 
+                    ;
+                
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -94,30 +101,26 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 cultureInfo = CultureInfo.CurrentUICulture;
             }
 
-            LocalizationFormat keyObject = null;
+            LocalizatedFormat localizedValue = null;
 
-            if (localization.TryGetValue(name, out keyObject))
+            if (localization.TryGetValue(name, out localizedValue))
             {
-                var localizedValue = string.Empty;
-                if (keyObject.Values.TryGetValue(cultureInfo.LCID, out localizedValue))
-                {
-                    return localizedValue;
-                }
+                return localizedValue.Value; 
             }
 
-            if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
-            {
-                Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
-                //Try the parent culture
-                return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
-            }
+            // if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
+            // {
+            //     Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
+            //     //Try the parent culture
+            //     return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
+            // }
 
-            if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
-            {
-                Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
-                //Try the default culture
-                return GetString(name, _localizationOptions.Value.DefaultCulture, false);
-            }
+            // if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
+            // {
+            //     Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
+            //     //Try the default culture
+            //     return GetString(name, _localizationOptions.Value.DefaultCulture, false);
+            // }
 
             //advert user that current name string does not 
             //contains any translation

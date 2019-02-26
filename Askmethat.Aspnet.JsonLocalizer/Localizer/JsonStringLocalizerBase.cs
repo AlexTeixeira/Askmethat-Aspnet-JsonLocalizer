@@ -14,7 +14,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizerBase
     {
-        protected Dictionary<string, LocalizationFormat> localization;
+        protected Dictionary<string, LocalizatedFormat> localization;
         protected readonly IMemoryCache _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         protected readonly string _resourcesRelativePath;
@@ -44,10 +44,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         void InitJsonStringLocalizer()
         {
+            var currentCulture = CultureInfo.CurrentUICulture;
             //Look for cache key.
-            if (!_memCache.TryGetValue(CACHE_KEY, out localization))
+            if (!_memCache.TryGetValue($"{CACHE_KEY}_{currentCulture.ThreeLetterISOLanguageName}", out localization))
             {
-                ConstructLocalizationObject(_resourcesRelativePath);
+                ConstructLocalizationObject(_resourcesRelativePath, currentCulture);
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
@@ -62,12 +63,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Construct localization object from json files
         /// </summary>
         /// <param name="jsonPath">Json file path</param>
-        void ConstructLocalizationObject(string jsonPath)
+        void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
         {
             //be sure that localization is always initialized
             if (localization == null)
             {
-                localization = new Dictionary<string, LocalizationFormat>();
+                localization = new Dictionary<string, LocalizatedFormat>();
             }
 
             string pattern = string.IsNullOrWhiteSpace(_baseName) ? "*.json" : $"{_baseName}/*.json";
@@ -77,23 +78,50 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             foreach (string file in myFiles)
             {
                 var tempLocalization = JsonConvert.DeserializeObject<Dictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
-
                 foreach (var temp in tempLocalization)
                 {
-
-                    if (localization.ContainsKey(temp.Key))
+                    var localizedValue = GetLocalizedValue(currentCulture, temp);
+                    if (!string.IsNullOrEmpty(localizedValue.Value))
                     {
-                        localization[temp.Key].Values = localization[temp.Key].Values.Concat(temp.Value.Values.ToDictionary(s => new CultureInfo(s.Key).LCID, s => s.Value))
-                                                        .ToDictionary(s => s.Key, s => s.Value);
-                    }
-                    else
-                    {
-                        var currentLocalization = new LocalizationFormat();
-                        currentLocalization.Values = temp.Value.Values.ToDictionary(s => new CultureInfo(s.Key).LCID, s => s.Value);
-                        localization.Add(temp.Key, currentLocalization);
+                        if (!localization.ContainsKey(temp.Key))
+                        {
+                            localization.Add(temp.Key, localizedValue);
+                        }
+                        else if (localization[temp.Key].IsParent)
+                        {
+                            localization[temp.Key] = localizedValue;
+                        }
                     }
                 }
             }
+        }
+
+        private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
+        {
+            bool isParent = false;
+            var value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+            if (string.IsNullOrEmpty(value))
+            {
+                isParent = true;
+                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+                if (string.IsNullOrEmpty(value))
+                {
+                    value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
+                    if (string.IsNullOrEmpty(value) && _localizationOptions.Value.DefaultCulture != null)
+                    {
+                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+                        if (string.IsNullOrEmpty(value))
+                        {
+                            value = null;
+                        }
+                    }
+                }
+            }
+            return new LocalizatedFormat()
+            {
+                IsParent = isParent,
+                Value = value
+            };
         }
 
         string TransformBaseNameToPath(string baseName)

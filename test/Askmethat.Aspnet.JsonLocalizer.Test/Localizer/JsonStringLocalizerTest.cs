@@ -54,7 +54,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
 
-
             var result = localizer.GetString("BaseName1");
 
             Assert.AreEqual("Mon Nom de Base 1", result);
@@ -78,10 +77,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Base_UseDefault()
         {
             // Arrange
+            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
             var result = localizer.GetString("NoFrench");
 
@@ -121,9 +120,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create(typeof(IStringLocalizer));
 
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
             var result = localizer.GetString("CaseInsensitiveCultureName");
             Assert.AreEqual("French", result);
         }
@@ -133,9 +133,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create(typeof(IStringLocalizer));
 
             CultureInfo.CurrentUICulture = new CultureInfo("de-DE");
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
             var result = localizer.GetString("CaseInsensitiveCultureName");
             Assert.AreEqual("US English", result);
         }
@@ -173,9 +174,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create(typeof(IStringLocalizer));
 
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
             var expected = new[] {
                 "Mon Nom de Base 1",
                 "Mon Nom de Base 2",

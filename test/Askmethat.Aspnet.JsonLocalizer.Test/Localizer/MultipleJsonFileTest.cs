@@ -60,7 +60,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
 
-
             var result = localizer.GetString("Name1");
 
             Assert.AreEqual("o meu nome 1", result);
