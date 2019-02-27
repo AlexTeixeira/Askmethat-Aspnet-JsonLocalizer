@@ -1,19 +1,17 @@
-﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using System.Globalization;
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Askmethat.Aspnet.JsonLocalizer.TestSample;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
     [TestClass]
-    public class MultipleJsonFileTest
+    public class CustomLocalizerJsonFileTest
     {
         IServiceCollection services;
         TestServer server;
@@ -24,62 +22,44 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             var builder = new WebHostBuilder()
                             .ConfigureServices(serv =>
                             {
-                                serv.AddJsonLocalization(options => options.ResourcesPath = "multiple");
+                                serv.AddJsonLocalization(options =>
+                                {
+                                    options.DefaultCulture = new CultureInfo("en-US");
+                                    options.PluralSeparator = '#';
+                                });
                                 this.services = serv;
                             })
                             .UseStartup<Startup>();
 
             server = new TestServer(builder);
-
         }
 
         [TestMethod]
-        public void Should_Read_Name1()
+        public void Should_Be_Singular_Users_Custom()
         {
             // Arrange
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
 
+            var result = localizer.GetString("CustomPluralUser", false);
 
-            var result = localizer.GetString("Name1");
-
-            Assert.AreEqual("Mon Nom 1", result);
-        }
-
-
-        [TestMethod]
-        public void Should_Read_Name1_PT()
-        {
-            // Arrange
-            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
-
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create(typeof(IStringLocalizer));
-
-            var result = localizer.GetString("Name1");
-
-            Assert.AreEqual("o meu nome 1", result);
+            Assert.AreEqual("Utilisateur", result);
         }
 
         [TestMethod]
-        public void Should_Read_Name2_IT()
+        public void Should_Be_Plural_Users_Custom()
         {
             // Arrange
-            CultureInfo.CurrentUICulture = new CultureInfo("it-IT");
-
+            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
             var sp = services.BuildServiceProvider();
             var factory = sp.GetService<IStringLocalizerFactory>();
             var localizer = factory.Create(typeof(IStringLocalizer));
 
+            var result = localizer.GetString("CustomPluralUser", true);
 
-            var result = localizer.GetString("Name2");
-
-            Assert.AreEqual("il mio nome 2", result);
+            Assert.AreEqual("Utilisateurs", result);
         }
-
     }
 }

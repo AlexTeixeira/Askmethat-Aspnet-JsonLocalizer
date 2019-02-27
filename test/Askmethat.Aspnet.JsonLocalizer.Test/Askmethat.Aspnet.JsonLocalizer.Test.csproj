@@ -46,12 +46,6 @@
     <None Update="json\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="merge\localization.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="merge\localization.pt.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="multiple\deep\localization.it.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

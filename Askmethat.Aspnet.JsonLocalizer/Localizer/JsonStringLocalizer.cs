@@ -38,25 +38,50 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             get
             {
                 var format = GetString(name);
-                var value = String.Format(format ?? name, arguments);
+                var value = GetPluralLocalization(name, format, arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
 
+        private string GetPluralLocalization(string name, string format, object[] arguments)
+        {
+            var last = arguments.LastOrDefault();
+            string value = string.Empty;
+            if (last != null && last is bool)
+            {
+                bool isPlural = (bool)last;
+                value = GetString(name);
+                int index = (isPlural ? 1 : 0);
+                value = value.Split(_localizationOptions.Value.PluralSeparator)[index];
+            }
+            else
+            {
+                value = String.Format(format ?? name, arguments);
+            }
+
+            return value;
+        }
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return includeParentCultures
-                ? localization
+            return includeParentCultures ? localization
                     .Select(
                         l =>
                         {
                             var value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    )
-                : localization
-                    .Where(l => l.Value.Values.ContainsKey(CultureInfo.CurrentUICulture.LCID))
-                    .Select(l => new LocalizedString(l.Key, l.Value.Values[CultureInfo.CurrentUICulture.LCID], false));
+                    ) : 
+                    localization
+                    .Where(w => !w.Value.IsParent)
+                    .Select(
+                        l =>
+                        {
+                            var value = GetString(l.Key);
+                            return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
+                        }
+                    ) 
+                    ;
+                
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -76,30 +101,26 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 cultureInfo = CultureInfo.CurrentUICulture;
             }
 
-            LocalizationFormat keyObject = null;
+            LocalizatedFormat localizedValue = null;
 
-            if (localization.TryGetValue(name, out keyObject))
+            if (localization.TryGetValue(name, out localizedValue))
             {
-                var localizedValue = string.Empty;
-                if (keyObject.Values.TryGetValue(cultureInfo.LCID, out localizedValue))
-                {
-                    return localizedValue;
-                }
+                return localizedValue.Value; 
             }
 
-            if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
-            {
-                Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
-                //Try the parent culture
-                return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
-            }
+            // if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
+            // {
+            //     Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
+            //     //Try the parent culture
+            //     return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
+            // }
 
-            if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
-            {
-                Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
-                //Try the default culture
-                return GetString(name, _localizationOptions.Value.DefaultCulture, false);
-            }
+            // if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
+            // {
+            //     Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
+            //     //Try the default culture
+            //     return GetString(name, _localizationOptions.Value.DefaultCulture, false);
+            // }
 
             //advert user that current name string does not 
             //contains any translation
