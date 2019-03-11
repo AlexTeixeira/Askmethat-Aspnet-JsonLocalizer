@@ -11,18 +11,18 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 # Project
 
 This library allow user to use JSON files instead of RESX in Asp.net application.
-You can have several files in one folder. This allows you to better manage your translations according to your preferences.
+The code try to be most compliante with Microsoft guidelines.
 The library is compatible with NetStandard & NetCore
 
 # Configuration
 
 An extension method is available for `IServiceCollection`.
-
+You can have a look to this method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
 
 # Breaking Changes
 
 For performance purpose, JSON structure was changes since 2.0.0 from List to Dictionnary.
-So if you move to 1.1.7 or less, please donc forget to change your JSON files.
+Here the detail for version before 1.1.7 and version after 2.0.0
 
 ## 1.1.7-
 
@@ -53,7 +53,8 @@ So if you move to 1.1.7 or less, please donc forget to change your JSON files.
 
 ## Options 
 
-A set of options is available, and you can set it when you add JsonLocalization to the your Services.
+A set of options is available.
+You can define them like this : 
 
 ``` cs
 services.AddJsonLocalization(options => {
@@ -75,12 +76,16 @@ services.AddJsonLocalization(options => {
 
 #Pluralization
 
-In version 2.0.0, Pluralization was introduced to be able to manage a singular (left) and plural (rigth) version for the same Key. *PluralSeparator* is used as separator between the two string.
+In version 2.0.0, Pluralization was introduced.
+You are now able to manage a singular (left) and plural (rigth) version for the same Key. 
+*PluralSeparator* is used as separator between the two strings.
 
 For example : User|Users for key Users
 
-To use plural string you only need to set last parameter as boolean in GetString methods 
-with IStringLocalizer and IViewLocalizer:
+To use plural string, use paramters from [IStringLocalizer](https://github.com/aspnet/AspNetCore/blob/def36fab1e45ef7f169dfe7b59604d0002df3b7c/src/Mvc/Mvc.Localization/src/LocalizedHtmlString.cs), if last parameters is a boolean, pluralization will be activated.
+
+
+Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringLocalizer :
 
 **localizer.GetString("Users", true)**;
 
