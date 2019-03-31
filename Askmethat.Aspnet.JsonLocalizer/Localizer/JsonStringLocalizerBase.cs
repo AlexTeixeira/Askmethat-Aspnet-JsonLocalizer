@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -81,7 +80,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 foreach (var temp in tempLocalization)
                 {
                     var localizedValue = GetLocalizedValue(currentCulture, temp);
-                    if (!string.IsNullOrEmpty(localizedValue.Value))
+                    if (!(localizedValue.Value is null))
                     {
                         if (!localization.ContainsKey(temp.Key))
                         {
@@ -100,20 +99,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             bool isParent = false;
             var value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
-            if (string.IsNullOrEmpty(value))
+            if (value is null)
             {
                 isParent = true;
                 value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
-                if (string.IsNullOrEmpty(value))
+                if (value is null)
                 {
                     value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
-                    if (string.IsNullOrEmpty(value) && _localizationOptions.Value.DefaultCulture != null)
+                    if (value is null && _localizationOptions.Value.DefaultCulture != null)
                     {
                         value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
-                        if (string.IsNullOrEmpty(value))
-                        {
-                            value = null;
-                        }
                     }
                 }
             }
