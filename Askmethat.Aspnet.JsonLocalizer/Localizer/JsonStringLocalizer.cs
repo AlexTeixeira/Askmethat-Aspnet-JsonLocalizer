@@ -51,8 +51,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 bool isPlural = (bool)last;
                 value = GetString(name);
-                int index = (isPlural ? 1 : 0);
-                value = value.Split(_localizationOptions.Value.PluralSeparator)[index];
+                if (value.Contains(_localizationOptions.Value.PluralSeparator))
+                {
+                    int index = (isPlural ? 1 : 0);
+                    value = value.Split(_localizationOptions.Value.PluralSeparator)[index];
+                }
+                else
+                {
+                    value = String.Format(format ?? name, arguments);
+                }
             }
             else
             {
