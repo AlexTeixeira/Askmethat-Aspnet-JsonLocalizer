@@ -1,37 +1,43 @@
 ﻿{
-  "BaseName1": {
-    "Values": {
-      "en-US": "My Base Name 1",
-      "fr-FR": "Mon Nom de Base 1"
+    "BaseName1": {
+        "Values": {
+            "en-US": "My Base Name 1",
+            "fr-FR": "Mon Nom de Base 1"
+        }
+    },
+    "BaseName2": {
+        "Values": {
+            "en-US": "My Base Name 2",
+            "fr-FR": "Mon Nom de Base 2"
+        }
+    },
+    "NoFrench": {
+        "Values": {
+            "en-US": "No more french"
+        }
+    },
+    "CaseInsensitiveCultureName": {
+        "Values": {
+            "en-us": "US English",
+            "FR-FR": "French"
+        }
+    },
+    "PluralUser": {
+        "Values": {
+            "en-US": "User|Users",
+            "fr-FR": "Utilisateur|Utilisateurs"
+        }
+    },
+    "PluralUserFailed": {
+        "Values": {
+            "en-US": "Users",
+            "fr-FR": "Utilisateurs"
+        }
+    },
+    "CustomPluralUser": {
+        "Values": {
+            "en-US": "User#Users",
+            "fr-FR": "Utilisateur#Utilisateurs"
+        }
     }
-  },
-  "BaseName2": {
-    "Values": {
-      "en-US": "My Base Name 2",
-      "fr-FR": "Mon Nom de Base 2"
-    }
-  },
-  "NoFrench": {
-    "Values": {
-      "en-US": "No more french"
-    }
-  },
-  "CaseInsensitiveCultureName": {
-    "Values": {
-      "en-us": "US English",
-      "FR-FR": "French"
-    }
-  },
-  "PluralUser":{
-    "Values": {
-      "en-US": "User|Users",
-      "fr-FR": "Utilisateur|Utilisateurs"
-    }
-  },
-  "CustomPluralUser":{
-    "Values": {
-      "en-US": "User#Users",
-      "fr-FR": "Utilisateur#Utilisateurs"
-    }
-  }
 }

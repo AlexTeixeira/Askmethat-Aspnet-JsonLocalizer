@@ -170,6 +170,20 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         }
 
         [TestMethod]
+        public void Should_Be_PluralWithNoSeperator_ShowDefault()
+        {
+            // Arrange
+            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
+            var sp = services.BuildServiceProvider();
+            var factory = sp.GetService<IStringLocalizerFactory>();
+            var localizer = factory.Create(typeof(IStringLocalizer));
+
+            var result = localizer.GetString("PluralUserFailed", true);
+
+            Assert.AreEqual("Utilisateurs", result);
+        }
+
+        [TestMethod]
         public void Should_GetAllStrings_ByCaseInsensitiveCultureName()
         {
             var sp = services.BuildServiceProvider();
@@ -184,7 +198,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 "No more french",
                 "French",
                 "Utilisateur|Utilisateurs",
-                "Utilisateur#Utilisateurs",
+                "Utilisateurs",
+                "Utilisateur#Utilisateurs"
             };
             var results = localizer.GetAllStrings().Select(x => x.Value).ToArray();
             CollectionAssert.AreEquivalent(expected, results);
