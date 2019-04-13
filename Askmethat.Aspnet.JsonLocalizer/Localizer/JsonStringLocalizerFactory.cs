@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
+using System.IO;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -40,14 +41,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            var path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath + "/") : GetJsonRelativePath(_resourcesRelativePath);
+            var path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath) : GetJsonRelativePath(_resourcesRelativePath);
             return (IStringLocalizer)new JsonStringLocalizer(path, _localizationOptions);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return (IStringLocalizer)new JsonStringLocalizer(GetJsonRelativePath($"{_resourcesRelativePath}/"), _localizationOptions, baseName);
+            return (IStringLocalizer)new JsonStringLocalizer(GetJsonRelativePath(_resourcesRelativePath), _localizationOptions, baseName);
         }
 
         /// <summary>
@@ -63,11 +64,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
             if (!this._localizationOptions.Value.IsAbsolutePath && string.IsNullOrEmpty(path))
             {
-                fullPath = $"{_env.ContentRootPath}/Resources/";
+                fullPath = Path.Combine(_env.ContentRootPath, "Resources");
             }
             else if (!this._localizationOptions.Value.IsAbsolutePath && !string.IsNullOrEmpty(path))
             {
-                fullPath = $"{AppContext.BaseDirectory}/{path}";
+                fullPath = Path.Combine(AppContext.BaseDirectory, path);
             }
             return fullPath;
         }

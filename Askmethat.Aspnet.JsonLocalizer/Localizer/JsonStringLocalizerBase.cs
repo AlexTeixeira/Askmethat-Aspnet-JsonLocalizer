@@ -72,7 +72,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 localization = new Dictionary<string, LocalizatedFormat>();
             }
 
-            string pattern = string.IsNullOrWhiteSpace(_baseName) ? "*.json" : $"{_baseName}/*.json";
+            string pattern = string.IsNullOrWhiteSpace(_baseName) ? "*.json" : $"{_baseName}{Path.DirectorySeparatorChar}*.json";
             //get all files ending by json extension
             var myFiles = Directory.GetFiles(jsonPath, pattern, SearchOption.AllDirectories);
 
@@ -127,7 +127,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             friendlyName = AppDomain.CurrentDomain.FriendlyName;
 
-            return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
+            return baseName.Replace($"{friendlyName}.", "").Replace(".", Path.DirectorySeparatorChar.ToString());
         }
 
     }
