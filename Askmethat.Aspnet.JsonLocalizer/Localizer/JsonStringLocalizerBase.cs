@@ -44,8 +44,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         void InitJsonStringLocalizer()
         {
             var currentCulture = CultureInfo.CurrentUICulture;
+            var cacheKey = $"{CACHE_KEY}_{currentCulture.ThreeLetterISOLanguageName}";
+
             //Look for cache key.
-            if (!_memCache.TryGetValue($"{CACHE_KEY}_{currentCulture.ThreeLetterISOLanguageName}", out localization))
+            if (!_memCache.TryGetValue(cacheKey, out localization))
             {
                 ConstructLocalizationObject(_resourcesRelativePath, currentCulture);
                 // Set cache options.
@@ -54,7 +56,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     .SetSlidingExpiration(_memCacheDuration);
 
                 // Save data in cache.
-                _memCache.Set(CACHE_KEY, localization, cacheEntryOptions);
+                _memCache.Set(cacheKey, localization, cacheEntryOptions);
             }
         }
 
