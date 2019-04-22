@@ -107,6 +107,13 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 |NetStandard|2.0+|
 |NetCore|2.0.0+|
 
+**WithCulture method**
+
+**WhithCulture** method is not implemented and will be not implemented. ASP.NET Team, start to set this method **Obsolete** fr version 3 and will be removed in version 4 of asp.net core.
+
+For more information : 
+https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
+
 # Performances
 
 After talking with others Devs about my package, they ask my about performance.
