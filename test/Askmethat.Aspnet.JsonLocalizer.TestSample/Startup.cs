@@ -34,7 +34,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
             services.AddJsonLocalization(options =>
             {
                 options.ResourcesPath = "json";
-                options.UseBaseName = true;
+                options.UseBaseName = false;
                 options.CacheDuration = TimeSpan.FromMinutes(15);
             });
 

@@ -43,13 +43,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         void InitJsonStringLocalizer()
         {
-            var currentCulture = CultureInfo.CurrentUICulture;
+            CultureInfo currentCulture = CultureInfo.CurrentUICulture;
             //Look for cache key.
             if (!_memCache.TryGetValue($"{CACHE_KEY}_{currentCulture.ThreeLetterISOLanguageName}", out localization))
             {
                 ConstructLocalizationObject(_resourcesRelativePath, currentCulture);
                 // Set cache options.
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
                     .SetSlidingExpiration(_memCacheDuration);
 
@@ -72,14 +72,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             string pattern = string.IsNullOrWhiteSpace(_baseName) ? "*.json" : $"{_baseName}/*.json";
             //get all files ending by json extension
-            var myFiles = Directory.GetFiles(jsonPath, pattern, SearchOption.AllDirectories);
+            string[] myFiles = Directory.GetFiles(jsonPath, pattern, SearchOption.AllDirectories);
 
             foreach (string file in myFiles)
             {
-                var tempLocalization = JsonConvert.DeserializeObject<Dictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
-                foreach (var temp in tempLocalization)
+                Dictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<Dictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
+                foreach (KeyValuePair<string, JsonLocalizationFormat> temp in tempLocalization)
                 {
-                    var localizedValue = GetLocalizedValue(currentCulture, temp);
+                    LocalizatedFormat localizedValue = GetLocalizedValue(currentCulture, temp);
                     if (!(localizedValue.Value is null))
                     {
                         if (!localization.ContainsKey(temp.Key))
@@ -98,7 +98,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
         {
             bool isParent = false;
-            var value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
             if (value is null)
             {
                 isParent = true;

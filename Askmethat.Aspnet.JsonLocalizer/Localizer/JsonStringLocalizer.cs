@@ -28,7 +28,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             get
             {
-                var value = GetString(name);
+                string value = GetString(name);
                 return new LocalizedString(name, value ?? name, resourceNotFound: value == null);
             }
         }
@@ -37,15 +37,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             get
             {
-                var format = GetString(name);
-                var value = GetPluralLocalization(name, format, arguments);
+                string format = GetString(name);
+                string value = GetPluralLocalization(name, format, arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
 
         private string GetPluralLocalization(string name, string format, object[] arguments)
         {
-            var last = arguments.LastOrDefault();
+            object last = arguments.LastOrDefault();
             string value = string.Empty;
             if (last != null && last is bool)
             {
@@ -74,7 +74,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     .Select(
                         l =>
                         {
-                            var value = GetString(l.Key);
+                            string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
                     ) : 
@@ -83,7 +83,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     .Select(
                         l =>
                         {
-                            var value = GetString(l.Key);
+                            string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
                     ) 
@@ -96,16 +96,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return new JsonStringLocalizer(_resourcesRelativePath, _localizationOptions);
         }
 
-        string GetString(string name, CultureInfo cultureInfo = null, bool shouldTryDefaultCulture = true)
+        string GetString(string name, bool shouldTryDefaultCulture = true)
         {
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
-            }
-
-            if (cultureInfo == null)
-            {
-                cultureInfo = CultureInfo.CurrentUICulture;
             }
 
             LocalizatedFormat localizedValue = null;
@@ -114,20 +109,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 return localizedValue.Value; 
             }
-
-            // if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
-            // {
-            //     Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
-            //     //Try the parent culture
-            //     return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
-            // }
-
-            // if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
-            // {
-            //     Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
-            //     //Try the default culture
-            //     return GetString(name, _localizationOptions.Value.DefaultCulture, false);
-            // }
 
             //advert user that current name string does not 
             //contains any translation

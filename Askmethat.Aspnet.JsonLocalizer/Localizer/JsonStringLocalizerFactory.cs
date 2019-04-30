@@ -40,7 +40,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            var path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath + "/") : GetJsonRelativePath(_resourcesRelativePath);
+            string path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath + "/") : GetJsonRelativePath(_resourcesRelativePath);
             return (IStringLocalizer)new JsonStringLocalizer(path, _localizationOptions);
         }
 
@@ -56,7 +56,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// <returns>JSON relative path</returns>
         string GetJsonRelativePath(string path)
         {
-            var fullPath = string.Empty;
+            string fullPath = string.Empty;
             if (this._localizationOptions.Value.IsAbsolutePath)
             {
                 fullPath = path;

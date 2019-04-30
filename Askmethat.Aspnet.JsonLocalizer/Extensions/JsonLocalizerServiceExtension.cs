@@ -62,7 +62,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         {
             services.AddMemoryCache();
             services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
-            services.AddSingleton<IStringLocalizer, JsonStringLocalizer>();
+            services.AddScoped<IStringLocalizer, JsonStringLocalizer>();
         }
 
         /// <summary>
