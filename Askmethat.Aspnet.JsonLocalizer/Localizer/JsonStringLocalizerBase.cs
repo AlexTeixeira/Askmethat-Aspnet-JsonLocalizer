@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -16,36 +17,45 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected Dictionary<string, LocalizatedFormat> localization;
         protected readonly IMemoryCache _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
-        protected readonly string _resourcesRelativePath;
+        protected string _resourcesRelativePath;
         protected readonly string _baseName;
 
         protected readonly TimeSpan _memCacheDuration;
         protected const string CACHE_KEY = "LocalizationBlob";
+        protected CultureInfo currentUsedCulture;
 
-        public JsonStringLocalizerBase(string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
+        public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
-            _resourcesRelativePath = resourcesRelativePath;
+
             _baseName = TransformBaseNameToPath(baseName);
             _localizationOptions = localizationOptions;
             _memCache = _localizationOptions.Value.Caching;
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
-            InitJsonStringLocalizer();
         }
 
-        public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions)
+        string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
+
+        protected void GetCultureToUse(CultureInfo cultureToUse)
         {
-            _localizationOptions = localizationOptions;
-            _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
-            _memCacheDuration = _localizationOptions.Value.CacheDuration;
-            _memCache = _localizationOptions.Value.Caching;
-            InitJsonStringLocalizer();
+            if (!_memCache.TryGetValue(GetCacheKey(cultureToUse), out localization))
+            {
+                if (_memCache.TryGetValue(GetCacheKey(cultureToUse.Parent), out localization))
+                {
+                    currentUsedCulture = cultureToUse.Parent;
+                }
+                else
+                {
+                    _memCache.TryGetValue(GetCacheKey(cultureToUse), out localization);
+                    currentUsedCulture = _localizationOptions.Value.DefaultCulture;
+                }
+            }
+            currentUsedCulture = cultureToUse;
         }
 
-        void InitJsonStringLocalizer()
+        protected void InitJsonStringLocalizer(CultureInfo currentCulture)
         {
-            CultureInfo currentCulture = CultureInfo.CurrentUICulture;
             //Look for cache key.
-            if (!_memCache.TryGetValue($"{CACHE_KEY}_{currentCulture.ThreeLetterISOLanguageName}", out localization))
+            if (!_memCache.TryGetValue(GetCacheKey(currentCulture), out localization))
             {
                 ConstructLocalizationObject(_resourcesRelativePath, currentCulture);
                 // Set cache options.
@@ -54,7 +64,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     .SetSlidingExpiration(_memCacheDuration);
 
                 // Save data in cache.
-                _memCache.Set(CACHE_KEY, localization, cacheEntryOptions);
+                _memCache.Set(GetCacheKey(currentCulture), localization, cacheEntryOptions);
             }
         }
 
@@ -121,12 +131,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         string TransformBaseNameToPath(string baseName)
         {
-            string friendlyName = string.Empty;
+            if (!string.IsNullOrEmpty(baseName))
+            {
+                string friendlyName = string.Empty;
 
-            friendlyName = AppDomain.CurrentDomain.FriendlyName;
+                friendlyName = AppDomain.CurrentDomain.FriendlyName;
 
-            return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
+                //return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
+                return baseName.Replace($"{friendlyName}.", "").Replace(".", Path.DirectorySeparatorChar.ToString());
+            }
+            return null;
         }
+
+
 
     }
 }

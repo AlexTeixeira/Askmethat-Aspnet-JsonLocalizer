@@ -31,20 +31,22 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             services.AddMvc().AddViewLocalization();
 
-            services.AddJsonLocalization(options =>
-            {
-                options.ResourcesPath = "json";
-                options.UseBaseName = false;
-                options.CacheDuration = TimeSpan.FromMinutes(15);
-            });
-
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new[]
+            var supportedCultures = new[]
                 {
                         new CultureInfo("en-US"),
                         new CultureInfo("fr-FR")
                 };
+
+            services.AddJsonLocalization(options =>
+            {
+                options.ResourcesPath = "json";
+                options.UseBaseName = true;
+                options.CacheDuration = TimeSpan.FromMinutes(15);
+                options.SupportedCultureInfos = supportedCultures.ToHashSet();
+            });
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
 
                 options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
                 options.SupportedCultures = supportedCultures;
@@ -60,7 +62,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 app.UseDeveloperExceptionPage();
             }
 
-           //app.
+            //app.
             app.UseRequestLocalization();
             app.UseMvc(routes =>
             {

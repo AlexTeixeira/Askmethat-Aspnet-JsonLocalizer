@@ -21,21 +21,22 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     {
         IHostingEnvironment env = new HostingEnvironment();
         private const int N = 10000;
-        JsonStringLocalizerFactory _jsonFactory;
         IStringLocalizer _jsonLocalizer;
 
         public BenchmarkJSONLocalizer()
         {
             var serviceProvider = new ServiceCollection()
-                                      .AddLocalization(opts => { opts.ResourcesPath = "Resources"; })
+                                     .AddLocalization(opts => { opts.ResourcesPath = "Resources"; })
                                      .BuildServiceProvider();
 
-            _jsonFactory = new JsonStringLocalizerFactory(env);
-            _jsonLocalizer = _jsonFactory.Create("", "");
+            _jsonLocalizer = serviceProvider.GetService<IStringLocalizer>();
         }
 
         [Benchmark]
-        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1");
+        public string JsonLocalizer() {
+            System.Diagnostics.Debug.WriteLine(_jsonLocalizer.GetString("BaseName1"));
+            return _jsonLocalizer.GetString("BaseName1");
+        }
 
 
         [Benchmark(Baseline = true)]

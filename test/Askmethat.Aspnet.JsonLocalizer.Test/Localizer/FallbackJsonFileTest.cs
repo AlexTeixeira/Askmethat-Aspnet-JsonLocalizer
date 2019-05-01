@@ -12,53 +12,45 @@ using System.Globalization;
 using System.Linq;
 
 using LocalizedString = Microsoft.Extensions.Localization.LocalizedString;
-
+using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
+using Askmethat.Aspnet.JsonLocalizer.Localizer;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
     [TestClass]
     public class FallbackJsonFileTest
     {
-        IServiceCollection services;
-        TestServer server;
-
-        [TestInitialize]
-        public void Init()
+        JsonStringLocalizer localizer = null;
+        public void InitLocalizer(string cultureString)
         {
-            var builder = new WebHostBuilder()
-                            .ConfigureServices(serv =>
-                            {
-                                serv.AddJsonLocalization(opt =>
-                                {
-                                    opt.ResourcesPath = "fallback";
-                                    opt.DefaultCulture = null;
-                                });
-                                this.services = serv;
-                            })
-                            .UseStartup<Startup>();
+            SetCurrentCulture(cultureString);
 
-            server = new TestServer(builder);
-
+            localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            {
+                DefaultCulture = null,
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                     new CultureInfo("fr"),
+                     new CultureInfo("en"),
+                     new CultureInfo("zh-CN"),
+                     new CultureInfo("en-AU")
+                },
+                ResourcesPath = "fallback",
+            });
         }
 
         [TestMethod]
         public void Should_Read_Color_NoFallback()
         {
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-
-            SetCurrentCulture("en-AU");
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("en-AU");
             var result = localizer.GetString("Color");
             Assert.AreEqual("Colour (specific)", result);
 
-            SetCurrentCulture("fr");
-            localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("fr");
             result = localizer.GetString("Color");
             Assert.AreEqual("Couleur (neutral)", result);
 
-            SetCurrentCulture(CultureInfo.InvariantCulture);
-            localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer(CultureInfo.InvariantCulture.DisplayName);
             result = localizer.GetString("Color");
             Assert.AreEqual("Color (invariant)", result);
         }
@@ -66,23 +58,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_Color_FallbackToParent()
         {
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-
-            SetCurrentCulture("fr-FR");
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("fr-FR");
             var result = localizer.GetString("Color");
             Assert.AreEqual("Couleur (neutral)", result);
             Assert.IsFalse(result.ResourceNotFound);
 
-            SetCurrentCulture("en-NZ");
-            localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("en-NZ");
             result = localizer.GetString("Color");
             Assert.AreEqual("Color (neutral)", result);
             Assert.IsFalse(result.ResourceNotFound);
 
-            SetCurrentCulture("zh-CN");
-            localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("zh-CN");
             result = localizer.GetString("Color");
             Assert.AreEqual("Color (invariant)", result);
             Assert.IsFalse(result.ResourceNotFound);
@@ -92,11 +78,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_ResourceMissingCulture_FallbackToResourceName()
         {
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-
-            SetCurrentCulture("zh-CN");
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("zh-CN");
             var result = localizer.GetString("Empty");
             Assert.AreEqual("Empty", result);
             Assert.IsTrue(result.ResourceNotFound);
@@ -105,12 +87,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_MissingResource_FallbackToResourceName()
         {
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-
-            SetCurrentCulture("en-AU");
-            var localizer = factory.Create(typeof(IStringLocalizer));
-
+            InitLocalizer("en-AU");
             var result = localizer.GetString("No resource string");
             Assert.AreEqual("No resource string", result);
             Assert.IsTrue(result.ResourceNotFound);
@@ -119,11 +96,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_AllStringsWithParentFallback()
         {
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-
-            SetCurrentCulture("en-AU");
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("en-AU");
 
             var results = localizer.GetAllStrings(includeParentCultures: true).ToArray();
             var expected = new[] {
@@ -136,11 +109,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_AllStringsWithoutParentFallback()
         {
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
 
-            SetCurrentCulture("en-AU");
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            InitLocalizer("en-AU");
 
             var results = localizer.GetAllStrings(includeParentCultures: false).ToArray();
             var expected = new[] {

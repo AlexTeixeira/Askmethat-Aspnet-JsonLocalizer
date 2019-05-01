@@ -15,18 +15,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         readonly IHostingEnvironment _env;
         readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
-        readonly string _resourcesRelativePath;
-
-        public JsonStringLocalizerFactory(IHostingEnvironment env)
-        {
-            _env = env;
-            _localizationOptions = Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions { });
-            _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
-        }
-
         public JsonStringLocalizerFactory(
                 IHostingEnvironment env,
-                IOptions<JsonLocalizationOptions> localizationOptions)
+                IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             if (localizationOptions == null)
             {
@@ -34,42 +25,18 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
             _env = env;
             _localizationOptions = localizationOptions;
-            _resourcesRelativePath = _localizationOptions.Value.ResourcesPath ?? String.Empty;
         }
 
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            string path = !string.IsNullOrEmpty(_resourcesRelativePath) ? GetJsonRelativePath(_resourcesRelativePath + "/") : GetJsonRelativePath(_resourcesRelativePath);
-            return (IStringLocalizer)new JsonStringLocalizer(path, _localizationOptions);
+            return (IStringLocalizer)new JsonStringLocalizer(_localizationOptions, _env);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return (IStringLocalizer)new JsonStringLocalizer(GetJsonRelativePath($"{_resourcesRelativePath}/"), _localizationOptions, baseName);
-        }
-
-        /// <summary>
-        /// Get path of json
-        /// </summary>
-        /// <returns>JSON relative path</returns>
-        string GetJsonRelativePath(string path)
-        {
-            string fullPath = string.Empty;
-            if (this._localizationOptions.Value.IsAbsolutePath)
-            {
-                fullPath = path;
-            }
-            if (!this._localizationOptions.Value.IsAbsolutePath && string.IsNullOrEmpty(path))
-            {
-                fullPath = $"{_env.ContentRootPath}/Resources/";
-            }
-            else if (!this._localizationOptions.Value.IsAbsolutePath && !string.IsNullOrEmpty(path))
-            {
-                fullPath = $"{AppContext.BaseDirectory}/{path}";
-            }
-            return fullPath;
+            return (IStringLocalizer)new JsonStringLocalizer(_localizationOptions, _env, baseName);
         }
     }
 }

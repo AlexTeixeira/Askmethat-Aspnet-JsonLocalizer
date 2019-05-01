@@ -14,7 +14,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Format
         public Dictionary<int, string> Values = new Dictionary<int, string>();
     }
 
-     internal class LocalizatedFormat
+    internal class LocalizatedFormat
     {
         public bool IsParent { get; set; }
         public string Value { get; set; }

@@ -66,4 +66,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Localizer\JsonLocalizerTestBase.cs" />
+  </ItemGroup>
 </Project>

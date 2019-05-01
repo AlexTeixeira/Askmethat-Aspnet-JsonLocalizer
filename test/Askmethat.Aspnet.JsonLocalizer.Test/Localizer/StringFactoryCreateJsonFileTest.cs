@@ -1,5 +1,7 @@
 using System.Globalization;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
 using Askmethat.Aspnet.JsonLocalizer.TestSample;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -12,37 +14,26 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class StringFactoryCreateJsonFileTest
     {
-        
-        IServiceCollection services;
-        TestServer server;
-
-        [TestInitialize]
-        public void Init()
+        JsonStringLocalizer localizer = null;
+        public void InitLocalizer(CultureInfo cultureInfo, string baseName = null)
         {
-            var builder = new WebHostBuilder()
-                            .ConfigureServices(serv =>
-                            {
-                                serv.AddJsonLocalization(opt =>
-                                {
-                                    opt.ResourcesPath = $"/factory";
-                                    opt.UseBaseName = true;
-                                });
-                                this.services = serv;
-                            })
-                            .UseStartup<Startup>();
-
-            server = new TestServer(builder);
-
+            CultureInfo.CurrentUICulture = cultureInfo;
+            localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("en-US"),
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                     new CultureInfo("fr-FR")
+                },
+                ResourcesPath = "factory",
+                UseBaseName = true
+            }, baseName);
         }
 
         [TestMethod]
         public void TestReadName1_StringLocation()
         {
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create("",$"factory");
-
+            InitLocalizer(new CultureInfo("fr-FR"));
             var result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
@@ -51,11 +42,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void TestReadName1_BaseName_StringLocation()
         {
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create("base", $"factory");
-
+            InitLocalizer(new CultureInfo("fr-FR"), "base");
             var result = localizer.GetString("Name3");
 
             Assert.AreEqual("Mon Nom 3", result);
@@ -67,7 +54,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             result = localizer.GetString("Name1");
 
             Assert.IsTrue(result.ResourceNotFound);
-
         }
         
     }

@@ -1,6 +1,7 @@
 using System.Globalization;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
 using Askmethat.Aspnet.JsonLocalizer.TestSample;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -13,35 +14,21 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class CustomLocalizerJsonFileTest
     {
-        IServiceCollection services;
-        TestServer server;
-
-        [TestInitialize]
-        public void Init()
-        {
-            var builder = new WebHostBuilder()
-                            .ConfigureServices(serv =>
-                            {
-                                serv.AddJsonLocalization(options =>
-                                {
-                                    options.DefaultCulture = new CultureInfo("en-US");
-                                    options.PluralSeparator = '#';
-                                });
-                                this.services = serv;
-                            })
-                            .UseStartup<Startup>();
-
-            server = new TestServer(builder);
-        }
 
         [TestMethod]
         public void Should_Be_Singular_Users_Custom()
         {
             // Arrange
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("en-US"),
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                     new CultureInfo("fr-FR")
+                },
+                PluralSeparator = '#'
+            });
 
             var result = localizer.GetString("CustomPluralUser", false);
 
@@ -53,9 +40,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             // Arrange
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            var sp = services.BuildServiceProvider();
-            var factory = sp.GetService<IStringLocalizerFactory>();
-            var localizer = factory.Create(typeof(IStringLocalizer));
+            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("en-US"),
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                     new CultureInfo("fr-FR")
+                },
+                PluralSeparator = '#'
+            });
 
             var result = localizer.GetString("CustomPluralUser", true);
 
