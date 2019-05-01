@@ -13,29 +13,79 @@ using BenchmarkDotNet.Running;
 using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Resources;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
+    public class HostingEnvironmentStub : IHostingEnvironment
+    {
+        public HostingEnvironmentStub()
+        {
+        }
+
+        public string EnvironmentName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string ApplicationName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string WebRootPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IFileProvider WebRootFileProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string ContentRootPath { get => AppContext.BaseDirectory; set => throw new NotImplementedException(); }
+        public IFileProvider ContentRootFileProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    }
+
     [MinColumn, MaxColumn, MemoryDiagnoser, MarkdownExporter]
     public class BenchmarkJSONLocalizer
     {
         IHostingEnvironment env = new HostingEnvironment();
+        IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {
+             
+        }));
         private const int N = 10000;
         IStringLocalizer _jsonLocalizer;
 
         public BenchmarkJSONLocalizer()
         {
-            var serviceProvider = new ServiceCollection()
-                                     .AddLocalization(opts => { opts.ResourcesPath = "Resources"; })
-                                     .BuildServiceProvider();
-
-            _jsonLocalizer = serviceProvider.GetService<IStringLocalizer>();
+            _jsonLocalizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "Resources"
+            }), new HostingEnvironmentStub());
         }
 
         [Benchmark]
-        public string JsonLocalizer() {
-            System.Diagnostics.Debug.WriteLine(_jsonLocalizer.GetString("BaseName1"));
-            return _jsonLocalizer.GetString("BaseName1");
+        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1");
+
+        [Benchmark]
+        public string JsonLocalizerWithCreation()
+        {
+            var localizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "Resources",
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("en-US"),
+                }
+            }), new HostingEnvironmentStub());
+
+            return localizer.GetString("BaseName1");
+        }
+
+        [Benchmark]
+        public string JsonLocalizerWithCreationAndExternalMemoryCache()
+        {
+            var localizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "Resources",
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("en-US"),
+                },
+                Caching = _cach
+            }), new HostingEnvironmentStub());
+
+            return localizer.GetString("BaseName1");
         }
 
 
@@ -47,14 +97,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     {
         static void Main(string[] args)
         {
-            //IHostingEnvironment env = new HostingEnvironment();
-            //var t = new JsonStringLocalizerFactory(env);
-            //var x = t.Create("", "");
-            //x.GetString("BaseName1");
-            //x.GetString("BaseName2");
-            var summary = BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
-
-
+            BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
         }
     }
 }
