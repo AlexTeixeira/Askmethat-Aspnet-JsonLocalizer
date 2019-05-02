@@ -31,10 +31,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             services.AddMvc().AddViewLocalization();
 
-            var supportedCultures = new[]
+            CultureInfo[] supportedCultures = new[]
                 {
                         new CultureInfo("en-US"),
-                        new CultureInfo("fr-FR")
+                        new CultureInfo("fr-FR"),
+                        new CultureInfo("pt-PT")
                 };
 
             services.AddJsonLocalization(options =>
@@ -42,7 +43,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 options.ResourcesPath = "json";
                 options.UseBaseName = true;
                 options.CacheDuration = TimeSpan.FromMinutes(15);
-                options.SupportedCultureInfos = supportedCultures.ToHashSet();
             });
 
             services.Configure<RequestLocalizationOptions>(options =>

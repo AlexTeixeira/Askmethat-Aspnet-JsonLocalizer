@@ -1,14 +1,13 @@
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.Format;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
-using Askmethat.Aspnet.JsonLocalizer.Format;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -22,7 +21,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         protected readonly TimeSpan _memCacheDuration;
         protected const string CACHE_KEY = "LocalizationBlob";
-        protected CultureInfo currentUsedCulture;
+        protected const string CURRENT_USED_CULTURE = "CurrentUsedCulture";
 
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
@@ -34,6 +33,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         }
 
         string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
+        void SetCurrentCultureToCache(CultureInfo ci) => _memCache.Set(CURRENT_USED_CULTURE, ci.Name);
+        protected bool IsUICultureCurrentCulture(CultureInfo ci) {
+            string currentCulture = string.Empty;
+            _memCache.TryGetValue(CURRENT_USED_CULTURE, out currentCulture);
+
+            return string.Equals(currentCulture, ci.Name, StringComparison.InvariantCultureIgnoreCase);
+        }
 
         protected void GetCultureToUse(CultureInfo cultureToUse)
         {
@@ -41,15 +47,37 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 if (_memCache.TryGetValue(GetCacheKey(cultureToUse.Parent), out localization))
                 {
-                    currentUsedCulture = cultureToUse.Parent;
+                    SetCurrentCultureToCache(cultureToUse.Parent);
                 }
                 else
                 {
                     _memCache.TryGetValue(GetCacheKey(cultureToUse), out localization);
-                    currentUsedCulture = _localizationOptions.Value.DefaultCulture;
+                    SetCurrentCultureToCache(_localizationOptions.Value.DefaultCulture);
                 }
             }
-            currentUsedCulture = cultureToUse;
+            SetCurrentCultureToCache(cultureToUse);
+        }
+
+        protected void InitJsonStringLocalizer()
+        {
+            AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
+            AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
+
+            foreach (CultureInfo ci in _localizationOptions.Value.SupportedCultureInfos)
+            {
+                InitJsonStringLocalizer(ci);
+            }
+
+            //after initialization, get current ui culture
+            GetCultureToUse(CultureInfo.CurrentUICulture);
+        }
+
+        protected void AddMissingCultureToSupportedCulture(CultureInfo cultureInfo)
+        {
+            if (!_localizationOptions.Value.SupportedCultureInfos.Contains(cultureInfo))
+            {
+                _localizationOptions.Value.SupportedCultureInfos.Add(cultureInfo);
+            }
         }
 
         protected void InitJsonStringLocalizer(CultureInfo currentCulture)

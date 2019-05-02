@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections;
-
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
-using Askmethat.Aspnet.JsonLocalizer.TestSample;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.Localizer;
+using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections;
 using System.Globalization;
 using System.Linq;
-
 using LocalizedString = Microsoft.Extensions.Localization.LocalizedString;
-using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
-using Askmethat.Aspnet.JsonLocalizer.Localizer;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
@@ -50,7 +44,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             result = localizer.GetString("Color");
             Assert.AreEqual("Couleur (neutral)", result);
 
-            InitLocalizer(CultureInfo.InvariantCulture.DisplayName);
+            InitLocalizer(CultureInfo.InvariantCulture.ThreeLetterISOLanguageName);
             result = localizer.GetString("Color");
             Assert.AreEqual("Color (invariant)", result);
         }

@@ -10,10 +10,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {
     public class JsonLocalizationOptions : LocalizationOptions
     {
-        public JsonLocalizationOptions()
-        {
-            SupportedCultureInfos = new HashSet<CultureInfo>();
-        }
 
         const char PLURAL_SEPARATOR = '|';
         const string DEFAULT_RESOURCES = "Resources";
@@ -33,12 +29,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
             {
                 return defaultCulture;
             }
-            set
+            set                 
             {
                 if (value != defaultCulture)
                 {
                     defaultCulture = value ?? CultureInfo.InvariantCulture;
-                    AddDefaultCulture();
                 }
             }
         }
@@ -59,7 +54,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
                 if (value != supportedCultureInfos)
                 {
                     supportedCultureInfos = value;
-                    AddDefaultCulture();
                 }
             }
         }
@@ -71,13 +65,5 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 
         public bool UseBaseName { get; set; } = false;
         public char PluralSeparator { get; set; } = PLURAL_SEPARATOR;
-
-        void AddDefaultCulture()
-        {
-            if (!SupportedCultureInfos.Contains(defaultCulture) && defaultCulture != null)
-            {
-                SupportedCultureInfos.Add(defaultCulture);
-            }
-        }
     }
 }

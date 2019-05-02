@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Askmethat.Aspnet.JsonLocalizer.Benchmark.BenchmarkJSONLocalizer</title>
+<title>Askmethat.Aspnet.JsonLocalizer.Benchmark.BenchmarkJSONLocalizer-20190502-121607</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,21 +13,24 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14.4 (18E226) [Darwin 18.5.0]
-Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=2.2.106
-  [Host]     : .NET Core 2.2.4 (CoreCLR 4.6.27521.02, CoreFX 4.6.27521.01), 64bit RyuJIT
-  DefaultJob : .NET Core 2.2.4 (CoreCLR 4.6.27521.02, CoreFX 4.6.27521.01), 64bit RyuJIT
+BenchmarkDotNet=v0.11.5, OS=Windows 10.0.17134.706 (1803/April2018Update/Redstone4)
+Intel Core i7-6700 CPU 3.40GHz (Skylake), 1 CPU, 8 logical and 4 physical cores
+Frequency=3328125 Hz, Resolution=300.4695 ns, Timer=TSC
+.NET Core SDK=2.2.103
+  [Host]     : .NET Core 2.2.1 (CoreCLR 4.6.27207.03, CoreFX 4.6.27207.03), 64bit RyuJIT
+  DefaultJob : .NET Core 2.2.1 (CoreCLR 4.6.27207.03, CoreFX 4.6.27207.03), 64bit RyuJIT
 </code></pre>
 <pre><code></code></pre>
 
 <table>
-<thead><tr><th>                                   Method</th><th>   Mean</th><th>  Error</th><th> StdDev</th><th>    Min</th><th>    Max</th><th>Ratio</th><th>RatioSD</th><th>Gen 0/1k Op</th><th>Gen 1/1k Op</th><th>Gen 2/1k Op</th><th>Allocated Memory/Op</th>
+<thead><tr><th>                                   Method</th><th>   Mean</th><th>  Error</th><th> StdDev</th><th>    Min</th><th>    Max</th><th>Ratio</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>JsonLocalizer</td><td>68.83 ns</td><td>0.1259 ns</td><td>0.1116 ns</td><td>68.58 ns</td><td>68.95 ns</td><td>0.63</td><td>0.00</td><td>0.0228</td><td>-</td><td>-</td><td>48 B</td>
-</tr><tr><td>JsonLocalizerWithCreation</td><td>512,929.54 ns</td><td>1,795.6669 ns</td><td>1,679.6679 ns</td><td>510,100.03 ns</td><td>515,499.84 ns</td><td>4,678.08</td><td>13.62</td><td>83.0078</td><td>29.2969</td><td>4.8828</td><td>174968 B</td>
-</tr><tr><td>JsonLocalizerWithCreationAndExternalMemoryCache</td><td>4,930.42 ns</td><td>20.7277 ns</td><td>18.3746 ns</td><td>4,888.34 ns</td><td>4,956.98 ns</td><td>44.98</td><td>0.18</td><td>1.7624</td><td>0.8774</td><td>-</td><td>3712 B</td>
-</tr><tr><td>Localizer</td><td>109.62 ns</td><td>0.1763 ns</td><td>0.1563 ns</td><td>109.48 ns</td><td>110.05 ns</td><td>1.00</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</thead><tbody><tr><td>JsonLocalizer</td><td>55.49 ns</td><td>1.176 ns</td><td>2.454 ns</td><td>52.55 ns</td><td>61.80 ns</td><td>1.00</td><td>0.00</td><td>0.0114</td><td>-</td><td>-</td><td>48 B</td>
+</tr><tr><td>Localizer</td><td>98.09 ns</td><td>1.176 ns</td><td>1.042 ns</td><td>96.39 ns</td><td>100.23 ns</td><td>1.78</td><td>0.06</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>JsonLocalizerWithCreation</td><td>647,389.65 ns</td><td>19,441.235 ns</td><td>56,402.548 ns</td><td>573,985.62 ns</td><td>814,434.86 ns</td><td>11,620.42</td><td>1,268.33</td><td>41.0156</td><td>20.5078</td><td>1.9531</td><td>174688 B</td>
+</tr><tr><td>JsonLocalizerWithCreationAndExternalMemoryCache</td><td>5,120.16 ns</td><td>99.768 ns</td><td>152.356 ns</td><td>4,962.78 ns</td><td>5,522.11 ns</td><td>91.02</td><td>5.12</td><td>0.9384</td><td>0.4654</td><td>-</td><td>3944 B</td>
+</tr><tr><td>JsonLocalizerDefault</td><td>268.60 ns</td><td>1.787 ns</td><td>1.492 ns</td><td>266.84 ns</td><td>271.32 ns</td><td>4.88</td><td>0.15</td><td>0.0892</td><td>-</td><td>-</td><td>376 B</td>
+</tr><tr><td>LocalizerDefault</td><td>316.64 ns</td><td>4.932 ns</td><td>4.614 ns</td><td>311.53 ns</td><td>326.27 ns</td><td>5.73</td><td>0.19</td><td>0.0777</td><td>-</td><td>-</td><td>328 B</td>
 </tr></tbody></table>
 </body>
 </html>

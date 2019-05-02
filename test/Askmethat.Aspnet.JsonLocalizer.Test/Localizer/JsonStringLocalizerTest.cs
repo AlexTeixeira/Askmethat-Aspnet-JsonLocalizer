@@ -1,14 +1,7 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
-using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
-using Askmethat.Aspnet.JsonLocalizer.TestSample;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Globalization;
 using System.Linq;
 

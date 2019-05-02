@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Resources;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
+using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
@@ -50,8 +51,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
             }), new HostingEnvironmentStub());
         }
 
+        [Benchmark(Baseline = true)]
+        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1").Value;
+
+
         [Benchmark]
-        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1");
+        public string Localizer() => SharedResources.BaseName1;
 
         [Benchmark]
         public string JsonLocalizerWithCreation()
@@ -88,9 +93,20 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
             return localizer.GetString("BaseName1");
         }
 
+        [Benchmark]
+        public string JsonLocalizerDefaultCultureValue()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
+            return _jsonLocalizer.GetString("BaseName1").Value;
+        }
 
-        [Benchmark(Baseline = true)]
-        public string Localizer() => SharedResources.BaseName1;
+        [Benchmark]
+        public string LocalizerDefaultCultureValue()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
+            return SharedResources.BaseName1;
+        }
+
     }
 
     class Program

@@ -22,14 +22,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _env = env;
             _resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
 
-            foreach (var ci in localizationOptions.Value.SupportedCultureInfos)
-            {
-                InitJsonStringLocalizer(ci);
-            }
-
-            //after initialization, get current ui culture
-            GetCultureToUse(CultureInfo.CurrentUICulture);
+            InitJsonStringLocalizer();
         }
+
+
 
         public LocalizedString this[string name]
         {
@@ -111,8 +107,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
 
             LocalizatedFormat localizedValue = null;
-            if (currentUsedCulture == _localizationOptions.Value.DefaultCulture || currentUsedCulture != CultureInfo.CurrentUICulture)
+
+            if (!shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
+                InitJsonStringLocalizer(CultureInfo.CurrentUICulture);
+                AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
                 GetCultureToUse(CultureInfo.CurrentUICulture);
             }
 
