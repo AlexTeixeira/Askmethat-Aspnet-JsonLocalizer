@@ -29,6 +29,12 @@
       "en-US": "Language: ",
       "fr-FR": "Langues :"
     }
+  },
+  "Save": {
+    "Values": {
+      "en-US": "Save",
+      "fr-FR": "Sauvegarder :"
+    }
 
   }
 }

@@ -108,7 +108,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             LocalizatedFormat localizedValue = null;
 
-            if (!shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
+            if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
                 InitJsonStringLocalizer(CultureInfo.CurrentUICulture);
                 AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);

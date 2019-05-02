@@ -21,11 +21,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         protected readonly TimeSpan _memCacheDuration;
         protected const string CACHE_KEY = "LocalizationBlob";
-        protected const string CURRENT_USED_CULTURE = "CurrentUsedCulture";
-
+        protected string currentCulture = string.Empty;
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
-
             _baseName = TransformBaseNameToPath(baseName);
             _localizationOptions = localizationOptions;
             _memCache = _localizationOptions.Value.Caching;
@@ -33,11 +31,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         }
 
         string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
-        void SetCurrentCultureToCache(CultureInfo ci) => _memCache.Set(CURRENT_USED_CULTURE, ci.Name);
+        void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
         protected bool IsUICultureCurrentCulture(CultureInfo ci) {
-            string currentCulture = string.Empty;
-            _memCache.TryGetValue(CURRENT_USED_CULTURE, out currentCulture);
-
             return string.Equals(currentCulture, ci.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 

@@ -7,11 +7,11 @@ Frequency=3328125 Hz, Resolution=300.4695 ns, Timer=TSC
   DefaultJob : .NET Core 2.2.1 (CoreCLR 4.6.27207.03, CoreFX 4.6.27207.03), 64bit RyuJIT
 
 
-                                          Method |          Mean |         Error |        StdDev |           Min |           Max |     Ratio |  RatioSD |   Gen 0 |   Gen 1 |  Gen 2 | Allocated |
------------------------------------------------- |--------------:|--------------:|--------------:|--------------:|--------------:|----------:|---------:|--------:|--------:|-------:|----------:|
-                                   JsonLocalizer |      55.49 ns |      1.176 ns |      2.454 ns |      52.55 ns |      61.80 ns |      1.00 |     0.00 |  0.0114 |       - |      - |      48 B |
-                                       Localizer |      98.09 ns |      1.176 ns |      1.042 ns |      96.39 ns |     100.23 ns |      1.78 |     0.06 |       - |       - |      - |         - |
-                       JsonLocalizerWithCreation | 647,389.65 ns | 19,441.235 ns | 56,402.548 ns | 573,985.62 ns | 814,434.86 ns | 11,620.42 | 1,268.33 | 41.0156 | 20.5078 | 1.9531 |  174688 B |
- JsonLocalizerWithCreationAndExternalMemoryCache |   5,120.16 ns |     99.768 ns |    152.356 ns |   4,962.78 ns |   5,522.11 ns |     91.02 |     5.12 |  0.9384 |  0.4654 |      - |    3944 B |
-                            JsonLocalizerDefault |     268.60 ns |      1.787 ns |      1.492 ns |     266.84 ns |     271.32 ns |      4.88 |     0.15 |  0.0892 |       - |      - |     376 B |
-                                LocalizerDefault |     316.64 ns |      4.932 ns |      4.614 ns |     311.53 ns |     326.27 ns |      5.73 |     0.19 |  0.0777 |       - |      - |     328 B |
+                                          Method |          Mean |         Error |        StdDev |        Median |           Min |           Max |    Ratio | RatioSD |   Gen 0 |   Gen 1 |  Gen 2 | Allocated |
+------------------------------------------------ |--------------:|--------------:|--------------:|--------------:|--------------:|--------------:|---------:|--------:|--------:|--------:|-------:|----------:|
+                                   JsonLocalizer |      85.36 ns |      1.777 ns |      2.247 ns |      84.88 ns |      82.71 ns |      90.84 ns |     1.00 |    0.00 |  0.0113 |       - |      - |      48 B |
+                                       Localizer |     111.95 ns |      5.681 ns |     16.482 ns |     103.47 ns |      97.57 ns |     154.47 ns |     1.33 |    0.13 |       - |       - |      - |         - |
+                       JsonLocalizerWithCreation | 679,279.52 ns | 14,495.178 ns | 42,511.848 ns | 679,310.74 ns | 603,370.89 ns | 779,815.73 ns | 7,837.87 |  594.65 | 41.0156 | 20.5078 | 1.9531 |  174232 B |
+ JsonLocalizerWithCreationAndExternalMemoryCache |   5,356.52 ns |    267.907 ns |    764.352 ns |   5,242.24 ns |   4,344.78 ns |   7,235.60 ns |    72.62 |   10.30 |  0.8392 |  0.4196 |      - |    3536 B |
+                JsonLocalizerDefaultCultureValue |     329.43 ns |      6.936 ns |     20.012 ns |     333.79 ns |     262.30 ns |     376.34 ns |     3.96 |    0.24 |  0.0892 |       - |      - |     376 B |
+                    LocalizerDefaultCultureValue |     377.61 ns |     16.365 ns |     47.997 ns |     359.06 ns |     323.90 ns |     492.92 ns |     4.29 |    0.35 |  0.0777 |       - |      - |     328 B |
