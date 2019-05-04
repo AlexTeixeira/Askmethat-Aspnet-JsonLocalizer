@@ -168,7 +168,13 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 
 # Contributors
 
-[@lethek](https://github.com/lethek) : PRs : [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+[@lethek](https://github.com/lethek) : 
+- [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20)
+- [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+
+[@lugospod](https://github.com/lugospod) :
+- [#43](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/43)
+- [#44](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/44)
 
 # License
 
