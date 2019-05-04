@@ -3,14 +3,40 @@
     ViewData["Title"] = "Index";
 }
 @using Askmethat.Aspnet.JsonLocalizer.TestSample
-
+@using System.Threading.Tasks
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject IOptions<RequestLocalizationOptions> LocOptions
 @inject IViewLocalizer Localizer
 
 
 <h2>Askmethat.Aspnet.JsonLocalizer</h2>
 
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = Localizer[c.Name].Value })
+        .ToList();
+
+}
+
+<div>
+    <form id="selectLanguage" asp-controller="Home"
+          asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
+          method="post" class="form-horizontal" role="form">
+        @Localizer["Language"] <select name="culture" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
+        <button type="submit" class="btn btn-default btn-xs">@Localizer["Save"]</button>
+
+    </form>
+</div>
+
+
 <p>
-    <span>@Localizer["Hello"] </span> 
+    <span>@ViewData["Hello"] </span>
     <span>@Localizer.GetString("Users", true) </span>
 </p>

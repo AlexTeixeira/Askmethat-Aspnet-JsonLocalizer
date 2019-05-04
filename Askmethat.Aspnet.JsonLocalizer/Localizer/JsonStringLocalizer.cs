@@ -15,20 +15,23 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
     {
+        readonly IHostingEnvironment _env;
 
-        public JsonStringLocalizer(string resourcesRelativePath, IOptions<JsonLocalizationOptions> localizationOptions, string baseName = "") : base(resourcesRelativePath, localizationOptions, baseName)
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, baseName)
         {
+            _env = env;
+            _resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+
+            InitJsonStringLocalizer();
         }
 
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions) : base(localizationOptions)
-        {
-        }
+
 
         public LocalizedString this[string name]
         {
             get
             {
-                var value = GetString(name);
+                string value = GetString(name);
                 return new LocalizedString(name, value ?? name, resourceNotFound: value == null);
             }
         }
@@ -37,15 +40,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             get
             {
-                var format = GetString(name);
-                var value = GetPluralLocalization(name, format, arguments);
+                string format = GetString(name);
+                string value = GetPluralLocalization(name, format, arguments);
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
 
         private string GetPluralLocalization(string name, string format, object[] arguments)
         {
-            var last = arguments.LastOrDefault();
+            object last = arguments.LastOrDefault();
             string value = string.Empty;
             if (last != null && last is bool)
             {
@@ -70,69 +73,85 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         }
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return includeParentCultures ? localization
+            return includeParentCultures ? localization?
                     .Select(
                         l =>
                         {
-                            var value = GetString(l.Key);
+                            string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    ) : 
-                    localization
+                    ) :
+                    localization?
                     .Where(w => !w.Value.IsParent)
                     .Select(
                         l =>
                         {
-                            var value = GetString(l.Key);
+                            string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    ) 
+                    )
                     ;
-                
+
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new JsonStringLocalizer(_resourcesRelativePath, _localizationOptions);
+            return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
-        string GetString(string name, CultureInfo cultureInfo = null, bool shouldTryDefaultCulture = true)
+        string GetString(string name, bool shouldTryDefaultCulture = true)
         {
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (cultureInfo == null)
-            {
-                cultureInfo = CultureInfo.CurrentUICulture;
-            }
-
             LocalizatedFormat localizedValue = null;
 
-            if (localization.TryGetValue(name, out localizedValue))
+            if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
-                return localizedValue.Value; 
+                InitJsonStringLocalizer(CultureInfo.CurrentUICulture);
+                AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
+                GetCultureToUse(CultureInfo.CurrentUICulture);
             }
 
-            // if (!cultureInfo.Equals(_localizationOptions.Value.DefaultCulture) && !cultureInfo.Equals(cultureInfo.Parent))
-            // {
-            //     Console.Error.WriteLine($"{name} is using parent culture instead of current ui culture");
-            //     //Try the parent culture
-            //     return GetString(name, cultureInfo.Parent, shouldTryDefaultCulture);
-            // }
+            if (localization != null && localization.TryGetValue(name, out localizedValue))
+            {
+                return localizedValue.Value;
+            }
 
-            // if (shouldTryDefaultCulture && !cultureInfo.Equals(_localizationOptions.Value.DefaultCulture))
-            // {
-            //     Console.Error.WriteLine($"{name} is using default option culture instead of current ui culture");
-            //     //Try the default culture
-            //     return GetString(name, _localizationOptions.Value.DefaultCulture, false);
-            // }
+            if (shouldTryDefaultCulture)
+            {
+                GetCultureToUse(_localizationOptions.Value.DefaultCulture);
+                return GetString(name, false);
+            }
 
             //advert user that current name string does not 
             //contains any translation
             Console.Error.WriteLine($"{name} does not contains any translation");
             return null;
+        }
+
+        /// <summary>
+        /// Get path of json
+        /// </summary>
+        /// <returns>JSON relative path</returns>
+        string GetJsonRelativePath(string path)
+        {
+            string fullPath = string.Empty;
+            if (this._localizationOptions.Value.IsAbsolutePath)
+            {
+                fullPath = path;
+            }
+            if (!this._localizationOptions.Value.IsAbsolutePath && string.IsNullOrEmpty(path))
+            {
+                fullPath = Path.Combine(_env.ContentRootPath, "Resources");
+            }
+            else if (!this._localizationOptions.Value.IsAbsolutePath && !string.IsNullOrEmpty(path))
+            {
+                fullPath = Path.Combine(AppContext.BaseDirectory,path);
+            }
+            return fullPath;
         }
     }
 }

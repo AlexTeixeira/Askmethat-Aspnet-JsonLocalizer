@@ -13,47 +13,107 @@ using BenchmarkDotNet.Running;
 using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Resources;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
+using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
+    public class HostingEnvironmentStub : IHostingEnvironment
+    {
+        public HostingEnvironmentStub()
+        {
+        }
+
+        public string EnvironmentName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string ApplicationName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string WebRootPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IFileProvider WebRootFileProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string ContentRootPath { get => AppContext.BaseDirectory; set => throw new NotImplementedException(); }
+        public IFileProvider ContentRootFileProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    }
+
     [MinColumn, MaxColumn, MemoryDiagnoser, MarkdownExporter]
     public class BenchmarkJSONLocalizer
     {
         IHostingEnvironment env = new HostingEnvironment();
+        IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
+        IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
+
         private const int N = 10000;
-        JsonStringLocalizerFactory _jsonFactory;
         IStringLocalizer _jsonLocalizer;
 
         public BenchmarkJSONLocalizer()
         {
-            var serviceProvider = new ServiceCollection()
-                                      .AddLocalization(opts => { opts.ResourcesPath = "Resources"; })
-                                     .BuildServiceProvider();
-
-            _jsonFactory = new JsonStringLocalizerFactory(env);
-            _jsonLocalizer = _jsonFactory.Create("", "");
+            _jsonLocalizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "Resources",
+                Caching = _cach2
+            }), new HostingEnvironmentStub());
         }
-
-        [Benchmark]
-        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1");
-
 
         [Benchmark(Baseline = true)]
         public string Localizer() => SharedResources.BaseName1;
+
+        [Benchmark]
+        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1").Value;
+
+        [Benchmark]
+        public string JsonLocalizerWithCreation()
+        {
+            var localizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "Resources",
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("en-US"),
+                }
+            }), new HostingEnvironmentStub());
+
+            return localizer.GetString("BaseName1");
+        }
+
+        [Benchmark]
+        public string JsonLocalizerWithCreationAndExternalMemoryCache()
+        {
+            var localizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "Resources",
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("en-US"),
+                },
+                Caching = _cach
+            }), new HostingEnvironmentStub());
+
+            return localizer.GetString("BaseName1");
+        }
+
+        [Benchmark]
+        public string JsonLocalizerDefaultCultureValue()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
+            return _jsonLocalizer.GetString("BaseName1").Value;
+        }
+
+        [Benchmark]
+        public string LocalizerDefaultCultureValue()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
+            return SharedResources.BaseName1;
+        }
+
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            //IHostingEnvironment env = new HostingEnvironment();
-            //var t = new JsonStringLocalizerFactory(env);
-            //var x = t.Create("", "");
-            //x.GetString("BaseName1");
-            //x.GetString("BaseName2");
-            var summary = BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
-
-
+            BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
         }
     }
 }
