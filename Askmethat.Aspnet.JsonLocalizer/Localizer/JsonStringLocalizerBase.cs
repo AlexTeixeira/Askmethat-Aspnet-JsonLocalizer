@@ -13,15 +13,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizerBase
     {
-        protected Dictionary<string, LocalizatedFormat> localization;
         protected readonly IMemoryCache _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
-        protected string _resourcesRelativePath;
         protected readonly string _baseName;
-
         protected readonly TimeSpan _memCacheDuration;
         protected const string CACHE_KEY = "LocalizationBlob";
+
+        protected string resourcesRelativePath;
         protected string currentCulture = string.Empty;
+        protected Dictionary<string, LocalizatedFormat> localization;
+
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
             _baseName = TransformBaseNameToPath(baseName);
@@ -80,7 +81,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             //Look for cache key.
             if (!_memCache.TryGetValue(GetCacheKey(currentCulture), out localization))
             {
-                ConstructLocalizationObject(_resourcesRelativePath, currentCulture);
+                ConstructLocalizationObject(resourcesRelativePath, currentCulture);
                 // Set cache options.
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.

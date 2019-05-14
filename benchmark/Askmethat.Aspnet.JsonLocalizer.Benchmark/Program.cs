@@ -39,7 +39,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
         IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
         IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
 
-        private const int N = 10000;
         IStringLocalizer _jsonLocalizer;
 
         public BenchmarkJSONLocalizer()
@@ -109,9 +108,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 
     }
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
         }

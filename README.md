@@ -10,46 +10,14 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 # Project
 
-This library allow user to use JSON files instead of RESX in Asp.net application.
-The code try to be most compliante with Microsoft guidelines.
-The library is compatible with NetStandard & NetCore
+This library allows users to use JSON files instead of RESX in an ASP.NET application.
+The code tries to be most compliant with Microsoft guidelines.
+The library is compatible with NetStandard & NetCore.
 
 # Configuration
 
 An extension method is available for `IServiceCollection`.
-You can have a look to this method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
-
-# Breaking Changes
-
-For performance purpose, JSON structure was changes since 2.0.0 from List to Dictionnary.
-Here the detail for version before 1.1.7 and version after 2.0.0
-
-## 1.1.7-
-
-``` json
-[
-  {
-    "Key": "Name3",
-    "Values": {
-      "en-US": "My Name 3",
-      "fr-FR": "Mon Nom 3"
-    }
-  }
-]
-```
-
-## 2.0.0+
-
-``` json
-{
-  "Name3": {
-    "Values": {
-      "en-US": "My Name 3",
-      "fr-FR": "Mon Nom 3"
-    }
-  }
-}
-```
+You can have a look at the method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
 
 ## Options 
 
@@ -61,7 +29,7 @@ services.AddJsonLocalization(options => {
         options.CacheDuration = TimeSpan.FromMinutes(15);
         options.ResourcesPath = "mypath";
         options.FileEncoding = Encoding.GetEncoding("ISO-8859-1");
-        options.SupportedCultureInfos = new[]
+        options.SupportedCultureInfos = new HashSet<CultureInfo>()
         {
           new CultureInfo("en-US"),
           new CultureInfo("fr-FR")
@@ -83,7 +51,7 @@ services.AddJsonLocalization(options => {
 #Pluralization
 
 In version 2.0.0, Pluralization was introduced.
-You are now able to manage a singular (left) and plural (rigth) version for the same Key. 
+You are now able to manage a singular (left) and plural (right) version for the same Key. 
 *PluralSeparator* is used as separator between the two strings.
 
 For example : User|Users for key Users
@@ -99,12 +67,6 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **Platform Support**
 
-## 1.1.7
-
-|Platform|Version|
-| -------------------  | :------------------: |
-|NetStandard|1.1.6+|
-|NetCore|2.0.0+|
 
 ## 2.0.0+
 
@@ -115,36 +77,15 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **WithCulture method**
 
-**WhithCulture** method is not implemented and will be not implemented. ASP.NET Team, start to set this method **Obsolete** fr version 3 and will be removed in version 4 of asp.net core.
+**WhithCulture** method is not implemented and will not be implemented. ASP.NET Team, start to set this method **Obsolete** for version 3 and will be removed in version 4 of asp.net core.
 
 For more information : 
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
 
 # Performances
 
-After talking with others Devs about my package, they ask my about performance.
+After talking with others Devs about my package, they asked my about performance.
 
-So I added a benchmark project and here the last results with some modification, that will be available with 1.1.7
-
-## 1.1.7
-
-``` ini
-
-BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
-Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=2.2.100
-  [Host]     : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT  [AttachedDebugger]
-  DefaultJob : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT
-
-
-```
-|        Method |     Mean |     Error |    StdDev |      Min |      Max | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|-------------- |---------:|----------:|----------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
-| JsonLocalizer | 255.1 ns | 0.7950 ns | 0.7048 ns | 253.3 ns | 256.4 ns |  2.18 |      0.0648 |           - |           - |               136 B |
-|     Localizer | 117.2 ns | 0.2544 ns | 0.2255 ns | 116.8 ns | 117.5 ns |  1.00 |           - |           - |           - |                   - |
-
-
-## 2.0.0+
 
 ``` ini
 
@@ -175,6 +116,9 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 [@lugospod](https://github.com/lugospod) :
 - [#43](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/43)
 - [#44](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/44)
+
+[@Compufreak345](https://github.com/Compufreak345) :
+- [#52](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/52)
 
 # License
 

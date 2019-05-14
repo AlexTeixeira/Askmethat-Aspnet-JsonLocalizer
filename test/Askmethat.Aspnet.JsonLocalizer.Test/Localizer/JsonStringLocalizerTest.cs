@@ -127,52 +127,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         }
 
         [TestMethod]
-        public void Should_Be_Singular_Users()
-        {
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
-            {
-                DefaultCulture = new CultureInfo("fr-FR")
-            });
-
-            var result = localizer.GetString("PluralUser", false);
-
-            Assert.AreEqual("Utilisateur", result);
-        }
-
-        [TestMethod]
-        public void Should_Be_Plural_Users()
-        {
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
-            {
-                DefaultCulture = new CultureInfo("fr-FR")
-            });
-
-            var result = localizer.GetString("PluralUser", true);
-
-            Assert.AreEqual("Utilisateurs", result);
-        }
-
-        [TestMethod]
-        public void Should_Be_PluralWithNoSeperator_ShowDefault()
-        {
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-
-            // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
-            {
-                DefaultCulture = new CultureInfo("fr-FR")
-            });
-
-            var result = localizer.GetString("PluralUserFailed", true);
-
-            Assert.AreEqual("Utilisateurs", result);
-        }
-
-        [TestMethod]
         public void Should_GetAllStrings_ByCaseInsensitiveCultureName()
         {
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
@@ -185,10 +139,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             var expected = new[] {
                 "Mon Nom de Base 1",
                 "Mon Nom de Base 2",
-                "French",
-                "Utilisateur|Utilisateurs",
-                "Utilisateurs",
-                "Utilisateur#Utilisateurs"
+                "French"
             };
             var results = localizer.GetAllStrings().Select(x => x.Value).ToArray();
             CollectionAssert.AreEquivalent(expected, results);

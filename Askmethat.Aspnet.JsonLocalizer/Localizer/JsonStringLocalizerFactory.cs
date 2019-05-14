@@ -19,12 +19,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 IHostingEnvironment env,
                 IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
-            if (localizationOptions == null)
-            {
-                throw new ArgumentNullException(nameof(localizationOptions));
-            }
             _env = env;
-            _localizationOptions = localizationOptions;
+            _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
         }
 
 

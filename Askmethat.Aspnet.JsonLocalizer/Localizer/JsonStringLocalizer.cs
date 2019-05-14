@@ -20,7 +20,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, baseName)
         {
             _env = env;
-            _resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+            resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
 
             InitJsonStringLocalizer();
         }
@@ -54,7 +54,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 bool isPlural = (bool)last;
                 value = GetString(name);
-                if (value.Contains(_localizationOptions.Value.PluralSeparator))
+                if (!string.IsNullOrEmpty(value) && value.Contains(_localizationOptions.Value.PluralSeparator))
                 {
                     int index = (isPlural ? 1 : 0);
                     value = value.Split(_localizationOptions.Value.PluralSeparator)[index];
@@ -128,7 +128,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             //advert user that current name string does not 
             //contains any translation
-            Console.Error.WriteLine($"{name} does not contains any translation");
+            Console.Error.WriteLine($"{name} does not contain any translation");
             return null;
         }
 
