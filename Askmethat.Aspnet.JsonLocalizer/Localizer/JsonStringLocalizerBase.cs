@@ -17,8 +17,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         protected readonly string _baseName;
         protected readonly TimeSpan _memCacheDuration;
-        protected const string CACHE_KEY = "LocalizationBlob";
 
+        protected const string CACHE_KEY = "LocalizationBlob";
         protected string resourcesRelativePath;
         protected string currentCulture = string.Empty;
         protected Dictionary<string, LocalizatedFormat> localization;
@@ -32,6 +32,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         }
 
         string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
+
+        //string GetCacheKey(CultureInfo ci)
+        //{
+        //    if (_localizationOptions.Value.UseBaseName)
+        //    {
+        //        return $"{CACHE_KEY}_{ci.DisplayName}_{_baseName}";
+        //    }
+        //    return $"{CACHE_KEY}_{ci.DisplayName}";
+        //}
         void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
         protected bool IsUICultureCurrentCulture(CultureInfo ci) {
             return string.Equals(currentCulture, ci.Name, StringComparison.InvariantCultureIgnoreCase);
@@ -104,9 +113,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 localization = new Dictionary<string, LocalizatedFormat>();
             }
 
-            string pattern = string.IsNullOrWhiteSpace(_baseName) ? "*.json" : $"{_baseName}/*.json";
+            string basePath = string.IsNullOrWhiteSpace(_baseName) ? jsonPath : Path.Combine(jsonPath, _baseName);
+            if (!Directory.Exists(basePath)) return;
+            string pattern = "*.json";
+
             //get all files ending by json extension
-            string[] myFiles = Directory.GetFiles(jsonPath, pattern, SearchOption.AllDirectories);
+            string[] myFiles = Directory.GetFiles(basePath, pattern, SearchOption.AllDirectories);
 
             foreach (string file in myFiles)
             {

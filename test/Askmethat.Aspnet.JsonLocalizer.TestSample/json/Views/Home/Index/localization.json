@@ -1,14 +1,14 @@
 ﻿{
   "Hello": {
     "Values": {
-      "en-US": "Hello",
-      "fr-FR": "Bonjour"
+      "en-US": "Hello!",
+      "fr-FR": "Bonjour!"
     }
   },
   "Users": {
     "Values": {
-      "en-US": "User|Users",
-      "fr-FR": "Utilisateur|Utilisateurs"
+      "en-US": "User!|Users!",
+      "fr-FR": "Utilisateur!|Utilisateurs!"
     }
   },
   "fr-FR": {
