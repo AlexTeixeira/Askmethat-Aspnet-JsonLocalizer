@@ -14,7 +14,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class FallbackJsonFileTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(string cultureString)
         {
             SetCurrentCulture(cultureString);
@@ -37,7 +37,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Color_NoFallback()
         {
             InitLocalizer("en-AU");
-            var result = localizer.GetString("Color");
+            LocalizedString result = localizer.GetString("Color");
             Assert.AreEqual("Colour (specific)", result);
 
             InitLocalizer("fr");
@@ -53,7 +53,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Color_FallbackToParent()
         {
             InitLocalizer("fr-FR");
-            var result = localizer.GetString("Color");
+            LocalizedString result = localizer.GetString("Color");
             Assert.AreEqual("Couleur (neutral)", result);
             Assert.IsFalse(result.ResourceNotFound);
 
@@ -73,7 +73,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_ResourceMissingCulture_FallbackToResourceName()
         {
             InitLocalizer("zh-CN");
-            var result = localizer.GetString("Empty");
+            LocalizedString result = localizer.GetString("Empty");
             Assert.AreEqual("Empty", result);
             Assert.IsTrue(result.ResourceNotFound);
         }
@@ -82,7 +82,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_MissingResource_FallbackToResourceName()
         {
             InitLocalizer("en-AU");
-            var result = localizer.GetString("No resource string");
+            LocalizedString result = localizer.GetString("No resource string");
             Assert.AreEqual("No resource string", result);
             Assert.IsTrue(result.ResourceNotFound);
         }
@@ -92,8 +92,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             InitLocalizer("en-AU");
 
-            var results = localizer.GetAllStrings(includeParentCultures: true).ToArray();
-            var expected = new[] {
+            LocalizedString[] results = localizer.GetAllStrings(includeParentCultures: true).ToArray();
+            LocalizedString[] expected = new[] {
                 new LocalizedString("Color", "Colour (specific)", false),
                 new LocalizedString("Empty", "Empty", false)
             };
@@ -106,8 +106,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             InitLocalizer("en-AU");
 
-            var results = localizer.GetAllStrings(includeParentCultures: false).ToArray();
-            var expected = new[] {
+            LocalizedString[] results = localizer.GetAllStrings(includeParentCultures: false).ToArray();
+            LocalizedString[] expected = new[] {
                 new LocalizedString("Color", "Colour (specific)", false)
             };
             CollectionAssert.AreEqual(expected, results, new LocalizedStringComparer());
@@ -120,8 +120,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             public int Compare(object x, object y)
             {
-                var lsX = (LocalizedString)x;
-                var lsY = (LocalizedString)y;
+                LocalizedString lsX = (LocalizedString)x;
+                LocalizedString lsY = (LocalizedString)y;
                 if (ReferenceEquals(lsX, lsY))
                 {
                     return 0;
@@ -136,11 +136,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                     return result;
                 }
                 result = StringComparer.CurrentCulture.Compare(lsX.Value, lsY.Value);
-                if (result != 0)
-                {
-                    return result;
-                }
-                return lsX.ResourceNotFound.CompareTo(lsY.ResourceNotFound);
+                return result != 0 ? result : lsX.ResourceNotFound.CompareTo(lsY.ResourceNotFound);
             }
         }
 

@@ -12,7 +12,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class PluralizationJsonTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(char seperator = '|')
         {
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
@@ -36,7 +36,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer();
 
-             var result = localizer.GetString("PluralUser", false);
+            LocalizedString result = localizer.GetString("PluralUser", false);
 
             Assert.AreEqual("Utilisateur", result);
         }
@@ -46,7 +46,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             InitLocalizer();
 
-            var result = localizer.GetString("PluralUser", true);
+            LocalizedString result = localizer.GetString("PluralUser", true);
 
             Assert.AreEqual("Utilisateurs", result);
         }
@@ -56,7 +56,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             InitLocalizer();
 
-            var result = localizer.GetString("PluralUserFailed", true);
+            LocalizedString result = localizer.GetString("PluralUserFailed", true);
 
             Assert.AreEqual("Utilisateurs", result);
         }
@@ -67,7 +67,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer('#');
 
-            var result = localizer.GetString("CustomPluralUser", false);
+            LocalizedString result = localizer.GetString("CustomPluralUser", false);
 
             Assert.AreEqual("Utilisateur", result);
         }
@@ -78,7 +78,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer('#');
 
-            var result = localizer.GetString("CustomPluralUser", true);
+            LocalizedString result = localizer.GetString("CustomPluralUser", true);
 
             Assert.AreEqual("Utilisateurs", result);
         }
@@ -89,7 +89,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer();
 
-            var result = localizer.GetString("NotFound", true);
+            LocalizedString result = localizer.GetString("NotFound", true);
 
             Assert.AreEqual("NotFound", result);
         }

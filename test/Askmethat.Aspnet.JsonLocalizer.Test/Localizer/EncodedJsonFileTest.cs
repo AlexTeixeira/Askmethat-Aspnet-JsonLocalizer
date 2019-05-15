@@ -15,7 +15,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void TestReadName1_ISOEncoding()
         {
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US"),
                 SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
@@ -26,7 +26,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 FileEncoding = Encoding.GetEncoding("ISO-8859-1")
             });
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
         }
@@ -35,7 +35,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void TestReadName1_ISOEncoding_SpecialChar()
         {
             CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US"),
                 SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
@@ -47,7 +47,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 FileEncoding = Encoding.GetEncoding("ISO-8859-1")
             });
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Eu so joão", result);
         }

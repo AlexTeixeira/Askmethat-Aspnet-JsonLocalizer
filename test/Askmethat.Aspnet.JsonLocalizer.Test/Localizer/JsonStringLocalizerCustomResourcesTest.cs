@@ -9,9 +9,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
     [TestClass]
     public class JsonStringLocalizerCustomResourcesTest
-    { 
-
-        JsonStringLocalizer localizer = null;
+    {
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo)
         {
             CultureInfo.CurrentUICulture = cultureInfo;
@@ -33,7 +32,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer(new CultureInfo("fr-FR"));
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
         }
@@ -44,7 +43,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer(new CultureInfo("fr-FR"));
 
-            var result = localizer.GetString("Nop");
+            LocalizedString result = localizer.GetString("Nop");
 
             Assert.AreEqual("Nop", result);
         }
@@ -55,7 +54,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer(new CultureInfo("en-US"));
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("My Name 1", result);
         }

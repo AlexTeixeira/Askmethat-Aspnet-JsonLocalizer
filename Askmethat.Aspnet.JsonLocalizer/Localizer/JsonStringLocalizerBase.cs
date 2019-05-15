@@ -31,7 +31,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
         }
 
-        string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
+        private string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
 
         //string GetCacheKey(CultureInfo ci)
         //{
@@ -41,8 +41,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         //    }
         //    return $"{CACHE_KEY}_{ci.DisplayName}";
         //}
-        void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
-        protected bool IsUICultureCurrentCulture(CultureInfo ci) {
+        private void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
+        protected bool IsUICultureCurrentCulture(CultureInfo ci)
+        {
             return string.Equals(currentCulture, ci.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
@@ -56,7 +57,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 }
                 else
                 {
-                    _memCache.TryGetValue(GetCacheKey(cultureToUse), out localization);
+                    _ = _memCache.TryGetValue(GetCacheKey(cultureToUse), out localization);
                     SetCurrentCultureToCache(_localizationOptions.Value.DefaultCulture);
                 }
             }
@@ -81,7 +82,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             if (!_localizationOptions.Value.SupportedCultureInfos.Contains(cultureInfo))
             {
-                _localizationOptions.Value.SupportedCultureInfos.Add(cultureInfo);
+                _ = _localizationOptions.Value.SupportedCultureInfos.Add(cultureInfo);
             }
         }
 
@@ -97,7 +98,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     .SetSlidingExpiration(_memCacheDuration);
 
                 // Save data in cache.
-                _memCache.Set(GetCacheKey(currentCulture), localization, cacheEntryOptions);
+                _ = _memCache.Set(GetCacheKey(currentCulture), localization, cacheEntryOptions);
             }
         }
 
@@ -105,7 +106,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Construct localization object from json files
         /// </summary>
         /// <param name="jsonPath">Json file path</param>
-        void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
+        private void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
         {
             //be sure that localization is always initialized
             if (localization == null)
@@ -114,7 +115,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
 
             string basePath = string.IsNullOrWhiteSpace(_baseName) ? jsonPath : Path.Combine(jsonPath, _baseName);
-            if (!Directory.Exists(basePath)) return;
+            if (!Directory.Exists(basePath))
+            {
+                return;
+            }
+
             string pattern = "*.json";
 
             //get all files ending by json extension
@@ -165,21 +170,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             };
         }
 
-        string TransformBaseNameToPath(string baseName)
+        private string TransformBaseNameToPath(string baseName)
         {
             if (!string.IsNullOrEmpty(baseName))
             {
-                string friendlyName = string.Empty;
-
-                friendlyName = AppDomain.CurrentDomain.FriendlyName;
+                string friendlyName = AppDomain.CurrentDomain.FriendlyName;
 
                 //return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
                 return baseName.Replace($"{friendlyName}.", "").Replace(".", Path.DirectorySeparatorChar.ToString());
             }
             return null;
         }
-
-
-
     }
 }

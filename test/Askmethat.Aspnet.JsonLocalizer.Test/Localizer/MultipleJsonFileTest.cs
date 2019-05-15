@@ -10,7 +10,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class MultipleJsonFileTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo)
         {
             CultureInfo.CurrentUICulture = cultureInfo;
@@ -33,7 +33,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer(new CultureInfo("fr-FR"));
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
         }
@@ -45,7 +45,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer(new CultureInfo("pt-PT"));
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("o meu nome 1", result);
         }
@@ -56,7 +56,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             // Arrange
             InitLocalizer(new CultureInfo("it-IT"));
 
-            var result = localizer.GetString("Name2");
+            LocalizedString result = localizer.GetString("Name2");
 
             Assert.AreEqual("il mio nome 2", result);
         }

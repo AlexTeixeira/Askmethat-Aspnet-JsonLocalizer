@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +23,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddMvc().AddViewLocalization();
+            _ = services.AddMvc().AddViewLocalization();
 
             CultureInfo[] supportedCultures = new[]
                 {
@@ -36,14 +32,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                         new CultureInfo("pt-PT")
                 };
 
-            services.AddJsonLocalization(options =>
+            _ = services.AddJsonLocalization(options =>
             {
                 options.ResourcesPath = "json";
                 options.UseBaseName = true;
                 options.CacheDuration = TimeSpan.FromMinutes(15);
             });
 
-            services.Configure<RequestLocalizationOptions>(options =>
+            _ = services.Configure<RequestLocalizationOptions>(options =>
             {
 
                 options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
@@ -57,17 +53,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                _ = app.UseDeveloperExceptionPage();
             }
 
             //app.
-            app.UseRequestLocalization();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
+            _ = app.UseRequestLocalization();
+            _ = app.UseMvc(routes => _ = routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    template: "{controller=Home}/{action=Index}/{id?}"));
         }
     }
 }

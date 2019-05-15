@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +8,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample.Controllers
 {
     public class HomeController : Controller
     {
-        IStringLocalizer _localizer;
+        private readonly IStringLocalizer _localizer;
         public HomeController(IStringLocalizer localizer)
         {
             _localizer = localizer;

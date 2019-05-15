@@ -23,12 +23,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
             // Arrange           
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("fr-FR")
             });
 
-            var result = localizer.GetString("BaseName1");
+            LocalizedString result = localizer.GetString("BaseName1");
 
             Assert.AreEqual("Mon Nom de Base 1", result);
         }
@@ -37,11 +37,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Base_NotFound()
         {
             // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US")
             });
-            var result = localizer.GetString("Nop");
+            LocalizedString result = localizer.GetString("Nop");
 
             Assert.AreEqual("Nop", result);
 
@@ -51,12 +51,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Base_UseDefault()
         {
             // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US")
             });
 
-            var result = localizer.GetString("NoFrench");
+            LocalizedString result = localizer.GetString("NoFrench");
 
             Assert.AreEqual("No more french", result);
         }
@@ -65,12 +65,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Base_Name1_US()
         {
             // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US")
             });
 
-            var result = localizer.GetString("BaseName1");
+            LocalizedString result = localizer.GetString("BaseName1");
 
             Assert.AreEqual("My Base Name 1", result);
         }
@@ -79,7 +79,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void Should_Read_Default_Name1_US()
         {
             // Arrange
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US"),
                 SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
@@ -87,7 +87,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                      new CultureInfo("de-DE")
                 }
             });
-            var result = localizer.GetString("BaseName1");
+            LocalizedString result = localizer.GetString("BaseName1");
 
             Assert.AreEqual("My Base Name 1", result);
         }
@@ -97,7 +97,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US"),
                 SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
@@ -106,14 +106,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 }
             });
 
-            var result = localizer.GetString("CaseInsensitiveCultureName");
+            LocalizedString result = localizer.GetString("CaseInsensitiveCultureName");
             Assert.AreEqual("French", result);
         }
 
         [TestMethod]
         public void Should_Read_CaseInsensitive_UseDefault()
         {
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("en-US"),
                 SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
@@ -122,7 +122,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 }
             });
 
-            var result = localizer.GetString("CaseInsensitiveCultureName");
+            LocalizedString result = localizer.GetString("CaseInsensitiveCultureName");
             Assert.AreEqual("US English", result);
         }
 
@@ -131,17 +131,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("fr-FR")
             });
 
-            var expected = new[] {
+            string[] expected = new[] {
                 "Mon Nom de Base 1",
                 "Mon Nom de Base 2",
                 "French"
             };
-            var results = localizer.GetAllStrings().Select(x => x.Value).ToArray();
+            string[] results = localizer.GetAllStrings().Select(x => x.Value).ToArray();
             CollectionAssert.AreEquivalent(expected, results);
         }
 
@@ -150,12 +150,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
-            var localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("fr-FR")
             });
 
-            var result = localizer.GetString("BaseName1");
+            LocalizedString result = localizer.GetString("BaseName1");
 
             Assert.AreEqual("Mon Nom de Base 1", result);
 

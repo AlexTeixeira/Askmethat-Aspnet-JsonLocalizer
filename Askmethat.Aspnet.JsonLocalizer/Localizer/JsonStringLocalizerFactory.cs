@@ -1,6 +1,5 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,8 +11,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     /// </summary>
     public class JsonStringLocalizerFactory : IStringLocalizerFactory
     {
-        readonly IHostingEnvironment _env;
-        readonly IOptions<JsonLocalizationOptions> _localizationOptions;
+        private readonly IHostingEnvironment _env;
+        private readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
         public JsonStringLocalizerFactory(
                 IHostingEnvironment env,
@@ -26,13 +25,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return (IStringLocalizer)new JsonStringLocalizer(_localizationOptions, _env);
+            return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return (IStringLocalizer)new JsonStringLocalizer(_localizationOptions, _env, baseName);
+            return new JsonStringLocalizer(_localizationOptions, _env, baseName);
         }
     }
 }

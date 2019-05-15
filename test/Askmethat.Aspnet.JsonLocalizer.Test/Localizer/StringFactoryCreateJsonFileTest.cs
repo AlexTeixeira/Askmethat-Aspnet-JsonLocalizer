@@ -10,7 +10,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class StringFactoryCreateJsonFileTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo, string baseName = null)
         {
             CultureInfo.CurrentUICulture = cultureInfo;
@@ -30,7 +30,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void TestReadName1_StringLocation()
         {
             InitLocalizer(new CultureInfo("fr-FR"));
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
         }
@@ -39,7 +39,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         public void TestReadName1_BaseName_StringLocation()
         {
             InitLocalizer(new CultureInfo("fr-FR"), "base");
-            var result = localizer.GetString("Name3");
+            LocalizedString result = localizer.GetString("Name3");
 
             Assert.AreEqual("Mon Nom 3", result);
 
@@ -51,6 +51,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             Assert.IsTrue(result.ResourceNotFound);
         }
-        
+
     }
 }
