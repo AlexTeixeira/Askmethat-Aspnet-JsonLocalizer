@@ -23,8 +23,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             InitJsonStringLocalizer();
         }
 
-
-
         public LocalizedString this[string name]
         {
             get

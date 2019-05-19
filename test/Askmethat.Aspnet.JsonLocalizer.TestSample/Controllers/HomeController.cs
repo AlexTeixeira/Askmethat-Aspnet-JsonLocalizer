@@ -9,13 +9,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample.Controllers
     public class HomeController : Controller
     {
         private readonly IStringLocalizer _localizer;
-        public HomeController(IStringLocalizer localizer)
+        public HomeController(IStringLocalizer<HomeController> localizer)
         {
             _localizer = localizer;
         }
         public IActionResult Index()
         {
-            ViewData["Hello"] = _localizer["Hello"];
+            ViewData["Hello"] = _localizer["Hello"] + " " + _localizer["Controller"];
             return View();
         }
 

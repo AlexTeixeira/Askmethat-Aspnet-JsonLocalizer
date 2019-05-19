@@ -1,0 +1,8 @@
+{
+    "Hello": {
+      "Values": {
+        "en-US": "Hello from Razor page cshtml",
+        "fr-FR": "Bonjour de la page Razor cshtml"
+      }
+    }
+  }

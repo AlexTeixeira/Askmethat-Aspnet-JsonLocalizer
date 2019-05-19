@@ -41,12 +41,25 @@ services.AddJsonLocalization(options => {
 
 - **SupportedCultureInfos** : _Default value : _List containing only default culture_ and CurrentUICulture. Optionnal array of cultures that you should provide to plugin. _(Like RequestLocalizationOptions)
 - **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files.
-- **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request,
+- **CacheDuration** : _Default value : 30 minutes_. We cache all values to memory to avoid loading files for each request, this parameter defines the time after which the cache is refreshed.
 - **FileEncoding** : _default value : UTF8_. Specify the file encoding.
 - **IsAbsolutePath** : *_default value : false*. Look for an absolute path instead of project path.
-- **UseBaseName** : *_default value : false*. Use base name location for Views and consors like default Resx localization in **ResourcePathFolder**.
+- **UseBaseName** : *_default value : false*. Use base name location for Views and constructors like default Resx localization in **ResourcePathFolder**. Please have a look at the documentation below to see the different possiblities for structuring your translation files.
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
+
+#### Search patterns when UseBaseName = true
+
+If UseBaseName is set to true, it will be searched for lingualization files by the following order - skipping the options below if any option before matches.
+
+- If you use a non-typed IStringLocalizer all files in the Resources-directory, including all subdirectories, will be used to find a localization. This can cause unpredictable behavior if the same key is used in multiple files.
+
+- If you use a typed localizer, the following applies - Namespace is the "short namespace" without the root namespace:
+  - Nested classes will use the translation file of their parent class.
+  - If there is a folder named "Your/Namespace/And/Classname", all contents of this folder will be used.
+  - If there is a folder named "Your/Namespace" the folder will be searched for all json-files beginning with your classname.
+  - Otherwise there will be searched for a json-file starting with "Your.Namespace.And.Classname" in your Resources-folder.
+
 
 #Pluralization
 

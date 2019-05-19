@@ -1,0 +1,20 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@model HelloRazorModel
+@{
+    ViewData["Title"] = "HelloRazor";
+}
+@inject IViewLocalizer Localizer
+
+<h1>@Model.Hello</h1>
+<h2>@Localizer["Hello"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Input.InputField"></label><br />
+        <input asp-for="Input.InputField" class="form-control" />
+    </div>
+</form>
+
+<br/>
+<span> Shared : @Localizer["Shared"]</span>

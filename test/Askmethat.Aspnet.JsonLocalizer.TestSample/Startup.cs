@@ -23,7 +23,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
         public void ConfigureServices(IServiceCollection services)
         {
 
-            _ = services.AddMvc().AddViewLocalization();
+            _ = services.AddMvc()
+                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2)
+                .AddMvcLocalization();
 
             CultureInfo[] supportedCultures = new[]
                 {
@@ -36,7 +38,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
             {
                 options.ResourcesPath = "json";
                 options.UseBaseName = true;
-                options.CacheDuration = TimeSpan.FromMinutes(15);
+                options.CacheDuration = TimeSpan.FromSeconds(15);
             });
 
             _ = services.Configure<RequestLocalizationOptions>(options =>
@@ -58,9 +60,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             //app.
             _ = app.UseRequestLocalization();
-            _ = app.UseMvc(routes => _ = routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"));
+            _ = app.UseMvcWithDefaultRoute();
         }
     }
 }

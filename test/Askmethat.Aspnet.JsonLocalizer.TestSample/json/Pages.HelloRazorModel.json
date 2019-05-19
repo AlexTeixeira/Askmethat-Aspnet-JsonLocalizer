@@ -1,0 +1,14 @@
+{
+  "Hello": {
+    "Values": {
+      "en-US": "Hello from Razor page model",
+      "fr-FR": "Bonjour du model de la page Razor ;)"
+    }
+  },
+  "InputField": {
+    "Values": {
+      "en-US": "Write some text.",
+      "fr-FR": "Écri un petite texte."
+    }
+  }
+}
