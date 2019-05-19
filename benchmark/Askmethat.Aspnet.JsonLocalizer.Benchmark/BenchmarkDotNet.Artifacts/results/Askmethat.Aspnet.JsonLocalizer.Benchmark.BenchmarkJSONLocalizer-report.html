@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Askmethat.Aspnet.JsonLocalizer.Benchmark.BenchmarkJSONLocalizer-20190514-122941</title>
+<title>Askmethat.Aspnet.JsonLocalizer.Benchmark.BenchmarkJSONLocalizer-20190519-055303</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,23 +13,23 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.11.5, OS=Windows 10.0.17134.706 (1803/April2018Update/Redstone4)
-Intel Core i7-6700 CPU 3.40GHz (Skylake), 1 CPU, 8 logical and 4 physical cores
-Frequency=3328128 Hz, Resolution=300.4692 ns, Timer=TSC
-.NET Core SDK=2.2.103
-  [Host] : .NET Core 2.2.1 (CoreCLR 4.6.27207.03, CoreFX 4.6.27207.03), 64bit RyuJIT
+BenchmarkDotNet=v0.11.5, OS=macOS Mojave 10.14.4 (18E226) [Darwin 18.5.0]
+Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
+.NET Core SDK=2.2.106
+  [Host]     : .NET Core 2.2.4 (CoreCLR 4.6.27521.02, CoreFX 4.6.27521.01), 64bit RyuJIT
+  DefaultJob : .NET Core 2.2.4 (CoreCLR 4.6.27521.02, CoreFX 4.6.27521.01), 64bit RyuJIT
 </code></pre>
 <pre><code></code></pre>
 
 <table>
-<thead><tr><th>                                   Method</th><th>Mean</th><th>Error</th><th>Min</th><th>Max</th><th>Ratio</th><th>RatioSD</th>
+<thead><tr><th>                                   Method</th><th>   Mean</th><th>  Error</th><th> StdDev</th><th>    Min</th><th>    Max</th><th>Ratio</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>Localizer</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>?</td><td>?</td>
-</tr><tr><td>JsonLocalizer</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>?</td><td>?</td>
-</tr><tr><td>JsonLocalizerWithCreation</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>?</td><td>?</td>
-</tr><tr><td>JsonLocalizerWithCreationAndExternalMemoryCache</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>?</td><td>?</td>
-</tr><tr><td>JsonLocalizerDefaultCultureValue</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>?</td><td>?</td>
-</tr><tr><td>LocalizerDefaultCultureValue</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>?</td><td>?</td>
+</thead><tbody><tr><td>Localizer</td><td>115.89 ns</td><td>0.1277 ns</td><td>0.1132 ns</td><td>115.71 ns</td><td>116.03 ns</td><td>1.00</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>JsonLocalizer</td><td>80.46 ns</td><td>0.0964 ns</td><td>0.0805 ns</td><td>80.37 ns</td><td>80.61 ns</td><td>0.69</td><td>0.00</td><td>0.0228</td><td>-</td><td>-</td><td>48 B</td>
+</tr><tr><td>JsonLocalizerWithCreation</td><td>533,754.90 ns</td><td>3,074.1865 ns</td><td>2,875.5960 ns</td><td>529,323.89 ns</td><td>539,354.61 ns</td><td>4,606.83</td><td>25.03</td><td>83.0078</td><td>28.3203</td><td>3.9063</td><td>175880 B</td>
+</tr><tr><td>JsonLocalizerWithCreationAndExternalMemoryCache</td><td>4,734.27 ns</td><td>135.6678 ns</td><td>133.2439 ns</td><td>4,643.43 ns</td><td>5,162.57 ns</td><td>40.91</td><td>1.22</td><td>1.6174</td><td>0.8087</td><td>-</td><td>3408 B</td>
+</tr><tr><td>JsonLocalizerDefaultCultureValue</td><td>331.54 ns</td><td>1.7528 ns</td><td>1.5539 ns</td><td>329.22 ns</td><td>334.37 ns</td><td>2.86</td><td>0.01</td><td>0.1793</td><td>-</td><td>-</td><td>376 B</td>
+</tr><tr><td>LocalizerDefaultCultureValue</td><td>371.86 ns</td><td>3.8521 ns</td><td>3.6033 ns</td><td>368.69 ns</td><td>378.81 ns</td><td>3.20</td><td>0.03</td><td>0.1559</td><td>-</td><td>-</td><td>328 B</td>
 </tr></tbody></table>
 </body>
 </html>
