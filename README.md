@@ -59,6 +59,7 @@ If UseBaseName is set to true, it will be searched for lingualization files by t
   - If there is a folder named "Your/Namespace/And/Classname", all contents of this folder will be used.
   - If there is a folder named "Your/Namespace" the folder will be searched for all json-files beginning with your classname.
   - Otherwise there will be searched for a json-file starting with "Your.Namespace.And.Classname" in your Resources-folder.
+  - If there any _.shared.json_ file at base path, all the keys that do not exist in other files will be added. 
 
 
 #Pluralization
@@ -132,6 +133,9 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 
 [@Compufreak345](https://github.com/Compufreak345) :
 - [#52](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/52)
+- [#53](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/53)
+
+A special thanks to @Compufreak345 for its hard work. He did a lot for this repo.
 
 # License
 
