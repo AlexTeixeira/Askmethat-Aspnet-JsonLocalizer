@@ -10,46 +10,14 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 # Project
 
-This library allow user to use JSON files instead of RESX in Asp.net application.
-The code try to be most compliante with Microsoft guidelines.
-The library is compatible with NetStandard & NetCore
+This library allows users to use JSON files instead of RESX in an ASP.NET application.
+The code tries to be most compliant with Microsoft guidelines.
+The library is compatible with NetStandard & NetCore.
 
 # Configuration
 
 An extension method is available for `IServiceCollection`.
-You can have a look to this method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
-
-# Breaking Changes
-
-For performance purpose, JSON structure was changes since 2.0.0 from List to Dictionnary.
-Here the detail for version before 1.1.7 and version after 2.0.0
-
-## 1.1.7-
-
-``` json
-[
-  {
-    "Key": "Name3",
-    "Values": {
-      "en-US": "My Name 3",
-      "fr-FR": "Mon Nom 3"
-    }
-  }
-]
-```
-
-## 2.0.0+
-
-``` json
-{
-  "Name3": {
-    "Values": {
-      "en-US": "My Name 3",
-      "fr-FR": "Mon Nom 3"
-    }
-  }
-}
-```
+You can have a look at the method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
 
 ## Options 
 
@@ -61,7 +29,7 @@ services.AddJsonLocalization(options => {
         options.CacheDuration = TimeSpan.FromMinutes(15);
         options.ResourcesPath = "mypath";
         options.FileEncoding = Encoding.GetEncoding("ISO-8859-1");
-        options.SupportedCultureInfos = new[]
+        options.SupportedCultureInfos = new HashSet<CultureInfo>()
         {
           new CultureInfo("en-US"),
           new CultureInfo("fr-FR")
@@ -71,19 +39,33 @@ services.AddJsonLocalization(options => {
 
 ### Current Options
 
-- **SupportedCultureInfos** : _Default value : _List containing only default culture_. Array of cultures that you should provide to plugin. _(Like RequestLocalizationOptions)
+- **SupportedCultureInfos** : _Default value : _List containing only default culture_ and CurrentUICulture. Optionnal array of cultures that you should provide to plugin. _(Like RequestLocalizationOptions)
 - **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files.
-- **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request,
+- **CacheDuration** : _Default value : 30 minutes_. We cache all values to memory to avoid loading files for each request, this parameter defines the time after which the cache is refreshed.
 - **FileEncoding** : _default value : UTF8_. Specify the file encoding.
 - **IsAbsolutePath** : *_default value : false*. Look for an absolute path instead of project path.
-- **UseBaseName** : *_default value : false*. Use base name location for Views and consors like default Resx localization in **ResourcePathFolder**.
+- **UseBaseName** : *_default value : false*. Use base name location for Views and constructors like default Resx localization in **ResourcePathFolder**. Please have a look at the documentation below to see the different possiblities for structuring your translation files.
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
+
+#### Search patterns when UseBaseName = true
+
+If UseBaseName is set to true, it will be searched for lingualization files by the following order - skipping the options below if any option before matches.
+
+- If you use a non-typed IStringLocalizer all files in the Resources-directory, including all subdirectories, will be used to find a localization. This can cause unpredictable behavior if the same key is used in multiple files.
+
+- If you use a typed localizer, the following applies - Namespace is the "short namespace" without the root namespace:
+  - Nested classes will use the translation file of their parent class.
+  - If there is a folder named "Your/Namespace/And/Classname", all contents of this folder will be used.
+  - If there is a folder named "Your/Namespace" the folder will be searched for all json-files beginning with your classname.
+  - Otherwise there will be searched for a json-file starting with "Your.Namespace.And.Classname" in your Resources-folder.
+  - If there any _.shared.json_ file at base path, all the keys that do not exist in other files will be added. 
+
 
 #Pluralization
 
 In version 2.0.0, Pluralization was introduced.
-You are now able to manage a singular (left) and plural (rigth) version for the same Key. 
+You are now able to manage a singular (left) and plural (right) version for the same Key. 
 *PluralSeparator* is used as separator between the two strings.
 
 For example : User|Users for key Users
@@ -99,12 +81,6 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **Platform Support**
 
-## 1.1.7
-
-|Platform|Version|
-| -------------------  | :------------------: |
-|NetStandard|1.1.6+|
-|NetCore|2.0.0+|
 
 ## 2.0.0+
 
@@ -115,36 +91,15 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **WithCulture method**
 
-**WhithCulture** method is not implemented and will be not implemented. ASP.NET Team, start to set this method **Obsolete** fr version 3 and will be removed in version 4 of asp.net core.
+**WhithCulture** method is not implemented and will not be implemented. ASP.NET Team, start to set this method **Obsolete** for version 3 and will be removed in version 4 of asp.net core.
 
 For more information : 
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
 
 # Performances
 
-After talking with others Devs about my package, they ask my about performance.
+After talking with others Devs about my package, they asked my about performance.
 
-So I added a benchmark project and here the last results with some modification, that will be available with 1.1.7
-
-## 1.1.7
-
-``` ini
-
-BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
-Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=2.2.100
-  [Host]     : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT  [AttachedDebugger]
-  DefaultJob : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT
-
-
-```
-|        Method |     Mean |     Error |    StdDev |      Min |      Max | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|-------------- |---------:|----------:|----------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
-| JsonLocalizer | 255.1 ns | 0.7950 ns | 0.7048 ns | 253.3 ns | 256.4 ns |  2.18 |      0.0648 |           - |           - |               136 B |
-|     Localizer | 117.2 ns | 0.2544 ns | 0.2255 ns | 116.8 ns | 117.5 ns |  1.00 |           - |           - |           - |                   - |
-
-
-## 2.0.0+
 
 ``` ini
 
@@ -158,17 +113,29 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 ```
 |                                          Method |          Mean |         Error |        StdDev |           Min |           Max |    Ratio | RatioSD |   Gen 0 |   Gen 1 |  Gen 2 | Allocated |
 |------------------------------------------------ |--------------:|--------------:|--------------:|--------------:|--------------:|---------:|--------:|--------:|--------:|-------:|----------:|
-|                                       Localizer |     109.70 ns |     0.1010 ns |     0.0789 ns |     109.60 ns |     109.89 ns |     1.00 |    0.00 |       - |       - |      - |         - |
-|                                   JsonLocalizer |      80.34 ns |     0.2115 ns |     0.1875 ns |      79.99 ns |      80.70 ns |     0.73 |    0.00 |  0.0228 |       - |      - |      48 B |
-|                       JsonLocalizerWithCreation | 510,920.91 ns | 2,157.3470 ns | 1,912.4319 ns | 507,912.26 ns | 514,646.87 ns | 4,659.68 |   16.18 | 83.0078 | 27.3438 | 4.8828 |  175576 B |
-| JsonLocalizerWithCreationAndExternalMemoryCache |   4,581.21 ns |    12.6355 ns |    11.2011 ns |   4,562.24 ns |   4,605.28 ns |    41.75 |    0.11 |  1.6174 |  0.8087 |      - |    3408 B |
-|                JsonLocalizerDefaultCultureValue |     322.22 ns |     0.9659 ns |     0.8563 ns |     320.33 ns |     323.33 ns |     2.94 |    0.01 |  0.1793 |       - |      - |     376 B |
-|                    LocalizerDefaultCultureValue |     362.96 ns |     1.8632 ns |     1.5558 ns |     361.14 ns |     365.80 ns |     3.31 |    0.01 |  0.1559 |       - |      - |     328 B |
+|                                       Localizer |     115.89 ns |     0.1277 ns |     0.1132 ns |     115.71 ns |     116.03 ns |     1.00 |    0.00 |       - |       - |      - |         - |
+|                                   JsonLocalizer |      80.46 ns |     0.0964 ns |     0.0805 ns |      80.37 ns |      80.61 ns |     0.69 |    0.00 |  0.0228 |       - |      - |      48 B |
+|                       JsonLocalizerWithCreation | 533,754.90 ns | 3,074.1865 ns | 2,875.5960 ns | 529,323.89 ns | 539,354.61 ns | 4,606.83 |   25.03 | 83.0078 | 28.3203 | 3.9063 |  175880 B |
+| JsonLocalizerWithCreationAndExternalMemoryCache |   4,734.27 ns |   135.6678 ns |   133.2439 ns |   4,643.43 ns |   5,162.57 ns |    40.91 |    1.22 |  1.6174 |  0.8087 |      - |    3408 B |
+|                JsonLocalizerDefaultCultureValue |     331.54 ns |     1.7528 ns |     1.5539 ns |     329.22 ns |     334.37 ns |     2.86 |    0.01 |  0.1793 |       - |      - |     376 B |
+|                    LocalizerDefaultCultureValue |     371.86 ns |     3.8521 ns |     3.6033 ns |     368.69 ns |     378.81 ns |     3.20 |    0.03 |  0.1559 |       - |      - |     328 B |
 
 
 # Contributors
 
-[@lethek](https://github.com/lethek) : PRs : [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+[@lethek](https://github.com/lethek) : 
+- [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20)
+- [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+
+[@lugospod](https://github.com/lugospod) :
+- [#43](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/43)
+- [#44](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/44)
+
+[@Compufreak345](https://github.com/Compufreak345) :
+- [#52](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/52)
+- [#53](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/53)
+
+A special thanks to @Compufreak345 for its hard work. He did a lot for this repo.
 
 # License
 

@@ -21,23 +21,5 @@
             "en-us": "US English",
             "FR-FR": "French"
         }
-    },
-    "PluralUser": {
-        "Values": {
-            "en-US": "User|Users",
-            "fr-FR": "Utilisateur|Utilisateurs"
-        }
-    },
-    "PluralUserFailed": {
-        "Values": {
-            "en-US": "Users",
-            "fr-FR": "Utilisateurs"
-        }
-    },
-    "CustomPluralUser": {
-        "Values": {
-            "en-US": "User#Users",
-            "fr-FR": "Utilisateur#Utilisateurs"
-        }
     }
 }

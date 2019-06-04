@@ -8,9 +8,9 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 
                                           Method |          Mean |         Error |        StdDev |           Min |           Max |    Ratio | RatioSD |   Gen 0 |   Gen 1 |  Gen 2 | Allocated |
 ------------------------------------------------ |--------------:|--------------:|--------------:|--------------:|--------------:|---------:|--------:|--------:|--------:|-------:|----------:|
-                                       Localizer |     109.70 ns |     0.1010 ns |     0.0789 ns |     109.60 ns |     109.89 ns |     1.00 |    0.00 |       - |       - |      - |         - |
-                                   JsonLocalizer |      80.34 ns |     0.2115 ns |     0.1875 ns |      79.99 ns |      80.70 ns |     0.73 |    0.00 |  0.0228 |       - |      - |      48 B |
-                       JsonLocalizerWithCreation | 510,920.91 ns | 2,157.3470 ns | 1,912.4319 ns | 507,912.26 ns | 514,646.87 ns | 4,659.68 |   16.18 | 83.0078 | 27.3438 | 4.8828 |  175576 B |
- JsonLocalizerWithCreationAndExternalMemoryCache |   4,581.21 ns |    12.6355 ns |    11.2011 ns |   4,562.24 ns |   4,605.28 ns |    41.75 |    0.11 |  1.6174 |  0.8087 |      - |    3408 B |
-                JsonLocalizerDefaultCultureValue |     322.22 ns |     0.9659 ns |     0.8563 ns |     320.33 ns |     323.33 ns |     2.94 |    0.01 |  0.1793 |       - |      - |     376 B |
-                    LocalizerDefaultCultureValue |     362.96 ns |     1.8632 ns |     1.5558 ns |     361.14 ns |     365.80 ns |     3.31 |    0.01 |  0.1559 |       - |      - |     328 B |
+                                       Localizer |     115.89 ns |     0.1277 ns |     0.1132 ns |     115.71 ns |     116.03 ns |     1.00 |    0.00 |       - |       - |      - |         - |
+                                   JsonLocalizer |      80.46 ns |     0.0964 ns |     0.0805 ns |      80.37 ns |      80.61 ns |     0.69 |    0.00 |  0.0228 |       - |      - |      48 B |
+                       JsonLocalizerWithCreation | 533,754.90 ns | 3,074.1865 ns | 2,875.5960 ns | 529,323.89 ns | 539,354.61 ns | 4,606.83 |   25.03 | 83.0078 | 28.3203 | 3.9063 |  175880 B |
+ JsonLocalizerWithCreationAndExternalMemoryCache |   4,734.27 ns |   135.6678 ns |   133.2439 ns |   4,643.43 ns |   5,162.57 ns |    40.91 |    1.22 |  1.6174 |  0.8087 |      - |    3408 B |
+                JsonLocalizerDefaultCultureValue |     331.54 ns |     1.7528 ns |     1.5539 ns |     329.22 ns |     334.37 ns |     2.86 |    0.01 |  0.1793 |       - |      - |     376 B |
+                    LocalizerDefaultCultureValue |     371.86 ns |     3.8521 ns |     3.6033 ns |     368.69 ns |     378.81 ns |     3.20 |    0.03 |  0.1559 |       - |      - |     328 B |

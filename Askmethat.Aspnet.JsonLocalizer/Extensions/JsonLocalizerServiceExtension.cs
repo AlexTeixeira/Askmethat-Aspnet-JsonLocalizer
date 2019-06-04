@@ -1,10 +1,7 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {
@@ -25,7 +22,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddOptions();
+            _ = services.AddOptions();
 
             AddJsonLocalizationServices(services);
 
@@ -60,9 +57,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 
         internal static void AddJsonLocalizationServices(IServiceCollection services)
         {
-            services.AddMemoryCache();
-            services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
-            services.AddScoped<IStringLocalizer, JsonStringLocalizer>();
+            _ = services.AddMemoryCache();
+            _ = services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
+            _ = services.AddScoped<IStringLocalizer, JsonStringLocalizer>();
         }
 
         /// <summary>
@@ -75,7 +72,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
             Action<JsonLocalizationOptions> setupAction)
         {
             AddJsonLocalizationServices(services);
-            services.Configure(setupAction);
+            _ = services.Configure(setupAction);
         }
     }
 }

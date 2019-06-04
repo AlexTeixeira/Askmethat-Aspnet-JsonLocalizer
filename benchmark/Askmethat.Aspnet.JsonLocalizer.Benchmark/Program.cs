@@ -6,15 +6,11 @@ using Askmethat.Aspnet.JsonLocalizer.Benchmark.Helpers;
 using Microsoft.Extensions.Localization;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using System.Globalization;
-using System.Text;
 using Microsoft.Extensions.Options;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Resources;
-using System.Reflection;
 using Microsoft.Extensions.FileProviders;
-using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
@@ -35,12 +31,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     [MinColumn, MaxColumn, MemoryDiagnoser, MarkdownExporter]
     public class BenchmarkJSONLocalizer
     {
-        IHostingEnvironment env = new HostingEnvironment();
-        IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
-        IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
+        private readonly IHostingEnvironment env = new HostingEnvironment();
+        private readonly IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
+        private readonly IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
 
-        private const int N = 10000;
-        IStringLocalizer _jsonLocalizer;
+        private readonly IStringLocalizer _jsonLocalizer;
 
         public BenchmarkJSONLocalizer()
         {
@@ -53,15 +48,21 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
         }
 
         [Benchmark(Baseline = true)]
-        public string Localizer() => SharedResources.BaseName1;
+        public string Localizer()
+        {
+            return SharedResources.BaseName1;
+        }
 
         [Benchmark]
-        public string JsonLocalizer() => _jsonLocalizer.GetString("BaseName1").Value;
+        public string JsonLocalizer()
+        {
+            return _jsonLocalizer.GetString("BaseName1").Value;
+        }
 
         [Benchmark]
         public string JsonLocalizerWithCreation()
         {
-            var localizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            var localizer = new JsonStringLocalizer(Options.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("fr-FR"),
                 ResourcesPath = "Resources",
@@ -78,7 +79,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
         [Benchmark]
         public string JsonLocalizerWithCreationAndExternalMemoryCache()
         {
-            var localizer = new JsonStringLocalizer(Options.Create<JsonLocalizationOptions>(new JsonLocalizationOptions()
+            JsonStringLocalizer localizer = new JsonStringLocalizer(Options.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("fr-FR"),
                 ResourcesPath = "Resources",
@@ -109,11 +110,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 
     }
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
+            _ = BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class AbsolutePathJsonFileTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo)
         {
             CultureInfo.CurrentUICulture = cultureInfo;
@@ -24,7 +24,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 },
                 ResourcesPath = $"{AppContext.BaseDirectory}/path",
                 IsAbsolutePath = true
-        });
+            });
         }
 
         [TestMethod]
@@ -32,7 +32,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             InitLocalizer(new CultureInfo("fr-FR"));
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
         }
@@ -42,10 +42,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             InitLocalizer(new CultureInfo("fr-FR"));
 
-            var result = localizer.GetString("Name1");
+            LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
         }
-        
+
     }
 }

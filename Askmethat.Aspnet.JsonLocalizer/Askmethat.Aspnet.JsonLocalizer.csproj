@@ -18,10 +18,11 @@
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.*" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.*" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="2.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.*" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 

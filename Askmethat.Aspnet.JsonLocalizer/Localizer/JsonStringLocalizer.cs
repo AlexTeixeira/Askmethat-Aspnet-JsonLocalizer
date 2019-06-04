@@ -1,10 +1,8 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,17 +13,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
     {
-        readonly IHostingEnvironment _env;
+        private readonly IHostingEnvironment _env;
 
         public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, baseName)
         {
             _env = env;
-            _resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+            resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
 
             InitJsonStringLocalizer();
         }
-
-
 
         public LocalizedString this[string name]
         {
@@ -49,24 +45,24 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         private string GetPluralLocalization(string name, string format, object[] arguments)
         {
             object last = arguments.LastOrDefault();
-            string value = string.Empty;
-            if (last != null && last is bool)
+            string value;
+            if (last != null && last is bool boolean)
             {
-                bool isPlural = (bool)last;
+                bool isPlural = boolean;
                 value = GetString(name);
-                if (value.Contains(_localizationOptions.Value.PluralSeparator))
+                if (!string.IsNullOrEmpty(value) && value.Contains(_localizationOptions.Value.PluralSeparator))
                 {
-                    int index = (isPlural ? 1 : 0);
+                    int index = isPlural ? 1 : 0;
                     value = value.Split(_localizationOptions.Value.PluralSeparator)[index];
                 }
                 else
                 {
-                    value = String.Format(format ?? name, arguments);
+                    value = string.Format(format ?? name, arguments);
                 }
             }
             else
             {
-                value = String.Format(format ?? name, arguments);
+                value = string.Format(format ?? name, arguments);
             }
 
             return value;
@@ -99,14 +95,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
-        string GetString(string name, bool shouldTryDefaultCulture = true)
+        private string GetString(string name, bool shouldTryDefaultCulture = true)
         {
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
-
-            LocalizatedFormat localizedValue = null;
 
             if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
@@ -115,7 +109,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 GetCultureToUse(CultureInfo.CurrentUICulture);
             }
 
-            if (localization != null && localization.TryGetValue(name, out localizedValue))
+
+            if (localization != null && localization.TryGetValue(name, out LocalizatedFormat localizedValue))
             {
                 return localizedValue.Value;
             }
@@ -128,7 +123,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             //advert user that current name string does not 
             //contains any translation
-            Console.Error.WriteLine($"{name} does not contains any translation");
+            Console.Error.WriteLine($"{name} does not contain any translation");
             return null;
         }
 
@@ -136,20 +131,20 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Get path of json
         /// </summary>
         /// <returns>JSON relative path</returns>
-        string GetJsonRelativePath(string path)
+        private string GetJsonRelativePath(string path)
         {
             string fullPath = string.Empty;
-            if (this._localizationOptions.Value.IsAbsolutePath)
+            if (_localizationOptions.Value.IsAbsolutePath)
             {
                 fullPath = path;
             }
-            if (!this._localizationOptions.Value.IsAbsolutePath && string.IsNullOrEmpty(path))
+            if (!_localizationOptions.Value.IsAbsolutePath && string.IsNullOrEmpty(path))
             {
                 fullPath = Path.Combine(_env.ContentRootPath, "Resources");
             }
-            else if (!this._localizationOptions.Value.IsAbsolutePath && !string.IsNullOrEmpty(path))
+            else if (!_localizationOptions.Value.IsAbsolutePath && !string.IsNullOrEmpty(path))
             {
-                fullPath = Path.Combine(AppContext.BaseDirectory,path);
+                fullPath = Path.Combine(AppContext.BaseDirectory, path2: path);
             }
             return fullPath;
         }

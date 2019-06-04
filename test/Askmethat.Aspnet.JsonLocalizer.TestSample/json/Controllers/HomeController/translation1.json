@@ -1,0 +1,8 @@
+{
+  "Hello": {
+    "Values": {
+      "en-US": "Hello from",
+      "fr-FR": "Bonjour de"
+    }
+  }
+}
