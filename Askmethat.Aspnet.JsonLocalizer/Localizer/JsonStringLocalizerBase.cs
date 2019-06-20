@@ -1,19 +1,19 @@
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
-using Askmethat.Aspnet.JsonLocalizer.Format;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Askmethat.Aspnet.JsonLocalizer.Caching;
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.Format;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizerBase
     {
-        protected readonly IMemoryCache _memCache;
+        protected readonly CacheHelper _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         protected readonly string _baseName;
         protected readonly TimeSpan _memCacheDuration;
@@ -27,7 +27,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             _baseName = CleanBaseName(baseName);
             _localizationOptions = localizationOptions;
-            _memCache = _localizationOptions.Value.Caching;
+
+            _memCache = _localizationOptions.Value.DistributedCache != null ?
+                new CacheHelper(_localizationOptions.Value.DistributedCache) :
+                new CacheHelper(_localizationOptions.Value.Caching);
+            
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
         }
 
@@ -95,13 +99,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             if (!_memCache.TryGetValue(GetCacheKey(currentCulture), out localization))
             {
                 ConstructLocalizationObject(resourcesRelativePath, currentCulture);
-                // Set cache options.
-                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                    // Keep in cache for this time, reset time if accessed.
-                    .SetSlidingExpiration(_memCacheDuration);
 
                 // Save data in cache.
-                _ = _memCache.Set(GetCacheKey(currentCulture), localization, cacheEntryOptions);
+                _memCache.Set(GetCacheKey(currentCulture), localization, _memCacheDuration);
             }
         }
 
