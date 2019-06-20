@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Localization;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {
@@ -23,6 +24,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         public IMemoryCache Caching { get; set; } = new MemoryCache(new MemoryCacheOptions
         {
         });
+
+        public IDistributedCache DistributedCache { get; set; }
 
         private CultureInfo defaultCulture = new CultureInfo(DEFAULT_CULTURE);
 
