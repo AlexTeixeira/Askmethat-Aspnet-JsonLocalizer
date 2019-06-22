@@ -186,7 +186,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                         searchPattern = $"{className}?.json";
                     }
                     else
-                    { // We search something like Resources/ViewModels.Account.RegisterViewModel.json
+                    { 
+                        // We search something like Resources/ViewModels.Account.RegisterViewModel.json
                         basePath = jsonPath;
                         searchPattern = $"{shortName}?.json";
                     }
@@ -195,6 +196,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 files = Directory.GetFiles(basePath, searchPattern, searchOption).ToList();
                 //add sharedfile that should be found in base path
                 files.AddRange(Directory.GetFiles(basePath, sharedSearchPattern, SearchOption.TopDirectoryOnly));
+                //get the base shared files
+                files.AddRange(Directory.GetFiles(jsonPath, $"localizatiion.{sharedSearchPattern}", SearchOption.TopDirectoryOnly));
             }
             else
             {
