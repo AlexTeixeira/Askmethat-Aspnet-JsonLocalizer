@@ -61,6 +61,7 @@ If UseBaseName is set to true, it will be searched for lingualization files by t
   - Otherwise there will be searched for a json-file starting with "Your.Namespace.And.Classname" in your Resources-folder.
   - If there any _.shared.json_ file at base path, all the keys that do not exist in other files will be added. 
 
+- If you need a base shared files, just add a file named _localization.shared.json_ in your **ResourcesPath**
 
 #Pluralization
 
