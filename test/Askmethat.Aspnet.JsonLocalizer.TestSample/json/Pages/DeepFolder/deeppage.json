@@ -1,0 +1,8 @@
+{
+  "DeepHello": {
+    "Values": {
+      "en-US": "Hello from deep razor page model",
+      "fr-FR": "Bonjour du model profond de la page Razor ;)"
+    }
+  }
+}
