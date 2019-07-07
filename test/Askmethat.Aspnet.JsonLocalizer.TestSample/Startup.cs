@@ -25,7 +25,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             _ = services.AddMvc()
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2)
-                .AddMvcLocalization();
+                .AddViewLocalization();
 
             CultureInfo[] supportedCultures = new[]
                 {

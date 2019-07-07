@@ -32,5 +32,8 @@
     <Content Update="json\localization.shared.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="json\Pages\DeepFolder\deeppage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

@@ -197,7 +197,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 //add sharedfile that should be found in base path
                 files.AddRange(Directory.GetFiles(basePath, sharedSearchPattern, SearchOption.TopDirectoryOnly));
                 //get the base shared files
-                files.AddRange(Directory.GetFiles(jsonPath, $"localization.{sharedSearchPattern}", SearchOption.TopDirectoryOnly));
+                files.AddRange(Directory.GetFiles(jsonPath, $"localization.shared.json", SearchOption.TopDirectoryOnly));
             }
             else
             {

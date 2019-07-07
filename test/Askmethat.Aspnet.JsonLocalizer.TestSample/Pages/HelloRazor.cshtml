@@ -1,10 +1,8 @@
 @page
-@using Microsoft.AspNetCore.Mvc.Localization
 @model HelloRazorModel
 @{
     ViewData["Title"] = "HelloRazor";
 }
-@inject IViewLocalizer Localizer
 
 <h1>@Model.Hello</h1>
 <h2>@Localizer["Hello"]</h2>
