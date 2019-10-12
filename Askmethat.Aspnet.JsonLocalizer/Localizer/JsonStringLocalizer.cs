@@ -67,6 +67,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             return value;
         }
+
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             return includeParentCultures ? localization?
@@ -92,7 +93,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new JsonStringLocalizer(_localizationOptions, _env);
+            return new JsonStringLocalizer(_localizationOptions, _env) as IJsonStringLocalizer;
         }
 
         private string GetString(string name, bool shouldTryDefaultCulture = true)
@@ -147,6 +148,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 fullPath = Path.Combine(AppContext.BaseDirectory, path2: path);
             }
             return fullPath;
+        }
+
+        public void ClearMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null)
+        {
+            // If one or more cultures are provided, clear only requested cultures, else clear all supported cultures.
+            foreach (var cultureInfo in culturesToClearFromCache ??
+                                         _localizationOptions.Value.SupportedCultureInfos.ToArray())
+            {
+                // May simply want to expose IMemoryCache.Remove() so it can be called here instead of _memCache.Set()
+                _memCache.Set(GetCacheKey(cultureInfo), null, TimeSpan.Zero);
+            }
         }
     }
 }

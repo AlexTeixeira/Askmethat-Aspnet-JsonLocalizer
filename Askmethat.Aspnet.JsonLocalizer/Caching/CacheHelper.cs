@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Microsoft.Extensions.Caching.Distributed;
@@ -22,7 +23,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Caching
             _memoryCache = memoryCache;
         }
 
-        public bool TryGetValue(string cacheKey, out Dictionary<string, LocalizatedFormat> localization)
+        public bool TryGetValue(string cacheKey, out ConcurrentDictionary<string, LocalizatedFormat> localization)
         {
             if (_memoryCache != null)
             {
@@ -38,14 +39,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Caching
                     return false;
                 }
 
-                localization = JsonConvert.DeserializeObject<Dictionary<string, LocalizatedFormat>>(json);
+                localization = JsonConvert.DeserializeObject<ConcurrentDictionary<string, LocalizatedFormat>>(json);
                 return true;
             }
 
             throw new InvalidOperationException("Both MemoryCache and DistributedCache are null");
         }
 
-        public void Set(string cacheKey, Dictionary<string, LocalizatedFormat> localization, TimeSpan cacheDuration)
+        public void Set(string cacheKey, ConcurrentDictionary<string, LocalizatedFormat> localization, TimeSpan cacheDuration)
         {
             if (_memoryCache == null && _distributedCache == null)
             {
