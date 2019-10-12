@@ -35,7 +35,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
         }
 
-        private string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
+        private string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.Name}";
 
         //string GetCacheKey(CultureInfo ci)
         //{
