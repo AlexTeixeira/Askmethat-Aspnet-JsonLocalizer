@@ -48,7 +48,7 @@ services.AddJsonLocalization(options => {
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
 
-#### Search patterns when UseBaseName = true
+### Search patterns when UseBaseName = true
 
 If UseBaseName is set to true, it will be searched for lingualization files by the following order - skipping the options below if any option before matches.
 
@@ -63,7 +63,7 @@ If UseBaseName is set to true, it will be searched for lingualization files by t
 
 - If you need a base shared files, just add a file named _localization.shared.json_ in your **ResourcesPath**
 
-#Pluralization
+### Pluralization
 
 In version 2.0.0, Pluralization was introduced.
 You are now able to manage a singular (left) and plural (right) version for the same Key. 
@@ -78,12 +78,31 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **localizer.GetString("Users", true)**;
 
+### Clean Memory Cache
+
+Version 2.2.0+ allows you to clean cache. 
+It's usefull when you want's tu update in live some translations.
+
+**Example**
+
+``` cs
+public class HomeController{
+  private readonly IJsonStringLocalizer _localizer;
+  
+  public HomeController(IJsonStringLocalizer<HomeController> localizer)
+  {
+      _localizer = localizer;
+      _localizer.ClearMemCache(new List<CultureInfo>()
+      {
+          new CultureInfo("en-US")
+      });
+  }
+}
+```
 # Information
 
 **Platform Support**
 
-
-## 2.0.0+
 
 |Platform|Version|
 | -------------------  | :------------------: |
@@ -124,17 +143,52 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 
 # Contributors
 
-[@lethek](https://github.com/lethek) : 
-- [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20)
-- [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
-
-[@lugospod](https://github.com/lugospod) :
-- [#43](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/43)
-- [#44](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/44)
-
-[@Compufreak345](https://github.com/Compufreak345) :
-- [#52](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/52)
-- [#53](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/53)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/lethek">
+        <img src="https://avatars2.githubusercontent.com/u/52574?s=460&v=4" width="100px;" alt="Michael Monsour"/>
+        <br />
+        <sub><b>Michael Monsour</b></sub>
+      </a>
+    </td>
+     <td align="center">
+      <a href="https://github.com/lugospod">
+        <img src="https://avatars1.githubusercontent.com/u/29342608?s=460&v=4" width="100px;" alt="Luka Gospodnetic"/>
+        <br />
+        <sub><b>Luka Gospodnetic</b></sub>
+      </a>
+    </td>
+     <td align="center">
+      <a href="https://github.com/Compufreak345">
+        <img src="https://avatars3.githubusercontent.com/u/10026694?s=460&v=4" width="100px;" alt="Christoph Sonntag"/>
+        <br />
+        <sub><b>Christoph Sonntag</b></sub>
+      </a>
+    </td>
+     <td align="center">
+      <a href="https://github.com/Dunning-Kruger">
+        <img src="https://avatars0.githubusercontent.com/u/1564825?s=460&v=4" width="100px;" alt="Nacho"/>
+        <br />
+        <sub><b>Nacho</b></sub>
+      </a>
+    </td>
+     <td align="center">
+      <a href="https://github.com/AshleyMedway">
+        <img src="https://avatars3.githubusercontent.com/u/1255596?s=460&v=4" width="100px;" alt="Ashley Medway"/>
+        <br />
+        <sub><b>Ashley Medway</b></sub>
+      </a>
+    </td>
+     <td align="center">
+      <a href="https://github.com/NoPasaran0218">
+        <img src="https://avatars2.githubusercontent.com/u/25226807?s=460&v=4" width="100px;" alt="Serhii Voitovych"/>
+        <br />
+        <sub><b>Serhii Voitovych</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
 A special thanks to @Compufreak345 for its hard work. He did a lot for this repo.
 
