@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
-    internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
+    internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
         private readonly IHostingEnvironment _env;
 
@@ -87,9 +87,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                             string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    )
-                    ;
-
+                    ).OrderBy(s => s.Name);
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -164,8 +162,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             foreach (var cultureInfo in culturesToClearFromCache ??
                                          _localizationOptions.Value.SupportedCultureInfos.ToArray())
             {
-                // May simply want to expose IMemoryCache.Remove() so it can be called here instead of _memCache.Set()
-                _memCache.Set(GetCacheKey(cultureInfo), null, TimeSpan.Zero);
+                _memCache.Remove(GetCacheKey(cultureInfo));
             }
         }
     }

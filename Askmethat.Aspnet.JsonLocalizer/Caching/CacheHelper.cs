@@ -72,5 +72,18 @@ namespace Askmethat.Aspnet.JsonLocalizer.Caching
                 _distributedCache.SetString(cacheKey, json, cacheEntryOptions);
             }
         }
+
+        public void Remove(string cacheKey)
+        {
+            if (_memoryCache != null)
+            {
+                _memoryCache.Remove(cacheKey);
+            }
+
+            if (_distributedCache != null)
+            {
+                _distributedCache.Remove(cacheKey);
+            }
+        }
     }
 }

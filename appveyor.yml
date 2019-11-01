@@ -38,10 +38,10 @@ dotnet_csproj:
   informational_version: '{version}'
 environment:
   nuget_key:
-    secure: dUOUuzSSXbcqVbxkcZFyB5fByZ/Zjl7ah8THyji8YVJNJiGVxKFYamuuuPOn/UxX
+    secure: GYX+JFKT7xo9zxtb5hhpSp7bmqTpljtH8hNfWMAOjZPHaofZ4RffdjFqZJRr8pxW
 deploy:
   - provider: NuGet
     api_key:
-      secure: dUOUuzSSXbcqVbxkcZFyB5fByZ/Zjl7ah8THyji8YVJNJiGVxKFYamuuuPOn/UxX
+      secure: GYX+JFKT7xo9zxtb5hhpSp7bmqTpljtH8hNfWMAOjZPHaofZ4RffdjFqZJRr8pxW
     on:
       appveyor_repo_tag: true

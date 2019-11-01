@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -9,10 +11,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IStringLocalizer _localizer;
-        public HomeController(IStringLocalizer<HomeController> localizer)
+        private readonly IJsonStringLocalizer _localizer;
+        public HomeController(IJsonStringLocalizer<HomeController> localizer)
         {
             _localizer = localizer;
+            _localizer.ClearMemCache(new List<CultureInfo>()
+            {
+                new CultureInfo("en-US")
+            });
         }
         public IActionResult Index()
         {

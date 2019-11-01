@@ -14,6 +14,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizerBase
     {
+        #region properties and constructor
+
         protected readonly CacheHelper _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         protected readonly string _baseName;
@@ -35,7 +37,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
         }
+        #endregion
 
+        #region cache and culture methods
         protected string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.Name}";
 
         private void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
@@ -63,7 +67,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 SetCurrentCultureToCache(_localizationOptions.Value.DefaultCulture);
             }
         }
+        #endregion
 
+        #region files initialization
+        
         protected void InitJsonStringLocalizer()
         {
             AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
@@ -221,6 +228,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 return string.Empty;
             }
         }
+        #endregion
 
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
         {

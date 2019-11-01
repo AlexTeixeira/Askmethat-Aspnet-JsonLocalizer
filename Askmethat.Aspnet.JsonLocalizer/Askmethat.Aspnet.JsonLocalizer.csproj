@@ -13,7 +13,7 @@
     <Copyright>Copyright 2018 (c) Askmethat Corporation.</Copyright>
     <PackageTags>Json Localizer Globalization netcore netstandard</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <RepositoryUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
