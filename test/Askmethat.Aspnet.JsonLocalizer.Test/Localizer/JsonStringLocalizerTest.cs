@@ -165,5 +165,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             Assert.AreEqual("My Base Name 1", result);
         }
+        
+        [TestMethod]
+        public void Should_SwitchCulture_FromWithCulture()
+        {
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR")
+            });
+
+            localizer.WithCulture(new CultureInfo("en-US"));
+            var result = localizer.GetString("BaseName1");
+
+            Assert.AreEqual("My Base Name 1", result);
+        }
     }
 }

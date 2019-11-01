@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -93,7 +94,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new JsonStringLocalizer(_localizationOptions, _env) as IJsonStringLocalizer;
+            if (!_localizationOptions.Value.SupportedCultureInfos.Contains(culture))
+            {
+                _localizationOptions.Value.SupportedCultureInfos.Add(culture);
+            }
+
+            CultureInfo.CurrentCulture = culture;
+            
+            return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
         private string GetString(string name, bool shouldTryDefaultCulture = true)
