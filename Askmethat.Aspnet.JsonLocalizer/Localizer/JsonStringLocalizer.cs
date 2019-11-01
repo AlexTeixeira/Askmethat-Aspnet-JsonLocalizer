@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
-    internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
+    internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
         private readonly IHostingEnvironment _env;
 
@@ -67,6 +68,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             return value;
         }
+
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             return includeParentCultures ? localization?
@@ -85,13 +87,18 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                             string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    )
-                    ;
-
+                    ).OrderBy(s => s.Name);
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
+            if (!_localizationOptions.Value.SupportedCultureInfos.Contains(culture))
+            {
+                _localizationOptions.Value.SupportedCultureInfos.Add(culture);
+            }
+
+            CultureInfo.CurrentCulture = culture;
+            
             return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
@@ -147,6 +154,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 fullPath = Path.Combine(AppContext.BaseDirectory, path2: path);
             }
             return fullPath;
+        }
+
+        public void ClearMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null)
+        {
+            // If one or more cultures are provided, clear only requested cultures, else clear all supported cultures.
+            foreach (var cultureInfo in culturesToClearFromCache ??
+                                         _localizationOptions.Value.SupportedCultureInfos.ToArray())
+            {
+                _memCache.Remove(GetCacheKey(cultureInfo));
+            }
         }
     }
 }

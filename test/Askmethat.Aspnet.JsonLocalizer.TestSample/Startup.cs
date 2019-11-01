@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using System.Linq;
 using Microsoft.AspNetCore.Localization;
 
 namespace Askmethat.Aspnet.JsonLocalizer.TestSample
@@ -25,6 +26,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             _ = services.AddMvc()
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2)
+                .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
 
             CultureInfo[] supportedCultures = new[]
@@ -39,6 +41,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 options.ResourcesPath = "json";
                 options.UseBaseName = true;
                 options.CacheDuration = TimeSpan.FromSeconds(15);
+                options.SupportedCultureInfos = supportedCultures.ToHashSet();
             });
 
             _ = services.Configure<RequestLocalizationOptions>(options =>

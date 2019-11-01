@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,6 +14,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizerBase
     {
+        #region properties and constructor
+
         protected readonly CacheHelper _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         protected readonly string _baseName;
@@ -21,7 +24,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected const string CACHE_KEY = "LocalizationBlob";
         protected string resourcesRelativePath;
         protected string currentCulture = string.Empty;
-        protected Dictionary<string, LocalizatedFormat> localization;
+        protected ConcurrentDictionary<string, LocalizatedFormat> localization;
 
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
@@ -34,17 +37,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
         }
+        #endregion
 
-        private string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.Name}";
+        #region cache and culture methods
+        protected string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.Name}";
 
-        //string GetCacheKey(CultureInfo ci)
-        //{
-        //    if (_localizationOptions.Value.UseBaseName)
-        //    {
-        //        return $"{CACHE_KEY}_{ci.DisplayName}_{_baseName}";
-        //    }
-        //    return $"{CACHE_KEY}_{ci.DisplayName}";
-        //}
         private void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
         protected bool IsUICultureCurrentCulture(CultureInfo ci)
         {
@@ -70,7 +67,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 SetCurrentCultureToCache(_localizationOptions.Value.DefaultCulture);
             }
         }
+        #endregion
 
+        #region files initialization
+        
         protected void InitJsonStringLocalizer()
         {
             AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
@@ -114,14 +114,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             //be sure that localization is always initialized
             if (localization == null)
             {
-                localization = new Dictionary<string, LocalizatedFormat>();
+                localization = new ConcurrentDictionary<string, LocalizatedFormat>();
             }
 
             IEnumerable<string> myFiles = GetMatchingJsonFiles(jsonPath);
 
             foreach (string file in myFiles)
             {
-                Dictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<Dictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
+                ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<ConcurrentDictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
                 if (tempLocalization == null)
                 {
                     continue;
@@ -133,7 +133,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     {
                         if (!localization.ContainsKey(temp.Key))
                         {
-                            localization.Add(temp.Key, localizedValue);
+                            localization.TryAdd(temp.Key, localizedValue);
                         }
                         else if (localization[temp.Key].IsParent)
                         {
@@ -228,6 +228,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 return string.Empty;
             }
         }
+        #endregion
 
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
         {
@@ -252,6 +253,5 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 Value = value
             };
         }
-
     }
 }
