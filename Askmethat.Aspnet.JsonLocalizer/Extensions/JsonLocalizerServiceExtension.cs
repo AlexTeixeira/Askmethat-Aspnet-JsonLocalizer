@@ -61,6 +61,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
             _ = services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
             _ = services.AddScoped<IJsonStringLocalizer, JsonStringLocalizer>();
             _ = services.AddScoped(typeof(IJsonStringLocalizer<>), typeof(JsonStringLocalizerOfT<>));
+            _ = services.AddScoped<IStringLocalizer, JsonStringLocalizer>();
+            _ = services.AddScoped(typeof(IStringLocalizer<>), typeof(JsonStringLocalizerOfT<>));
+
         }
 
         /// <summary>
