@@ -10,7 +10,7 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer</PackageProjectUrl>
-    <Copyright>Copyright 2018 (c) Askmethat Corporation.</Copyright>
+    <Copyright>Copyright 2019 (c) Alexandre TEIXEIRA.</Copyright>
     <PackageTags>Json Localizer Globalization netcore netstandard</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.2.0</Version>
