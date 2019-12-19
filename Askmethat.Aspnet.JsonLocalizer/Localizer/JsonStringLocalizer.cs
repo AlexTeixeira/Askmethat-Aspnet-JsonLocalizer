@@ -156,6 +156,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return fullPath;
         }
 
+        /// <summary>
+        /// In order to use this method, JsonLocalizationOptions.ResourcesPath & JsonLocalizationOptions.IsAbsolutePath = true must be set. For more information, see: [https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/wiki/How-file-path-works]
+        /// </summary>
+        /// <param name="culturesToClearFromCache">Specific cultures to clear from cache. If not provided, all cultures will be purged from cache.</param>
         public void ClearMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null)
         {
             // If one or more cultures are provided, clear only requested cultures, else clear all supported cultures.
