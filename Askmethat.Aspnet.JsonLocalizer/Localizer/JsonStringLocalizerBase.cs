@@ -45,7 +45,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         private void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
         protected bool IsUICultureCurrentCulture(CultureInfo ci)
         {
-            return string.Equals(currentCulture, ci.Name, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(currentCulture, ci.Name, StringComparison.OrdinalIgnoreCase);
         }
 
         protected void GetCultureToUse(CultureInfo cultureToUse)
@@ -233,17 +233,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
         {
             bool isParent = false;
-            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
             if (value is null)
             {
                 isParent = true;
-                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)).Value;
                 if (value is null)
                 {
                     value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
                     if (value is null && _localizationOptions.Value.DefaultCulture != null)
                     {
-                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
                     }
                 }
             }
