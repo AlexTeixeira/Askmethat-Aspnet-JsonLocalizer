@@ -8,7 +8,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     //resource not use, only here to match microsoft interfaces
     internal class JsonStringLocalizerOfT<T> : JsonStringLocalizer, IJsonStringLocalizer<T>, IStringLocalizer<T>
     {
-        public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, env, baseName)
+        public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName = null) : base(localizationOptions, env, baseName)
         {
         }
     }

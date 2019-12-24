@@ -11,11 +11,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     /// </summary>
     public class JsonStringLocalizerFactory : IStringLocalizerFactory
     {
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
         public JsonStringLocalizerFactory(
-                IHostingEnvironment env,
+                IWebHostEnvironment env,
                 IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             _env = env;

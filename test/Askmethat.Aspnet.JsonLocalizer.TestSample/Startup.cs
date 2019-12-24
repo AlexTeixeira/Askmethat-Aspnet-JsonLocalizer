@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Hosting;
 
 namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 {
@@ -24,8 +25,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
         public void ConfigureServices(IServiceCollection services)
         {
 
-            _ = services.AddMvc()
-                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2)
+            _ = services.AddControllersWithViews()
+                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0)
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
 
@@ -54,7 +55,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -63,7 +64,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             //app.
             _ = app.UseRequestLocalization();
-            _ = app.UseMvcWithDefaultRoute();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
