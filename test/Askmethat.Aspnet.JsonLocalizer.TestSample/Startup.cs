@@ -29,6 +29,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0)
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
+            _ = services.AddRazorPages()
+                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0)
+                .AddDataAnnotationsLocalization()
+                .AddViewLocalization();
 
             CultureInfo[] supportedCultures = new[]
                 {
@@ -69,6 +73,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
