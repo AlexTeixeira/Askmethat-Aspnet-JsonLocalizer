@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,11 +20,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
 
 
         public IConfiguration Configuration { get; }
+
+        JsonLocalizationOptions _jsonLocalizationOptions;
+        List<CultureInfo> _supportedCultures;
+        RequestCulture _defaultRequestCulture;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
             _ = services.AddControllersWithViews()
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0)
                 .AddDataAnnotationsLocalization()
@@ -34,27 +38,31 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
 
-            CultureInfo[] supportedCultures = new[]
-                {
-                        new CultureInfo("en-US"),
-                        new CultureInfo("fr-FR"),
-                        new CultureInfo("pt-PT")
-                };
+            // Get json localization options from appsettings 
+            var jsonLocalizationOptions = Configuration.GetSection(nameof(JsonLocalizationOptions));
+
+            _jsonLocalizationOptions = jsonLocalizationOptions.Get<JsonLocalizationOptions>();
+            _defaultRequestCulture = new RequestCulture(_jsonLocalizationOptions.DefaultCulture,
+                _jsonLocalizationOptions.DefaultUICulture);
+            _supportedCultures = _jsonLocalizationOptions.SupportedCultureInfos.ToList();
 
             _ = services.AddJsonLocalization(options =>
             {
-                options.ResourcesPath = "json";
-                options.UseBaseName = true;
-                options.CacheDuration = TimeSpan.FromSeconds(15);
-                options.SupportedCultureInfos = supportedCultures.ToHashSet();
+                options.ResourcesPath = _jsonLocalizationOptions.ResourcesPath;
+                options.UseBaseName = _jsonLocalizationOptions.UseBaseName;
+                options.CacheDuration = _jsonLocalizationOptions.CacheDuration;
+                options.SupportedCultureInfos = _jsonLocalizationOptions.SupportedCultureInfos;
+                options.FileEncoding = _jsonLocalizationOptions.FileEncoding;
+                options.IsAbsolutePath = _jsonLocalizationOptions.IsAbsolutePath;
             });
 
             _ = services.Configure<RequestLocalizationOptions>(options =>
             {
-
-                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
+                options.DefaultRequestCulture = _defaultRequestCulture;
+                // Formatting numbers, dates, etc.
+                options.SupportedCultures = _supportedCultures;
+                // UI strings that we have localized.
+                options.SupportedUICultures = _supportedCultures;
             });
         }
 
@@ -66,8 +74,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 _ = app.UseDeveloperExceptionPage();
             }
 
-            //app.
-            _ = app.UseRequestLocalization();
+            _ = app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = _defaultRequestCulture,
+                // Formatting numbers, dates, etc.
+                SupportedCultures = _supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = _supportedCultures
+            });
 
             app.UseRouting();
 

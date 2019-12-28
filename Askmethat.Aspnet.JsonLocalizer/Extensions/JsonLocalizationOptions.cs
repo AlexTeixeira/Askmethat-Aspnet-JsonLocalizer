@@ -44,6 +44,23 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
             }
         }
 
+        private CultureInfo defaultUICulture = new CultureInfo(DEFAULT_CULTURE);
+
+        /// <summary>
+        /// Sets the default ui culture to use.
+        /// </summary>
+        public CultureInfo DefaultUICulture
+        {
+            get => defaultUICulture;
+            set
+            {
+                if (value != defaultUICulture)
+                {
+                    defaultUICulture = value ?? CultureInfo.InvariantCulture;
+                }
+            }
+        }
+
         private HashSet<CultureInfo> supportedCultureInfos = new HashSet<CultureInfo>
         {
 
@@ -69,6 +86,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         /// Look for an absolute path instead of project path.
         /// </summary>
         public bool IsAbsolutePath { get; set; } = false;
+
+        /// <summary>
+        /// Specify the file encoding name.
+        /// .NET core supported:
+        /// https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
+        /// </summary>
+        public string FileEncodingName {
+            get => FileEncoding.EncodingName;
+            set => FileEncoding = Encoding.GetEncoding(value);
+        }
 
         /// <summary>
         /// Specify the file encoding.
