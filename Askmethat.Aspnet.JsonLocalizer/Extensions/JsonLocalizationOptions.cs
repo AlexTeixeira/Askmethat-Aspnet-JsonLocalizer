@@ -79,8 +79,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         /// </summary>
         public bool UseBaseName { get; set; } = false;
         /// <summary>
-        /// Seperator used to get singular or pluralized version of localization.
+        /// Separator used to get singular or pluralized version of localization.
         /// </summary>
         public char PluralSeparator { get; set; } = PLURAL_SEPARATOR;
+
+        /// <summary>
+        /// Define logging behavior when a translation is not found.
+        /// </summary>
+        public MissingTranslationLogBehavior MissingTranslationLogBehavior { get; set; } = MissingTranslationLogBehavior.LogConsoleError;
     }
 }
