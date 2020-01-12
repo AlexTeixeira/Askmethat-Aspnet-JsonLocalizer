@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -128,9 +127,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 return GetString(name, false);
             }
 
-            //advert user that current name string does not 
-            //contains any translation
-            Console.Error.WriteLine($"{name} does not contain any translation");
+            // Notify the user that a translation was not found for the current string
+            // only if logging is defined in options.MissingTranslationLogBehavior
+            if (_localizationOptions.Value.MissingTranslationLogBehavior ==
+                MissingTranslationLogBehavior.LogConsoleError)
+            {
+                Console.Error.WriteLine($"{name} does not contain any translation");
+            }
+
             return null;
         }
 
