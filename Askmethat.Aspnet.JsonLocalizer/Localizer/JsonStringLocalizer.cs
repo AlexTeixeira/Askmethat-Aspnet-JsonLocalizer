@@ -14,9 +14,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
 
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, baseName)
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName = null) : base(localizationOptions, baseName)
         {
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
