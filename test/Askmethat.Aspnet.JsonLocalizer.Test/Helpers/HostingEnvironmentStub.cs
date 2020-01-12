@@ -4,7 +4,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Helpers
 {
-    public class HostingEnvironmentStub : IHostingEnvironment
+    public class HostingEnvironmentStub : IWebHostEnvironment
     {
         public HostingEnvironmentStub()
         {

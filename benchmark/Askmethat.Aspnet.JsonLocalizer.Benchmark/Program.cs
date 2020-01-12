@@ -14,7 +14,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
-    public class HostingEnvironmentStub : IHostingEnvironment
+    public class HostingEnvironmentStub : IWebHostEnvironment
     {
         public HostingEnvironmentStub()
         {
@@ -31,7 +31,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     [MinColumn, MaxColumn, MemoryDiagnoser, MarkdownExporter]
     public class BenchmarkJSONLocalizer
     {
-        private readonly IHostingEnvironment env = new HostingEnvironment();
+        private readonly IWebHostEnvironment env = new HostingEnvironment();
         private readonly IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
         private readonly IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
 

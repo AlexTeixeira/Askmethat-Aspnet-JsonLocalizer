@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark.Helpers
 {
-    public class HostingEnvironment : IHostingEnvironment
+    public class HostingEnvironment : IWebHostEnvironment
     {
         public string EnvironmentName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public string ApplicationName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }

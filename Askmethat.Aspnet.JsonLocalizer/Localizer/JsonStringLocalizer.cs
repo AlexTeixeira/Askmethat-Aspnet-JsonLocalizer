@@ -8,15 +8,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
 
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, baseName)
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName = null) : base(localizationOptions, baseName)
         {
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
@@ -128,9 +127,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 return GetString(name, false);
             }
 
-            //advert user that current name string does not 
-            //contains any translation
-            Console.Error.WriteLine($"{name} does not contain any translation");
+            // Notify the user that a translation was not found for the current string
+            // only if logging is defined in options.MissingTranslationLogBehavior
+            if (_localizationOptions.Value.MissingTranslationLogBehavior ==
+                MissingTranslationLogBehavior.LogConsoleError)
+            {
+                Console.Error.WriteLine($"{name} does not contain any translation");
+            }
+
             return null;
         }
 
@@ -156,6 +160,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return fullPath;
         }
 
+        /// <summary>
+        /// In order to use this method, JsonLocalizationOptions.ResourcesPath & JsonLocalizationOptions.IsAbsolutePath = true must be set. For more information, see: [https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/wiki/How-file-path-works]
+        /// </summary>
+        /// <param name="culturesToClearFromCache">Specific cultures to clear from cache. If not provided, all cultures will be purged from cache.</param>
         public void ClearMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null)
         {
             // If one or more cultures are provided, clear only requested cultures, else clear all supported cultures.
