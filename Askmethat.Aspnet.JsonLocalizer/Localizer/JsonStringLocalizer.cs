@@ -123,6 +123,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             if (shouldTryDefaultCulture)
             {
+	            InitJsonStringLocalizer(_localizationOptions.Value.DefaultCulture);
+	            AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
                 GetCultureToUse(_localizationOptions.Value.DefaultCulture);
                 return GetString(name, false);
             }
