@@ -20,7 +20,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
 
-            InitJsonStringLocalizer();
+            //InitJsonStringLocalizer();
         }
 
         public LocalizedString this[string name]

@@ -70,20 +70,20 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         #endregion
 
         #region files initialization
-        
-        protected void InitJsonStringLocalizer()
-        {
-            AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
-            AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
 
-            foreach (CultureInfo ci in _localizationOptions.Value.SupportedCultureInfos)
-            {
-                InitJsonStringLocalizer(ci);
-            }
+        //protected void InitJsonStringLocalizer()
+        //{
+        //    AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
+        //    AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
 
-            //after initialization, get current ui culture
-            GetCultureToUse(CultureInfo.CurrentUICulture);
-        }
+        //    foreach (CultureInfo ci in _localizationOptions.Value.SupportedCultureInfos)
+        //    {
+        //        InitJsonStringLocalizer(ci);
+        //    }
+
+        //    // after initialization, get current ui culture
+        //    GetCultureToUse(CultureInfo.CurrentUICulture);
+        //}
 
         protected void AddMissingCultureToSupportedCulture(CultureInfo cultureInfo)
         {
@@ -192,7 +192,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                         searchPattern = $"{shortName}?.json";
                     }
                 }
-
+					
                 files = Directory.GetFiles(basePath, searchPattern, searchOption).ToList();
                 //add sharedfile that should be found in base path
                 files.AddRange(Directory.GetFiles(basePath, sharedSearchPattern, SearchOption.TopDirectoryOnly));
