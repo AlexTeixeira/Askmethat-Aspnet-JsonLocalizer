@@ -175,5 +175,22 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 _memCache.Remove(GetCacheKey(cultureInfo));
             }
         }
+
+        /// <summary>
+        /// Reload memory cache
+        /// </summary>
+        /// <param name="reloadCulturesToCache">Reload specified cultures</param>
+
+        public void ReloadMemCache(IEnumerable<CultureInfo> reloadCulturesToCache = null)
+        {
+	        ClearMemCache();
+	        foreach (var cultureInfo in reloadCulturesToCache ??
+	                                    _localizationOptions.Value.SupportedCultureInfos.ToArray())
+	        {
+		        InitJsonStringLocalizer(cultureInfo);
+		        AddMissingCultureToSupportedCulture(cultureInfo);
+		        GetCultureToUse(cultureInfo);
+            }
+        }
     }
 }

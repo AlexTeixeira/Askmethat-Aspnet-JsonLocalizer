@@ -45,13 +45,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
                 ResourcesPath = "Resources",
                 Caching = _cach2
             }), new HostingEnvironmentStub());
-
-            // Simulate the first web request.
-            // Ignore *.json loading in test.
-            CultureInfo.CurrentUICulture = new CultureInfo("pt-PT");
-            _ = _jsonLocalizer.GetString("BaseName1").Value;
-            CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
-            _ = _jsonLocalizer.GetString("BaseName1").Value;
         }
 
         [Benchmark(Baseline = true)]
