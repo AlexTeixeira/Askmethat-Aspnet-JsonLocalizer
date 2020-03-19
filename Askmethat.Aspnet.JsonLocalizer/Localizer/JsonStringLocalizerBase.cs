@@ -71,20 +71,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         #region files initialization
 
-        //protected void InitJsonStringLocalizer()
-        //{
-        //    AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
-        //    AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
-
-        //    foreach (CultureInfo ci in _localizationOptions.Value.SupportedCultureInfos)
-        //    {
-        //        InitJsonStringLocalizer(ci);
-        //    }
-
-        //    // after initialization, get current ui culture
-        //    GetCultureToUse(CultureInfo.CurrentUICulture);
-        //}
-
         protected void AddMissingCultureToSupportedCulture(CultureInfo cultureInfo)
         {
             if (!_localizationOptions.Value.SupportedCultureInfos.Contains(cultureInfo))

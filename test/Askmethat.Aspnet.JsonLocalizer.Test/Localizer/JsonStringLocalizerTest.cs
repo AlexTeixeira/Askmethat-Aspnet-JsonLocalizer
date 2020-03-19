@@ -129,6 +129,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_GetAllStrings_ByCaseInsensitiveCultureName()
         {
+            
             CultureInfo.CurrentUICulture = new CultureInfo("fr-FR");
 
             JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(new JsonLocalizationOptions()
@@ -141,6 +142,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 "Mon Nom de Base 2",
                 "French"
             };
+            LocalizedString result = localizer.GetString("BaseName1");
+
             string[] results = localizer.GetAllStrings().Select(x => x.Value).ToArray();
             CollectionAssert.AreEquivalent(expected, results);
         }
