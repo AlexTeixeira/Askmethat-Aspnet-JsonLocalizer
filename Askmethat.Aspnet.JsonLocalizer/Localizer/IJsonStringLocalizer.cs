@@ -6,7 +6,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     public interface IJsonStringLocalizer: IStringLocalizer
     {
-        void ClearMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null);
+	    void ClearMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null);
+	    void ReloadMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null);
     }
 
     public interface IJsonStringLocalizer<T> : IJsonStringLocalizer

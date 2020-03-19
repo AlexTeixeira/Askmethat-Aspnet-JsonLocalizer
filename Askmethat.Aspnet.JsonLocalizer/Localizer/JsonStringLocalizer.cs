@@ -20,7 +20,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
 
-            InitJsonStringLocalizer();
+            //InitJsonStringLocalizer();
         }
 
         public LocalizedString this[string name]
@@ -123,6 +123,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             if (shouldTryDefaultCulture)
             {
+	            InitJsonStringLocalizer(_localizationOptions.Value.DefaultCulture);
+	            AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
                 GetCultureToUse(_localizationOptions.Value.DefaultCulture);
                 return GetString(name, false);
             }
@@ -171,6 +173,23 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                                          _localizationOptions.Value.SupportedCultureInfos.ToArray())
             {
                 _memCache.Remove(GetCacheKey(cultureInfo));
+            }
+        }
+
+        /// <summary>
+        /// Reload memory cache
+        /// </summary>
+        /// <param name="reloadCulturesToCache">Reload specified cultures</param>
+
+        public void ReloadMemCache(IEnumerable<CultureInfo> reloadCulturesToCache = null)
+        {
+	        ClearMemCache();
+	        foreach (var cultureInfo in reloadCulturesToCache ??
+	                                    _localizationOptions.Value.SupportedCultureInfos.ToArray())
+	        {
+		        InitJsonStringLocalizer(cultureInfo);
+		        AddMissingCultureToSupportedCulture(cultureInfo);
+		        GetCultureToUse(cultureInfo);
             }
         }
     }
