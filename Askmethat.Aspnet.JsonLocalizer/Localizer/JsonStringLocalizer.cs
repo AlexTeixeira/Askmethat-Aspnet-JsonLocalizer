@@ -19,8 +19,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
-
-            //InitJsonStringLocalizer();
         }
 
         public LocalizedString this[string name]
@@ -70,6 +68,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
+            InitJsonFromCulture(CultureInfo.CurrentUICulture); 
+
             return includeParentCultures ? localization?
                     .Select(
                         l =>
@@ -110,11 +110,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
-                InitJsonStringLocalizer(CultureInfo.CurrentUICulture);
-                AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
-                GetCultureToUse(CultureInfo.CurrentUICulture);
+                InitJsonFromCulture(CultureInfo.CurrentUICulture);
             }
-
 
             if (localization != null && localization.TryGetValue(name, out LocalizatedFormat localizedValue))
             {
@@ -123,9 +120,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             if (shouldTryDefaultCulture)
             {
-	            InitJsonStringLocalizer(_localizationOptions.Value.DefaultCulture);
-	            AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
-                GetCultureToUse(_localizationOptions.Value.DefaultCulture);
+                InitJsonFromCulture(_localizationOptions.Value.DefaultCulture);
                 return GetString(name, false);
             }
 
@@ -138,6 +133,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
 
             return null;
+        }
+
+        private void InitJsonFromCulture(CultureInfo cultureInfo)
+        {
+            InitJsonStringLocalizer(cultureInfo);
+            AddMissingCultureToSupportedCulture(cultureInfo);
+            GetCultureToUse(cultureInfo);
         }
 
         /// <summary>
@@ -187,9 +189,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 	        foreach (var cultureInfo in reloadCulturesToCache ??
 	                                    _localizationOptions.Value.SupportedCultureInfos.ToArray())
 	        {
-		        InitJsonStringLocalizer(cultureInfo);
-		        AddMissingCultureToSupportedCulture(cultureInfo);
-		        GetCultureToUse(cultureInfo);
+                InitJsonFromCulture(cultureInfo); 
             }
         }
     }

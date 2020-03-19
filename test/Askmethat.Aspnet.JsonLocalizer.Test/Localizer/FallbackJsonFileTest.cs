@@ -104,7 +104,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_AllStringsWithoutParentFallback()
         {
-
             InitLocalizer("en-AU");
 
             LocalizedString[] results = localizer.GetAllStrings(includeParentCultures: false).ToArray();
