@@ -34,7 +34,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             });
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Should_Read_Color_NoFallback()
         {
             InitLocalizer("en-AU");
@@ -70,7 +70,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Should_Read_ResourceMissingCulture_FallbackToResourceName()
         {
             InitLocalizer("zh-CN");
@@ -79,7 +79,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             Assert.IsTrue(result.ResourceNotFound);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Should_Read_MissingResource_FallbackToResourceName()
         {
             InitLocalizer("en-AU");
