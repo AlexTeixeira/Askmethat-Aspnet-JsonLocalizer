@@ -7,6 +7,7 @@ branches:
   only:
     - master
 before_build:
+  - ps: dotnet clean
   - ps: nuget restore Askmethat.Aspnet.JsonLocalizer.sln
 init:
   # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
