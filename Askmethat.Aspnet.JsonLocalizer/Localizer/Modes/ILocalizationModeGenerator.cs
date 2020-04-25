@@ -6,7 +6,7 @@ using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
-    internal interface ILocalisationModeGenerator
+    internal interface ILocalizationModeGenerator
     {
         ConcurrentDictionary<string, LocalizatedFormat> ConstructLocalization(
             IEnumerable<string> myFiles, CultureInfo currentCulture, JsonLocalizationOptions options);

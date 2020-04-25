@@ -9,23 +9,23 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
     internal static class LocalizationModeFactory
     {
-        public static ILocalisationModeGenerator GetLocalisationFromMode(
+        public static ILocalizationModeGenerator GetLocalisationFromMode(
             LocalizationMode localizationMode)
         {
-            ILocalisationModeGenerator localisationModeGenerator = null;
+            ILocalizationModeGenerator localizationModeGenerator = null;
 
             switch (localizationMode)
             {
                 case LocalizationMode.I18n:
-                    localisationModeGenerator = new LocalisationI18nModeGenerator();
+                    localizationModeGenerator = new LocalizationI18NModeGenerator();
                     break;
 
                 default:
-                    localisationModeGenerator = new LocalisationBasicModeGenerator();
+                    localizationModeGenerator = new LocalizationBasicModeGenerator();
                     break;
             };
 
-            return localisationModeGenerator;
+            return localizationModeGenerator;
         }
     }
 }

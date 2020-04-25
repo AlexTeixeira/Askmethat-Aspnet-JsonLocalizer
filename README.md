@@ -109,6 +109,8 @@ public class HomeController{
 |Platform|Version|
 | -------------------  | :------------------: |
 |NetCore|3.0.0+|
+|Blazor Server|3.0.0+|
+
 
 **WithCulture method**
 

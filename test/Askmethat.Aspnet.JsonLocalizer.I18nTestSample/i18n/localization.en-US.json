@@ -1,0 +1,23 @@
+{
+  "Home": "Home",
+  "Counter": "Counter",
+  "FetchData": "Fetch Data",
+  "Welcome": "Welcome to your new app",
+  "HelloWorld": "Hello, World",
+  "WeatherForecast": "Weather forecast",
+  "WeatherForecastDesc": "This component demonstrates fetching data from a service.",
+  "Loading": "Loading...",
+  "Date": "Date",
+  "TempC": "Temp. (C)",
+  "TempF": "Temp. (F)",
+  "Summary": "Summary",
+  "CurrentCount": "Current count",
+  "ClickMe": "Click me",
+  "About": "About",
+  "Freezing": "Freezing",
+  "Bracing": "Bracing",
+  "Chilly": "Chilly",
+  "Cool": "Cool",
+  "Mild": "Mild",
+  "Warm": "Warm"
+}

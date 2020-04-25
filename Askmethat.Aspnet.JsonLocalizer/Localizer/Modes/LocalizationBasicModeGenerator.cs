@@ -10,13 +10,8 @@ using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
-    internal class LocalisationBasicModeGenerator : ILocalisationModeGenerator
+    internal class LocalizationBasicModeGenerator : LocalizationModeBase, ILocalizationModeGenerator
     {
-        private ConcurrentDictionary<string, LocalizatedFormat> localization =
-            new ConcurrentDictionary<string, LocalizatedFormat>();
-
-        private JsonLocalizationOptions _options;
-        
         public ConcurrentDictionary<string, LocalizatedFormat> ConstructLocalization(
             IEnumerable<string> myFiles, CultureInfo currentCulture, JsonLocalizationOptions options)
         {
@@ -24,7 +19,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             
             foreach (string file in myFiles)
             {
-                ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization = LocalisationModeHelpers.ReadAndDeserializeFile<string,JsonLocalizationFormat>(file, options.FileEncoding);
+                ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization =
+                    LocalisationModeHelpers.ReadAndDeserializeFile<string, JsonLocalizationFormat>(file,
+                        options.FileEncoding);
 
                 if (tempLocalization == null)
                 {
@@ -34,17 +31,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
                 foreach (KeyValuePair<string, JsonLocalizationFormat> temp in tempLocalization)
                 {
                     LocalizatedFormat localizedValue = GetLocalizedValue(currentCulture, temp);
-                    if (!(localizedValue.Value is null))
-                    {
-                        if (!localization.ContainsKey(temp.Key))
-                        {
-                            localization.TryAdd(temp.Key, localizedValue);
-                        }
-                        else if (localization[temp.Key].IsParent)
-                        {
-                            localization[temp.Key] = localizedValue;
-                        }
-                    }
+                    AddOrUpdateLocalizedValue<JsonLocalizationFormat>(localizedValue, temp);
                 }
             }
 
@@ -54,20 +41,21 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture,
             KeyValuePair<string, JsonLocalizationFormat> temp)
         {
+            var localizationFormat = temp.Value;
             bool isParent = false;
-            string value = temp.Value.Values.FirstOrDefault(s =>
+            string value = localizationFormat.Values.FirstOrDefault(s =>
                 string.Equals(s.Key, currentCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
             if (value is null)
             {
                 isParent = true;
-                value = temp.Value.Values.FirstOrDefault(s =>
+                value = localizationFormat.Values.FirstOrDefault(s =>
                     string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)).Value;
                 if (value is null)
                 {
-                    value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
+                    value = localizationFormat.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
                     if (value is null && _options.DefaultCulture != null)
                     {
-                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key,
+                        value = localizationFormat.Values.FirstOrDefault(s => string.Equals(s.Key,
                             _options.DefaultCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
                     }
                 }

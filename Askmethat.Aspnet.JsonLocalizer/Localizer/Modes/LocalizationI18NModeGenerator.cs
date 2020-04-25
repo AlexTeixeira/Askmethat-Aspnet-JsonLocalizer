@@ -10,13 +10,18 @@ using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
-    internal class LocalisationI18nModeGenerator : ILocalisationModeGenerator
+    internal class LocalizationI18NModeGenerator : LocalizationModeBase, ILocalizationModeGenerator
     {
-        private ConcurrentDictionary<string, LocalizatedFormat> localization =
-            new ConcurrentDictionary<string, LocalizatedFormat>();
 
-        private JsonLocalizationOptions _options;
-
+        private LocalizatedFormat GetLocalizedValue(KeyValuePair<string, string> temp, bool isParent)
+        {
+            return new LocalizatedFormat()
+            {
+                IsParent = isParent,
+                Value = temp.Value as string
+            };
+        }
+        
         public ConcurrentDictionary<string, LocalizatedFormat> ConstructLocalization(IEnumerable<string> myFiles,
             CultureInfo currentCulture,
             JsonLocalizationOptions options)
@@ -26,14 +31,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             var neutralFile = myFiles.FirstOrDefault(file => file.Split("/")
                 .Last().Count(s => s.CompareTo('.') == 0) == 1);
 
-            var cultureExistInFiles = myFiles.Any(file => file.Split("/").Any(
+            var isNotInvariantCulture =
+                currentCulture.DisplayName != CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
+
+            var files = myFiles.Where(file => file.Split("/").Any(
                 s => s.Contains(currentCulture.Name, StringComparison.OrdinalIgnoreCase)
                      || s.Contains(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)
-            )) && currentCulture.DisplayName != CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
+            )).ToArray();
 
-            if (cultureExistInFiles)
+            if (files.Any() && isNotInvariantCulture)
             {
-                foreach (string file in myFiles)
+                foreach (var file in files)
                 {
                     var splittedFiles = file.Split("/");
                     var fileCulture = new CultureInfo(splittedFiles[^1].Split(".")[1]);
@@ -52,10 +60,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             {
                 AddValueToLocalization(options, neutralFile, true);
             }
-            
+
             return localization;
         }
-
+        
         private void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
         {
             ConcurrentDictionary<string, string> tempLocalization =
@@ -70,27 +78,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             {
                 LocalizatedFormat localizedValue = GetLocalizedValue(temp, isParent);
 
-                if (!(localizedValue.Value is null))
-                {
-                    if (!localization.ContainsKey(temp.Key))
-                    {
-                        localization.TryAdd(temp.Key, localizedValue);
-                    }
-                    else if (localization[temp.Key].IsParent)
-                    {
-                        localization[temp.Key] = localizedValue;
-                    }
-                }
+                AddOrUpdateLocalizedValue(localizedValue, temp);
             }
         }
 
-        private LocalizatedFormat GetLocalizedValue(KeyValuePair<string, string> temp, bool isParent)
-        {
-            return new LocalizatedFormat()
-            {
-                IsParent = isParent,
-                Value = temp.Value
-            };
-        }
     }
 }

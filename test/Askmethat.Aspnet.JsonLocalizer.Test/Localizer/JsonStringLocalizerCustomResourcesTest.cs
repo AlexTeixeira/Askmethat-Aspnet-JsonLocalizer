@@ -25,7 +25,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             });
         }
 
-
         [TestMethod]
         public void Should_Read_Name1()
         {
