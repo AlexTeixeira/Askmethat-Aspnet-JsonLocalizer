@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {

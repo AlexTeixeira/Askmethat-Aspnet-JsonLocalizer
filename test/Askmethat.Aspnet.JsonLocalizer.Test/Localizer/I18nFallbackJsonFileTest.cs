@@ -12,7 +12,7 @@ using LocalizedString = Microsoft.Extensions.Localization.LocalizedString;
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
     [TestClass]
-    public class FallbackJsonFileTest
+    public class I18nFallbackJsonFileTest
     {
         private JsonStringLocalizer localizer = null;
         public void InitLocalizer(string cultureString)
@@ -29,23 +29,24 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                      new CultureInfo("zh-CN"),
                      new CultureInfo("en-AU")
                 },
-                ResourcesPath = "fallback",
+                ResourcesPath = $"{AppContext.BaseDirectory}/i18nFallback",
+                LocalizationMode = LocalizationMode.I18n
             });
         }
 
         [TestMethod]
         public void Should_Read_Color_NoFallback()
         {
-            InitLocalizer("en-AU");
-            LocalizedString result = localizer.GetString("Color");
-            Assert.AreEqual("Colour (specific)", result);
-
-            InitLocalizer("fr");
-            result = localizer.GetString("Color");
-            Assert.AreEqual("Couleur (neutre)", result);
+            // InitLocalizer("en-AU");
+            // LocalizedString result = localizer.GetString("Color");
+            // Assert.AreEqual("Colour (specific)", result);
+            //
+            // InitLocalizer("fr");
+            // result = localizer.GetString("Color");
+            // Assert.AreEqual("Couleur (neutre)", result);
 
             InitLocalizer(CultureInfo.InvariantCulture.ThreeLetterISOLanguageName);
-            result = localizer.GetString("Color");
+            var result = localizer.GetString("Color");
             Assert.AreEqual("Color (invariant)", result);
         }
 
@@ -56,7 +57,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             LocalizedString result = localizer.GetString("Color");
             Assert.AreEqual("Couleur (neutre)", result);
             Assert.IsFalse(result.ResourceNotFound);
-
+            
             InitLocalizer("en-NZ");
             result = localizer.GetString("Color");
             Assert.AreEqual("Color (neutral)", result);

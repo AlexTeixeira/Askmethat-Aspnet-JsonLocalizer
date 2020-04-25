@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 
-namespace Askmethat.Aspnet.JsonLocalizer.Extensions
+namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
 {
     public class JsonLocalizationOptions : LocalizationOptions
     {
@@ -114,5 +115,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Extensions
         /// Define logging behavior when a translation is not found.
         /// </summary>
         public MissingTranslationLogBehavior MissingTranslationLogBehavior { get; set; } = MissingTranslationLogBehavior.LogConsoleError;
+
+        /// <summary>
+        /// Define JSON Files management. See documentation for more information
+        /// </summary>
+        public LocalizationMode LocalizationMode { get; set; } = LocalizationMode.Basic;
     }
 }

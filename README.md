@@ -47,6 +47,8 @@ services.AddJsonLocalization(options => {
 - **UseBaseName** : *_default value : false*. Use base name location for Views and constructors like default Resx localization in **ResourcePathFolder**. Please have a look at the documentation below to see the different possiblities for structuring your translation files.
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
+- **MissingTranslationLogBehavior** : *_default value: LogConsoleError*. Define the logging mode
+- **LocalizationMode** : *_default value: Basic*. Define the localization mode for the Json file. Currently Basic and I18n. More information in *LocalizationMode*
 
 ### Search patterns when UseBaseName = true
 
@@ -106,8 +108,7 @@ public class HomeController{
 
 |Platform|Version|
 | -------------------  | :------------------: |
-|NetStandard|2.0+|
-|NetCore|2.0.0+|
+|NetCore|3.0.0+|
 
 **WithCulture method**
 
@@ -115,6 +116,36 @@ public class HomeController{
 
 For more information : 
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
+
+# Localization mode
+
+As asked on the request #64, Some user want to have the possiblities to manage file with i18n way. 
+To answer this demand, a localization mode was introduced with default value Basic. Basic version means the the one describe in the previous parts
+
+## I18n
+
+To use the i18n file management, use the the option Localization mode like this : ``` cs LocalizationMode = LocalizationMode.I18n ```.
+After that, you should be able to use this json : 
+
+``` json
+{
+   "Name": "Name",
+   "Color": "Color"
+}
+```
+
+**File name**
+
+File name are important for some purpose (Culture looking, parent culture, fallback).
+
+Please use this pattern : **[fileName].[culture].json**
+If you need a fallback culture that target all culture, you can create a file named  **localisation.json**. Of course, if this file does not exist, the chosen default culture is the fallback.
+
+**Important: In this mode, the UseBaseName options should be False.**
+
+
+For more information : 
+https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/64
 
 # Performances
 
@@ -187,7 +218,22 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
         <sub><b>Serhii Voitovych</b></sub>
       </a>
     </td>
+    <td align="center">
+        <a href="https://github.com/JamesHill3">
+            <img src="https://avatars0.githubusercontent.com/u/1727474?s=460&v=4" width="100px;" alt="James Hill"/>
+            <br />
+            <sub><b>James Hill</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Czirok">
+            <img src="https://avatars2.githubusercontent.com/u/1266377?s=460&v=4" width="100px;" alt="Ferenc Czirok"/>
+            <br />
+            <sub><b>Ferenc Czirok</b></sub>
+        </a>
+    </td>
   </tr>
+  
 </table>
 
 A special thanks to @Compufreak345 for its hard work. He did a lot for this repo.

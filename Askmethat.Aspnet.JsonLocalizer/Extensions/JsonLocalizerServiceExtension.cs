@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {

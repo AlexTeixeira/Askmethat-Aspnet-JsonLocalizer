@@ -4,13 +4,13 @@ using Microsoft.Extensions.Caching.Memory;
 using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Helpers;
 using Microsoft.Extensions.Localization;
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using System.Globalization;
-using Microsoft.Extensions.Options;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Resources;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
