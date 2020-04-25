@@ -1,0 +1,23 @@
+{
+  "Home": "Accueil",
+  "Counter": "Compteur",
+  "FetchData": "Récupérer Données",
+  "Welcome": "Bienvenue dans notre nouvelle application",
+  "HelloWorld": "Bonjour, monde",
+  "WeatherForecast": "Prévisions météorologiques",
+  "WeatherForecastDesc": "Ce volet montre comment obtenir des données à partir d'un service.",
+  "Loading": "Chargement...",
+  "Date": "Date",
+  "TempC": "Temp. (C)",
+  "TempF": "Temp. (F)",
+  "Summary": "Sommaire",
+  "CurrentCount": "Valeur courante",
+  "ClickMe": "Cliquer",
+  "About": "À propos de",
+  "Freezing": "Geler",
+  "Bracing": "Bracing",
+  "Chilly": "Froid",
+  "Cool": "Frais",
+  "Mild": "Doux",
+  "Warm": "Chaud"
+}

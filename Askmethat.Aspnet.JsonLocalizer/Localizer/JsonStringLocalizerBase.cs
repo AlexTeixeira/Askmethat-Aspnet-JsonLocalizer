@@ -7,6 +7,8 @@ using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.Caching;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using Askmethat.Aspnet.JsonLocalizer.Localizer.Modes;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -31,6 +33,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _baseName = CleanBaseName(baseName);
             _localizationOptions = localizationOptions;
 
+            if (_localizationOptions.Value.LocalizationMode == LocalizationMode.I18n && _localizationOptions.Value.UseBaseName)
+            {
+                throw new ArgumentException("UseBaseName can't be activated with I18n localisation mode");
+            }
+            
             _memCache = _localizationOptions.Value.DistributedCache != null ?
                 new CacheHelper(_localizationOptions.Value.DistributedCache) :
                 new CacheHelper(_localizationOptions.Value.Caching);
@@ -105,29 +112,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             IEnumerable<string> myFiles = GetMatchingJsonFiles(jsonPath);
 
-            foreach (string file in myFiles)
-            {
-                ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<ConcurrentDictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
-                if (tempLocalization == null)
-                {
-                    continue;
-                }
-                foreach (KeyValuePair<string, JsonLocalizationFormat> temp in tempLocalization)
-                {
-                    LocalizatedFormat localizedValue = GetLocalizedValue(currentCulture, temp);
-                    if (!(localizedValue.Value is null))
-                    {
-                        if (!localization.ContainsKey(temp.Key))
-                        {
-                            localization.TryAdd(temp.Key, localizedValue);
-                        }
-                        else if (localization[temp.Key].IsParent)
-                        {
-                            localization[temp.Key] = localizedValue;
-                        }
-                    }
-                }
-            }
+            localization = LocalizationModeFactory.GetLocalisationFromMode(_localizationOptions.Value.LocalizationMode)
+                .ConstructLocalization(myFiles, currentCulture, _localizationOptions.Value);
         }
 
         private IEnumerable<string> GetMatchingJsonFiles(string jsonPath)
@@ -215,29 +201,5 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
         }
         #endregion
-
-        private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
-        {
-            bool isParent = false;
-            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
-            if (value is null)
-            {
-                isParent = true;
-                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)).Value;
-                if (value is null)
-                {
-                    value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
-                    if (value is null && _localizationOptions.Value.DefaultCulture != null)
-                    {
-                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
-                    }
-                }
-            }
-            return new LocalizatedFormat()
-            {
-                IsParent = isParent,
-                Value = value
-            };
-        }
     }
 }

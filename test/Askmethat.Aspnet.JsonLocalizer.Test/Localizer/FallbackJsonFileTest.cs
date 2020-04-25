@@ -1,5 +1,4 @@
-﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
-using Askmethat.Aspnet.JsonLocalizer.Localizer;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -7,6 +6,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Linq;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using LocalizedString = Microsoft.Extensions.Localization.LocalizedString;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
@@ -42,7 +42,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             InitLocalizer("fr");
             result = localizer.GetString("Color");
-            Assert.AreEqual("Couleur (neutral)", result);
+            Assert.AreEqual("Couleur (neutre)", result);
 
             InitLocalizer(CultureInfo.InvariantCulture.ThreeLetterISOLanguageName);
             result = localizer.GetString("Color");
@@ -54,7 +54,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         {
             InitLocalizer("fr-FR");
             LocalizedString result = localizer.GetString("Color");
-            Assert.AreEqual("Couleur (neutral)", result);
+            Assert.AreEqual("Couleur (neutre)", result);
             Assert.IsFalse(result.ResourceNotFound);
 
             InitLocalizer("en-NZ");
@@ -87,7 +87,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             Assert.IsTrue(result.ResourceNotFound);
         }
 
-        //[TestMethod]
+        [TestMethod]
         //Plant only on CI
         public void Should_Read_AllStringsWithParentFallback()
         {
@@ -98,7 +98,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 new LocalizedString("Color", "Colour (specific)", false),
                 new LocalizedString("Empty", "Empty", false)
             };
-            CollectionAssert.AreEqual(expected, results, new LocalizedStringComparer());
+            CollectionAssert.AreEqual(expected, results.OrderBy(s => s.Name).ToArray(), new LocalizedStringComparer());
         }
 
         [TestMethod]

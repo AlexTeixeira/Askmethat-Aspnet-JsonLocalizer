@@ -1,9 +1,9 @@
-﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
-using Askmethat.Aspnet.JsonLocalizer.Localizer;
+﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Askmethat.Aspnet.JsonLocalizer.Test.Helpers;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
@@ -24,7 +24,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                 ResourcesPath = "json",
             });
         }
-
 
         [TestMethod]
         public void Should_Read_Name1()

@@ -1,4 +1,4 @@
-﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
+﻿using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Microsoft.Extensions.Options;
 

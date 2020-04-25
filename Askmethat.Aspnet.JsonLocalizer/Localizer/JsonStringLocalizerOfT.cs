@@ -1,4 +1,4 @@
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;

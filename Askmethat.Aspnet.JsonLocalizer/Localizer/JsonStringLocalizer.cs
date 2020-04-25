@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {

@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
 using System.Linq;
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Hosting;
 

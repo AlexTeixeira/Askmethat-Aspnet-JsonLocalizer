@@ -1,0 +1,17 @@
+﻿@page "/counter"
+
+<h1>@Localizer["Counter"]</h1>
+
+<p>@Localizer["CurrentCount"]: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">@Localizer["ClickMe"]</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+}

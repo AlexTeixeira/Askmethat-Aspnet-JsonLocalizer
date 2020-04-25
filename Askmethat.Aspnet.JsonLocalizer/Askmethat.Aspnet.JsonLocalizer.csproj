@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
     <PackageId>Askmethat.Aspnet.JsonLocalizer</PackageId>
     <PackageVersion>$(Version)</PackageVersion>
     <Authors>TEIXEIRA Alexandre</Authors>
     <Description>Json Localizer library for .NetStandard and .NetCore Asp.net projects</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>See associated version in https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/releases</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer</PackageProjectUrl>
     <Copyright>Copyright 2019 (c) Alexandre TEIXEIRA.</Copyright>
     <PackageTags>Json Localizer Globalization netcore netstandard</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.0</Version>
+    <Version>3.0.0-preview1</Version>
     <RepositoryUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
