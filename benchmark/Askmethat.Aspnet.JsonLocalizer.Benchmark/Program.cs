@@ -65,6 +65,24 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
             var localizer = new JsonStringLocalizer(Options.Create(new JsonLocalizationOptions()
             {
                 DefaultCulture = new CultureInfo("fr-FR"),
+                ResourcesPath = "i18n",
+                SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
+                {
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("en-US"),
+                },
+                LocalizationMode = LocalizationMode.I18n
+            }), new HostingEnvironmentStub());
+
+            return localizer.GetString("BaseName1");
+        }
+        
+        [Benchmark]
+        public string I18nJsonLocalizerWithCreation()
+        {
+            var localizer = new JsonStringLocalizer(Options.Create(new JsonLocalizationOptions()
+            {
+                DefaultCulture = new CultureInfo("fr-FR"),
                 ResourcesPath = "Resources",
                 SupportedCultureInfos = new System.Collections.Generic.HashSet<CultureInfo>()
                 {
