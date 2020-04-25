@@ -31,15 +31,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             var neutralFile = myFiles.FirstOrDefault(file => file.Split("/")
                 .Last().Count(s => s.CompareTo('.') == 0) == 1);
 
-            var isNotInvariantCulture =
-                currentCulture.DisplayName != CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
+            var isInvariantCulture =
+                currentCulture.DisplayName == CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
 
-            var files = myFiles.Where(file => file.Split("/").Any(
-                s => s.Contains(currentCulture.Name, StringComparison.OrdinalIgnoreCase)
-                     || s.Contains(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)
+            var files = isInvariantCulture ? new string[]{} : myFiles.Where(file => file.Split("/").Any(
+                s => (s.Contains(currentCulture.Name, StringComparison.OrdinalIgnoreCase)
+                     || s.Contains(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase))
             )).ToArray();
 
-            if (files.Any() && isNotInvariantCulture)
+            if (files.Any() && !isInvariantCulture)
             {
                 foreach (var file in files)
                 {

@@ -37,34 +37,34 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         [TestMethod]
         public void Should_Read_Color_NoFallback()
         {
-            // InitLocalizer("en-AU");
-            // LocalizedString result = localizer.GetString("Color");
-            // Assert.AreEqual("Colour (specific)", result);
-            //
-            // InitLocalizer("fr");
-            // result = localizer.GetString("Color");
-            // Assert.AreEqual("Couleur (neutre)", result);
+            InitLocalizer("en-AU");
+            LocalizedString result = localizer.GetString("Color");
+            Assert.AreEqual("Colour (specific)", result);
+            
+            InitLocalizer("fr");
+            result = localizer.GetString("Color");
+            Assert.AreEqual("Couleur (neutre)", result);
 
             InitLocalizer(CultureInfo.InvariantCulture.ThreeLetterISOLanguageName);
-            var result = localizer.GetString("Color");
+            result = localizer.GetString("Color");
             Assert.AreEqual("Color (invariant)", result);
         }
 
         [TestMethod]
         public void Should_Read_Color_FallbackToParent()
         {
-            // InitLocalizer("fr-FR");
-            // LocalizedString result = localizer.GetString("Color");
-            // Assert.AreEqual("Couleur (neutre)", result);
-            // Assert.IsFalse(result.ResourceNotFound);
-            //
-            // InitLocalizer("en-NZ");
-            // result = localizer.GetString("Color");
-            // Assert.AreEqual("Color (neutral)", result);
-            // Assert.IsFalse(result.ResourceNotFound);
+            InitLocalizer("fr-FR");
+            LocalizedString result = localizer.GetString("Color");
+            Assert.AreEqual("Couleur (neutre)", result);
+            Assert.IsFalse(result.ResourceNotFound);
+
+            InitLocalizer("en-NZ");
+            result = localizer.GetString("Color");
+            Assert.AreEqual("Color (neutral)", result);
+            Assert.IsFalse(result.ResourceNotFound);
 
             InitLocalizer("zh-CN");
-            var result = localizer.GetString("Color");
+            result = localizer.GetString("Color");
             Assert.AreEqual("Color (invariant)", result);
             Assert.IsFalse(result.ResourceNotFound);
 
