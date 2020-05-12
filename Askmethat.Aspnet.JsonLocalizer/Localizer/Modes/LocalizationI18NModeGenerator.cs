@@ -28,13 +28,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         {
             _options = options;
 
-            var neutralFile = myFiles.FirstOrDefault(file => file.Split("/")
+            var neutralFile = myFiles.FirstOrDefault(file => file.Split(Path.PathSeparator)
                 .Last().Count(s => s.CompareTo('.') == 0) == 1);
 
             var isInvariantCulture =
                 currentCulture.DisplayName == CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
 
-            var files = isInvariantCulture ? new string[]{} : myFiles.Where(file => file.Split("/").Any(
+            var files = isInvariantCulture ? new string[]{} : myFiles.Where(file => file.Split(Path.PathSeparator).Any(
                 s => (s.Contains(currentCulture.Name, StringComparison.OrdinalIgnoreCase)
                      || s.Contains(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase))
             )).ToArray();
@@ -43,7 +43,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             {
                 foreach (var file in files)
                 {
-                    var splittedFiles = file.Split("/");
+                    var splittedFiles = file.Split(Path.PathSeparator);
                     var fileCulture = new CultureInfo(splittedFiles[^1].Split(".")[1]);
 
                     var isParent =
