@@ -44,7 +44,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
                 foreach (var file in files)
                 {
                     var splittedFiles = file.Split(Path.AltDirectorySeparatorChar);
-                    var fileCulture = new CultureInfo(splittedFiles[^1].Split(".")[1]);
+                    var fileName = Path.GetFileName(splittedFiles[^1]);
+                    var fileCulture = new CultureInfo(fileName.Split(".")[1]);
 
                     var isParent =
                         fileCulture.Name.Equals(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase);
