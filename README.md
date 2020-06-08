@@ -109,6 +109,7 @@ public class HomeController{
 |Platform|Version|
 | -------------------  | :------------------: |
 |NetCore|3.0.0+|
+|NetStandard|2.1.0+|
 |Blazor Server|3.0.0+|
 
 
@@ -235,6 +236,13 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
             <sub><b>Ferenc Czirok</b></sub>
         </a>
     </td>
+     <td align="center">
+            <a href="https://github.com/rohanreddyg">
+                <img src="https://avatars0.githubusercontent.com/u/240114?s=400&v=4" width="100px;" alt="rohanreddyg"/>
+                <br />
+                <sub><b>rohanreddyg</b></sub>
+            </a>
+        </td>
   </tr>
   
 </table>
