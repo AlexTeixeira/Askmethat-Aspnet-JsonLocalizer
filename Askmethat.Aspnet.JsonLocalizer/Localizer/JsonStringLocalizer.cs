@@ -14,13 +14,26 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
-        private readonly IWebHostEnvironment _env;
-
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName = null) : base(localizationOptions, baseName)
+#if NETCORE
+            private readonly IWebHostEnvironment _env;
+        
+          public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName
+ = null) : base(localizationOptions, baseName)
         {
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
         }
+#else
+        private readonly IHostingEnvironment _env;
+
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,
+            string baseName = null) : base(localizationOptions, baseName)
+        {
+            _env = env;
+            resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+        }
+#endif
+
 
         public LocalizedString this[string name]
         {
@@ -69,17 +82,18 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            InitJsonFromCulture(CultureInfo.CurrentUICulture); 
+            InitJsonFromCulture(CultureInfo.CurrentUICulture);
 
-            return includeParentCultures ? localization?
+            return includeParentCultures
+                ? localization?
                     .Select(
                         l =>
                         {
                             string value = GetString(l.Key);
                             return new LocalizedString(l.Key, value ?? l.Key, resourceNotFound: value == null);
                         }
-                    ) :
-                    localization?
+                    )
+                : localization?
                     .Where(w => !w.Value.IsParent)
                     .Select(
                         l =>
@@ -98,7 +112,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
 
             CultureInfo.CurrentCulture = culture;
-            
+
             return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
@@ -154,6 +168,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 fullPath = path;
             }
+
             if (!_localizationOptions.Value.IsAbsolutePath && string.IsNullOrEmpty(path))
             {
                 fullPath = Path.Combine(_env.ContentRootPath, "Resources");
@@ -162,6 +177,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 fullPath = Path.Combine(AppContext.BaseDirectory, path2: path);
             }
+
             return fullPath;
         }
 
@@ -173,7 +189,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             // If one or more cultures are provided, clear only requested cultures, else clear all supported cultures.
             foreach (var cultureInfo in culturesToClearFromCache ??
-                                         _localizationOptions.Value.SupportedCultureInfos.ToArray())
+                                        _localizationOptions.Value.SupportedCultureInfos.ToArray())
             {
                 _memCache.Remove(GetCacheKey(cultureInfo));
             }
@@ -183,14 +199,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Reload memory cache
         /// </summary>
         /// <param name="reloadCulturesToCache">Reload specified cultures</param>
-
         public void ReloadMemCache(IEnumerable<CultureInfo> reloadCulturesToCache = null)
         {
-	        ClearMemCache();
-	        foreach (var cultureInfo in reloadCulturesToCache ??
-	                                    _localizationOptions.Value.SupportedCultureInfos.ToArray())
-	        {
-                InitJsonFromCulture(cultureInfo); 
+            ClearMemCache();
+            foreach (var cultureInfo in reloadCulturesToCache ??
+                                        _localizationOptions.Value.SupportedCultureInfos.ToArray())
+            {
+                InitJsonFromCulture(cultureInfo);
             }
         }
     }
