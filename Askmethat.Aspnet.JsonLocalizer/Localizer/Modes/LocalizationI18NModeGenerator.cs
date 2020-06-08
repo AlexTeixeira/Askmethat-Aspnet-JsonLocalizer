@@ -28,23 +28,25 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         {
             _options = options;
 
-            var neutralFile = myFiles.FirstOrDefault(file => Path.GetFileName(file)
-                .Count(s => s.CompareTo('.') == 0) == 1);
+            var neutralFile = myFiles.FirstOrDefault(file => file.Split(Path.AltDirectorySeparatorChar)
+                .Last().Count(s => s.CompareTo('.') == 0) == 1);
 
             var isInvariantCulture =
                 currentCulture.DisplayName == CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
 
-            var files = isInvariantCulture ? new string[]{} : myFiles.Where(file => Path.GetFileName(file).Split(".").Any(
-                s => (s.Contains(currentCulture.Name, StringComparison.OrdinalIgnoreCase)
-                     || s.Contains(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase))
-            )).ToArray();
+            var files = isInvariantCulture ? new string[]{} : myFiles.Where(file => file.Split(Path.AltDirectorySeparatorChar).Any(
+                s => (s.IndexOf(currentCulture.Name, StringComparison.OrdinalIgnoreCase) >= 0
+                      || s.IndexOf(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase) >= 0)
+            )).ToArray(); 
+            
 
             if (files.Any() && !isInvariantCulture)
             {
                 foreach (var file in files)
                 {
-                    var fileName = Path.GetFileName(file);
-                    var fileCulture = new CultureInfo(fileName.Split(".")[^2]);
+                    var splittedFiles = file.Split(Path.AltDirectorySeparatorChar);
+                    var stringCulture = splittedFiles.Last().Split('.')[1];
+                    var fileCulture = new CultureInfo(stringCulture);
 
                     var isParent =
                         fileCulture.Name.Equals(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase);

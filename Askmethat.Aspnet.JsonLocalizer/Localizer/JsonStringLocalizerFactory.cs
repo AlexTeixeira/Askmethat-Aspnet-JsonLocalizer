@@ -12,16 +12,29 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     /// </summary>
     public class JsonStringLocalizerFactory : IStringLocalizerFactory
     {
-        private readonly IWebHostEnvironment _env;
         private readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
-        public JsonStringLocalizerFactory(
-                IWebHostEnvironment env,
-                IOptions<JsonLocalizationOptions> localizationOptions = null)
+#if NETCORE
+            private readonly IWebHostEnvironment _env;
+        
+         public JsonStringLocalizerFactory(
+            IWebHostEnvironment env,
+            IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             _env = env;
             _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
         }
+#else
+        private readonly IHostingEnvironment _env;
+
+        public JsonStringLocalizerFactory(
+            IHostingEnvironment env,
+            IOptions<JsonLocalizationOptions> localizationOptions = null)
+        {
+            _env = env;
+            _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
+        }
+#endif
 
 
         public IStringLocalizer Create(Type resourceSource)
