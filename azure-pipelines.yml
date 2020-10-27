@@ -13,17 +13,18 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-
+- script: VERSION_TAG=`git describe --tags` && echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
+  displayName: Set the tag name as an environment variable
 - task: CmdLine@2
   displayName: 'Install DNT'
-  condition: and(succeeded(),ne(variables[tagname], ''),eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(),ne(variables['VERSION_TAG'], ''),eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     script: 'npm i -g dotnettools'
 - task: CmdLine@2
   displayName: 'Update project version patch'
-  condition: and(succeeded(), ne(variables[tagname], '') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['VERSION_TAG'], '') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
-    script: 'dnt bump-versions patch $(tagname)'
+    script: 'dnt bump-versions patch $(VERSION_TAG)'
     failOnStderr: true
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
