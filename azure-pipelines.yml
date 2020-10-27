@@ -10,26 +10,11 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  versionMajor: 3
+  versionMinor: 0
+  versionPatch: 
 
 steps:
-
-- task: CmdLine@2
-  displayName: 'Install DNT'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  inputs:
-    script: 'npm i -g dotnettools'
-- task: CmdLine@2
-  displayName: 'Update project version patch'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  inputs:
-    script: 'dnt bump-versions patch'
-    failOnStderr: true
-- task: CmdLine@2
-  displayName: 'Patch project version preview'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  inputs:
-    script: 'dnt bump-versions preview "$(Build.BuildNumber)"'
-    failOnStderr: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
@@ -51,11 +36,3 @@ steps:
     packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
     nobuild: true
     versioningScheme: 'off'
-
-# Push a project
-# - task: NuGetCommand@2
-#   inputs:
-#     command: 'push'
-#     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
-#     feedsToUse: 'config'
-#     includeNugetOrg: 'true'
