@@ -1,0 +1,46 @@
+
+
+trigger:
+- master
+- refs/tags/{tagname}
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: CmdLine@2
+  displayName: 'Install DNT'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'),eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'npm i -g dotnettools'
+- task: CmdLine@2
+  displayName: 'Update project version patch'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'dnt bump-versions patch $(Build.SourceBranch)'
+    failOnStderr: true
+- task: DotNetCoreCLI@2
+  displayName: 'Unit Tests'
+  inputs:
+    command: 'test'
+    projects: 'test/Askmethat.Aspnet.JsonLocalizer.Test/Askmethat.Aspnet.JsonLocalizer.Test.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: 'Askmethat.Aspnet.JsonLocalizer.sln'
+    arguments: --configuration $(BuildConfiguration)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
+    nobuild: true
+    versioningScheme: 'off'
