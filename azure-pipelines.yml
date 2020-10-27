@@ -24,7 +24,7 @@ steps:
   displayName: 'Update project version patch'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   inputs:
-    script: 'dnt bump-versions patch $(Build.SourceBranch)'
+    script: 'dnt bump-versions patch $(Build.SourceBranchName)'
     failOnStderr: true
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
