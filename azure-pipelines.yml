@@ -16,12 +16,12 @@ steps:
 
 - task: CmdLine@2
   displayName: 'Install DNT'
-  condition: and(succeeded(),ne($(tagname), ''),eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(),ne(variables[tagname], ''),eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     script: 'npm i -g dotnettools'
 - task: CmdLine@2
   displayName: 'Update project version patch'
-  condition: and(succeeded(), ne($(tagname), '') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables[tagname], '') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     script: 'dnt bump-versions patch $(tagname)'
     failOnStderr: true
