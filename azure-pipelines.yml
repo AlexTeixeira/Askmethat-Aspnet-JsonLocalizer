@@ -20,8 +20,14 @@ steps:
     projects: 'test/Askmethat.Aspnet.JsonLocalizer.Test/Askmethat.Aspnet.JsonLocalizer.Test.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: 'Askmethat.Aspnet.JsonLocalizer.sln'
+
+- task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
-    nobuild: false
+    nobuild: true
     versioningScheme: 'off'
