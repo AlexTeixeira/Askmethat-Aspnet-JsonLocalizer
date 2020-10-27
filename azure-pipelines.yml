@@ -2,6 +2,7 @@
 
 trigger:
 - master
+- refs/tags/{tagname}
 
 pool:
   vmImage: 'windows-latest'
@@ -13,6 +14,23 @@ variables:
 
 steps:
 
+- task: CmdLine@2
+  displayName: 'Install DNT'
+  condition: and(succeeded(), neq({tagname}, '') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'npm i -g dotnettools'
+- task: CmdLine@2
+  displayName: 'Update project version patch'
+  condition: and(succeeded(), neq({tagname}, '') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'dnt bump-versions patch'
+    failOnStderr: true
+- task: CmdLine@2
+  displayName: 'Patch project version preview'
+  condition: and(succeeded(), neq({tagname}, ''), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    script: 'dnt bump-versions preview "$(Build.BuildNumber)"'
+    failOnStderr: true
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
   inputs:
