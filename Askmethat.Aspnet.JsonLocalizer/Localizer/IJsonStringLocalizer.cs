@@ -10,7 +10,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 	    void ReloadMemCache(IEnumerable<CultureInfo> culturesToClearFromCache = null);
     }
 
-    public interface IJsonStringLocalizer<T> : IJsonStringLocalizer
+    public interface IJsonStringLocalizer<out T> : IJsonStringLocalizer
     {
         
     }
