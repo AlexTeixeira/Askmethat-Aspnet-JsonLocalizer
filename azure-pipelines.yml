@@ -10,9 +10,6 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  versionMajor: 3
-  versionMinor: 0
-  versionPatch: 
 
 steps:
 
