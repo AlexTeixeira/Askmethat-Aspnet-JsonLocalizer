@@ -24,6 +24,7 @@ steps:
   inputs:
     command: 'build'
     projects: 'Askmethat.Aspnet.JsonLocalizer.sln'
+    arguments: -C $(BuildConfiguration)
 
 - task: DotNetCoreCLI@2
   inputs:
