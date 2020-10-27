@@ -1,8 +1,10 @@
-
-
 trigger:
-- master
-- refs/tags/{tagname}
+  branches:
+    include:
+      - develop
+  tags:
+    include:
+      - refs/tags/*
 
 pool:
   vmImage: 'windows-latest'
