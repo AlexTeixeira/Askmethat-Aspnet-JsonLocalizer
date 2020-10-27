@@ -14,13 +14,20 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
+  displayName: 'Unit Tests'
   inputs:
     command: 'test'
-    projects: 'Askmethat.Aspnet.JsonLocalizer/test/Askmethat.Aspnet.JsonLocalizer.Test/Askmethat.Aspnet.JsonLocalizer.Test.csproj'
+    projects: 'test/Askmethat.Aspnet.JsonLocalizer.Test/Askmethat.Aspnet.JsonLocalizer.Test.csproj'
 
-# ASP.NET Core (.NET Framework)
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
     command: 'build'
     projects: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
+    nobuild: true
+    versioningScheme: 'off'
