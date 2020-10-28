@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - develop
+      - master
   tags:
     include:
       - refs/tags/*
@@ -15,17 +15,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: CmdLine@2
-  displayName: 'Install DNT'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'),eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  inputs:
-    script: 'npm i -g dotnettools'
-- task: CmdLine@2
-  displayName: 'Update project version patch'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/') ,eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  inputs:
-    script: 'dnt bump-versions patch $(Build.SourceBranch)'
-    failOnStderr: true
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
   inputs:
