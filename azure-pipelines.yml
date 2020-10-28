@@ -15,17 +15,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: CmdLine@2
-  displayName: 'Install DNT'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-  inputs:
-    script: 'npm i -g dotnettools'
-- task: CmdLine@2
-  displayName: 'Update project version patch'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-  inputs:
-    script: 'dnt bump-versions patch $(Build.SourceBranchName)'
-    failOnStderr: true
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
   inputs:
