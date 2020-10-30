@@ -59,7 +59,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             }
             else
             {
-                AddValueToLocalization(options, neutralFile, true);
+                if (neutralFile != null)
+                {
+                    AddValueToLocalization(options, neutralFile, true);
+                }
             }
 
             return localization;
