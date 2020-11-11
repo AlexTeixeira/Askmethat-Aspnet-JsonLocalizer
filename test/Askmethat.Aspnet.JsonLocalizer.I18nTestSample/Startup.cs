@@ -36,7 +36,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.I18nTestSample
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<WeatherForecastService>();
             
             var jsonLocalizationOptions = Configuration.GetSection(nameof(JsonLocalizationOptions));
 
