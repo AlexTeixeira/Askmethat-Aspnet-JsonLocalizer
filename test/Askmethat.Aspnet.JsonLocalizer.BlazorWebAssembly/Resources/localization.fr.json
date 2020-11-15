@@ -1,0 +1,5 @@
+{
+  "CounterTitle": "<h1>Counter</h1>",
+  "CounterSubTitle": "<h2 style='color:blue'>Exemple of Blazor counting button<h2>",
+  "ClickMe": "Click me"
+}
