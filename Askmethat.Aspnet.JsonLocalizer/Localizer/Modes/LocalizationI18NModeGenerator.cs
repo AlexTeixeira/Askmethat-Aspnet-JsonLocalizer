@@ -28,14 +28,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         {
             _options = options;
 
-            var neutralFile = myFiles.FirstOrDefault(file => Path.GetFileName(file)
+            var enumerable = myFiles as string[] ?? myFiles.ToArray();
+            var neutralFile = enumerable.FirstOrDefault(file => Path.GetFileName(file)
                 .Count(s => s.CompareTo('.') == 0) == 1);
             var isInvariantCulture =
                 currentCulture.DisplayName == CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
 
             var files = isInvariantCulture
                 ? new string[] { }
-                : myFiles.Where(file => Path.GetFileName(file).Split('.').Any(
+                : enumerable.Where(file => Path.GetFileName(file).Split('.').Any(
                     s => (s.IndexOf(currentCulture.Name, StringComparison.OrdinalIgnoreCase) >= 0
                           || s.IndexOf(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase) >= 0)
                 )).ToArray();
@@ -79,13 +80,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             }
 
             AddValues(json, null, isParent);
-
-            // foreach (var temp in tempLocalization)
-            // {
-            //     LocalizatedFormat localizedValue = GetLocalizedValue(temp, isParent);
-            //
-            //     AddOrUpdateLocalizedValue(localizedValue, temp);
-            // }
         }
 
         private void AddValues(dynamic input, string baseName, bool isParent)
