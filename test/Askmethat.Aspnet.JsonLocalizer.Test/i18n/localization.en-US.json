@@ -1,4 +1,7 @@
 {
   "Name": "Name",
-  "Color": "Color"
+  "Color": "Color",
+  "Restricted": {
+    "Sentence": "You are not available is this area"
+  }
 }
