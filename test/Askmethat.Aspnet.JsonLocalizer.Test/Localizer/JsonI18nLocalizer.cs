@@ -98,5 +98,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             Assert.AreEqual("Nop", result);
 
         }
+        
+        [TestMethod]
+        public void I18n_Should_ReadHirarchicalValue()
+        {
+            // Arrange
+            JsonLocalizer.Localizer.JsonStringLocalizer localizer = JsonStringLocalizerHelperFactory.Create(_jsonLocalizationOptions);
+            LocalizedString result = localizer.GetString("Restricted.Sentence");
+
+            Assert.AreEqual("You are not available is this area", result);
+
+        }
     }
 }
