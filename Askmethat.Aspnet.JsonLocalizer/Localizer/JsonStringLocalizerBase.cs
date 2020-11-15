@@ -70,20 +70,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         #endregion
 
         #region files initialization
-        
-        protected void InitJsonStringLocalizer()
-        {
-            AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
-            AddMissingCultureToSupportedCulture(_localizationOptions.Value.DefaultCulture);
-
-            foreach (CultureInfo ci in _localizationOptions.Value.SupportedCultureInfos)
-            {
-                InitJsonStringLocalizer(ci);
-            }
-
-            //after initialization, get current ui culture
-            GetCultureToUse(CultureInfo.CurrentUICulture);
-        }
 
         protected void AddMissingCultureToSupportedCulture(CultureInfo cultureInfo)
         {
@@ -119,6 +105,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             IEnumerable<string> myFiles = GetMatchingJsonFiles(jsonPath);
 
+            //be sure that localization is always initialized
+            if (localization == null)
+            {
+                localization = new ConcurrentDictionary<string, LocalizatedFormat>();
+            }
+            
             foreach (string file in myFiles)
             {
                 ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<ConcurrentDictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, _localizationOptions.Value.FileEncoding));
@@ -142,6 +134,30 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     }
                 }
             }
+        }
+        
+        private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
+        {
+            bool isParent = false;
+            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
+            if (value is null)
+            {
+                isParent = true;
+                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)).Value;
+                if (value is null)
+                {
+                    value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
+                    if (value is null && _localizationOptions.Value.DefaultCulture != null)
+                    {
+                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
+                    }
+                }
+            }
+            return new LocalizatedFormat()
+            {
+                IsParent = isParent,
+                Value = value
+            };
         }
 
         private IEnumerable<string> GetMatchingJsonFiles(string jsonPath)
@@ -192,7 +208,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                         searchPattern = $"{shortName}?.json";
                     }
                 }
-
+					
                 files = Directory.GetFiles(basePath, searchPattern, searchOption).ToList();
                 //add sharedfile that should be found in base path
                 files.AddRange(Directory.GetFiles(basePath, sharedSearchPattern, SearchOption.TopDirectoryOnly));
@@ -229,29 +245,5 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
         }
         #endregion
-
-        private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
-        {
-            bool isParent = false;
-            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
-            if (value is null)
-            {
-                isParent = true;
-                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase)).Value;
-                if (value is null)
-                {
-                    value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
-                    if (value is null && _localizationOptions.Value.DefaultCulture != null)
-                    {
-                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, _localizationOptions.Value.DefaultCulture.Name, StringComparison.OrdinalIgnoreCase)).Value;
-                    }
-                }
-            }
-            return new LocalizatedFormat()
-            {
-                IsParent = isParent,
-                Value = value
-            };
-        }
     }
 }
