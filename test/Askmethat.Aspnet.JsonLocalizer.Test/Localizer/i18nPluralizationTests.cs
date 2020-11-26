@@ -8,7 +8,7 @@ using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
     [TestClass]
-    public class DefaultPluralizationRuleSetTests
+    public class i18nPluralizationTests
     {
         private JsonStringLocalizer localizer = null;
         public void InitLocalizer(char seperator = '|', string currentCulture = "en-US")
@@ -23,7 +23,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                      new CultureInfo("fr-FR"),
                      new CultureInfo("es-UY"),
                 },
-                ResourcesPath = "pluralization",
+                ResourcesPath = "i18nPluralization",
                 PluralSeparator = seperator,
                 LocalizationMode = LocalizationMode.I18n
             });
