@@ -38,7 +38,10 @@
     <None Update="multiple\localization.pt.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="pluralization\localization.json">
+    <None Update="pluralization\localization.en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="pluralization\localization.es.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\localization.json">
