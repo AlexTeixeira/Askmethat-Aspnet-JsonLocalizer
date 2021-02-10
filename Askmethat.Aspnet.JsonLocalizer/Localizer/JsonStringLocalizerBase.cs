@@ -27,11 +27,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected string resourcesRelativePath;
         protected string currentCulture = string.Empty;
         protected ConcurrentDictionary<string, LocalizatedFormat> localization;
+        protected ConcurrentDictionary<string, IPluralizationRuleSet> pluralizationRuleSets;
+
 
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
             _baseName = CleanBaseName(baseName);
             _localizationOptions = localizationOptions;
+            pluralizationRuleSets = new ConcurrentDictionary<string, IPluralizationRuleSet>();
 
             if (_localizationOptions.Value.LocalizationMode == LocalizationMode.I18n && _localizationOptions.Value.UseBaseName)
             {
@@ -73,6 +76,22 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 SetCurrentCultureToCache(_localizationOptions.Value.DefaultCulture);
             }
+        }
+
+        protected IPluralizationRuleSet GetPluralizationToUse()
+        {
+            IPluralizationRuleSet ruleSet;
+
+            if (pluralizationRuleSets.ContainsKey(currentCulture))
+            {
+                ruleSet = pluralizationRuleSets[currentCulture];
+            }
+            else
+            {
+                ruleSet = new DefaultPluralizationRuleSet();
+            }
+
+            return ruleSet;
         }
         #endregion
 
@@ -179,8 +198,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             // Get all files ending by json extension
             return files;
         }
-
-
 
         private string TransformNameToPath(string name)
         {
