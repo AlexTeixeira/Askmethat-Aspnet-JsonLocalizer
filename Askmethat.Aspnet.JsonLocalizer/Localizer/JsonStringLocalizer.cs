@@ -9,11 +9,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
+        
 #if NETCORE
             private readonly IWebHostEnvironment _env;
         
@@ -23,7 +26,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
         }
+#elif BLAZORASM
+         private readonly IWebAssemblyHostEnvironment _env;
+        
+          public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebAssemblyHostEnvironment env, string baseName
+ = null) : base(localizationOptions, baseName)
+        {
+            _env = env;
+            resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+        }
 #else
+
         private readonly IHostingEnvironment _env;
 
         public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,
@@ -150,6 +163,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return null;
         }
 
+        public MarkupString GetHtmlBlazorString(string name, bool shouldTryDefaultCulture = true)
+        {
+            return new MarkupString(GetString(name, shouldTryDefaultCulture));
+        }
+        
         private void InitJsonFromCulture(CultureInfo cultureInfo)
         {
             InitJsonStringLocalizer(cultureInfo);

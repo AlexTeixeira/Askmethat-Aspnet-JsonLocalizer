@@ -1,4 +1,5 @@
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -13,7 +14,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
  = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }
-#elif WEBASSEMBLY
+#elif BLAZORASM
             public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IWebAssemblyHostEnvironment env, string baseName
  = null) : base(localizationOptions, env, ModifyBaseName)
         {

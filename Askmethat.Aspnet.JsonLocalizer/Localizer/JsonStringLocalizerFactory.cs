@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -24,7 +25,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _env = env;
             _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
         }
+#elif BLAZORASM 
+        private readonly IWebAssemblyHostEnvironment _env;
+
+         public JsonStringLocalizerFactory(
+            IWebAssemblyHostEnvironment env,
+            IOptions<JsonLocalizationOptions> localizationOptions = null)
+        {
+            _env = env;
+            _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
+        }
 #else
+
+        //private readonly IHostingEnvironment _env;
         private readonly IHostingEnvironment _env;
 
         public JsonStringLocalizerFactory(
