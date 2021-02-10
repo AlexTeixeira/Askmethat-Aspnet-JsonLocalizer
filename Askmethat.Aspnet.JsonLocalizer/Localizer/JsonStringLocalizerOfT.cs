@@ -10,14 +10,21 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     {
 #if NETCORE
          public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName
- = null) : base(localizationOptions, env, baseName)
+ = null) : base(localizationOptions, env, ModifyBaseName)
+        {
+        }
+#elif WEBASSEMBLY
+            public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IWebAssemblyHostEnvironment env, string baseName
+ = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }
 #else
         public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,
-            string baseName = null) : base(localizationOptions, env, baseName)
+            string baseName = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }
 #endif
+
+        private static string ModifyBaseName => typeof(T).ToString();
     }
 }
