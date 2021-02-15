@@ -9,21 +9,34 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
-#if NETCORE
-            private readonly IWebHostEnvironment _env;
         
-          public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName
+#if NETCORE
+        private readonly IWebHostEnvironment _env;
+
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName
+= null) : base(localizationOptions, baseName)
+        {
+            _env = env;
+            resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+        }
+#elif BLAZORASM
+         private readonly IWebAssemblyHostEnvironment _env;
+        
+          public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IWebAssemblyHostEnvironment env, string baseName
  = null) : base(localizationOptions, baseName)
         {
             _env = env;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
         }
 #else
+
         private readonly IHostingEnvironment _env;
 
         public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,
@@ -80,6 +93,55 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return value;
         }
 
+        public LocalizedString GetPlural(string name, double count, params object[] arguments)
+        {
+            bool shouldTryDefaultCulture = true;
+
+            if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
+            {
+                InitJsonFromCulture(CultureInfo.CurrentUICulture);
+            }
+            else if (shouldTryDefaultCulture)
+            {
+                InitJsonFromCulture(_localizationOptions.Value.DefaultCulture);
+            }
+
+            IPluralizationRuleSet pluralizationRuleSet = GetPluralizationToUse();
+
+            var applicableRule = pluralizationRuleSet.GetMatchingPluralizationRule(count);
+            var nameWithRule = $"{name}.{applicableRule}";
+
+            string format = name;
+
+            if(localization != null) {
+                // try get the localization for the specified rule
+                if (localization.TryGetValue(nameWithRule, out LocalizatedFormat localizedValue))
+                {
+                    format = localizedValue.Value;
+                }
+                else 
+                {
+                    // if no translation was found for that rule, try with the "Other" rule.
+                    var nameWithOtherRule = $"{name}.{PluralizationConstants.Other}";
+                    if (localization.TryGetValue(nameWithOtherRule, out LocalizatedFormat localizedOtherValue))
+                    {
+                        format = localizedOtherValue.Value;
+                    }
+                    else // no pluralized value found. Check out if it's a normal non-pluralized translation
+                    {
+                        format = GetString(name, true);
+                    }
+                }
+            }
+
+            var argumentsWithCount = arguments.ToList();
+            argumentsWithCount.Insert(0, count);
+
+            // By this point we either found a pluralized or non pluralized translation, or we stick to the received string.
+            var value = string.Format(format ?? name, argumentsWithCount.ToArray());
+
+            return new LocalizedString(name, value, format != null);
+        }
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             InitJsonFromCulture(CultureInfo.CurrentUICulture);
@@ -150,6 +212,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return null;
         }
 
+        public MarkupString GetHtmlBlazorString(string name, bool shouldTryDefaultCulture = true)
+        {
+            return new MarkupString(GetString(name, shouldTryDefaultCulture));
+        }
+        
         private void InitJsonFromCulture(CultureInfo cultureInfo)
         {
             InitJsonStringLocalizer(cultureInfo);
@@ -208,5 +275,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 InitJsonFromCulture(cultureInfo);
             }
         }
+
     }
 }

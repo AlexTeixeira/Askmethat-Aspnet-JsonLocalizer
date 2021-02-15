@@ -75,8 +75,10 @@ For example : User|Users for key Users
 
 To use plural string, use paramters from [IStringLocalizer](https://github.com/aspnet/AspNetCore/blob/def36fab1e45ef7f169dfe7b59604d0002df3b7c/src/Mvc/Mvc.Localization/src/LocalizedHtmlString.cs), if last parameters is a boolean, pluralization will be activated.
 
-
 Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringLocalizer :
+
+In version 3.1.1 and above you can have multiple pluralization, to use it, you should 
+use IJsonStringLocalizer interface and this method ```LocalizedString GetPlural(string key, double count, params object[] arguments)```
 
 **localizer.GetString("Users", true)**;
 
@@ -101,6 +103,12 @@ public class HomeController{
   }
 }
 ```
+
+# Blazor Server HTML parsing
+
+As you know, Blazor Server does not provide IHtmlLocalizer. To avoid this, you can now use 
+from **IJsonStringLocalizer** this method ```MarkupString GetHtmlBlazorString(string name, bool shouldTryDefaultCulture = true)```
+
 # Information
 
 **Platform Support**
@@ -241,6 +249,20 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
                 <img src="https://avatars0.githubusercontent.com/u/240114?s=400&v=4" width="100px;" alt="rohanreddyg"/>
                 <br />
                 <sub><b>rohanreddyg</b></sub>
+            </a>
+        </td>
+ <td align="center">
+            <a href="https://github.com/rickszyr">
+                <img src="https://avatars.githubusercontent.com/u/10763102?s=460&v=4" width="100px;" alt="rickszyr"/>
+                <br />
+                <sub><b>rickszyr</b></sub>
+            </a>
+        </td>
+ <td align="center">
+            <a href="https://github.com/ErikApption">
+                <img src="https://avatars.githubusercontent.com/u/3179656?s=460&u=4a6b52f80b64f5951d3d04b4cfe18ac7f050a52a&v=4" width="100px;" alt="ErikApption"/>
+                <br />
+                <sub><b>ErikApption</b></sub>
             </a>
         </td>
   </tr>

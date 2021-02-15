@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocalizer.I18nTestSample", "test\Askmethat.Aspnet.JsonLocalizer.I18nTestSample\Askmethat.Aspnet.JsonLocalizer.I18nTestSample.csproj", "{630D66E9-7DD4-4B6C-891A-F9D829BBE2B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly", "test\Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly\Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly.csproj", "{D4271821-DC98-4FB9-A7C3-107535DFB2F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{630D66E9-7DD4-4B6C-891A-F9D829BBE2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{630D66E9-7DD4-4B6C-891A-F9D829BBE2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{630D66E9-7DD4-4B6C-891A-F9D829BBE2B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4271821-DC98-4FB9-A7C3-107535DFB2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4271821-DC98-4FB9-A7C3-107535DFB2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4271821-DC98-4FB9-A7C3-107535DFB2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4271821-DC98-4FB9-A7C3-107535DFB2F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

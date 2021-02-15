@@ -55,6 +55,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
                 options.SupportedCultureInfos = _jsonLocalizationOptions.SupportedCultureInfos;
                 options.FileEncoding = _jsonLocalizationOptions.FileEncoding;
                 options.IsAbsolutePath = _jsonLocalizationOptions.IsAbsolutePath;
+                options.DefaultCulture = _defaultRequestCulture.Culture;
+                options.DefaultUICulture = _defaultRequestCulture.UICulture;
             });
 
             _ = services.Configure<RequestLocalizationOptions>(options =>

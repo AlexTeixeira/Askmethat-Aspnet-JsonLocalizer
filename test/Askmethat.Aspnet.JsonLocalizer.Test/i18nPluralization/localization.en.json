@@ -1,0 +1,14 @@
+﻿{
+  "Title": {
+    "One": "1 User",
+    "Other": "{0} Users"
+  },
+  "UseCase": {
+    "Title": {
+      "One": "A Number",
+      "Other": "{0} Numbers",
+      "Zero": "No Numbers"
+    }
+  },
+  "TextWithNoPlural": "Sample Text"
+}
