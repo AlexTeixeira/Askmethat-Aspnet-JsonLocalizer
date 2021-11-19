@@ -49,6 +49,7 @@ services.AddJsonLocalization(options => {
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
 - **MissingTranslationLogBehavior** : *_default value: LogConsoleError*. Define the logging mode
 - **LocalizationMode** : *_default value: Basic*. Define the localization mode for the Json file. Currently Basic and I18n. More information in *LocalizationMode*
+- **MissingTranslationsOutputFile** : This enables to specify in which file the missing translations will be written when `MissingTranslationLogBehavior = MissingTranslationLogBehavior.CollectToJSON`, defaults to `MissingTranslations.json`
 
 ### Search patterns when UseBaseName = true
 

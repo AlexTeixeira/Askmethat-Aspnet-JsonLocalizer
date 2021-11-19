@@ -11,10 +11,11 @@ using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
-    internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
+    internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer, IDisposable
     {
         
 #if NETCORE
@@ -24,6 +25,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 = null) : base(localizationOptions, baseName)
         {
             _env = env;
+            _missingTranslations = localizationOptions.Value.MissingTranslationsOutputFile;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
         }
 #elif BLAZORASM
@@ -33,6 +35,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
  = null) : base(localizationOptions, baseName)
         {
             _env = env;
+            //_missingValuesJSON not viable on WASM
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
         }
 #else
@@ -43,10 +46,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             string baseName = null) : base(localizationOptions, baseName)
         {
             _env = env;
+            _missingTranslations = localizationOptions.Value.MissingTranslationsOutputFile;
             resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
         }
 #endif
 
+        private IDictionary<string, string> _missingJsonValues = null;
+        private bool _disposedValue;
+        private string _missingTranslations = null;
 
         public LocalizedString this[string name]
         {
@@ -209,6 +216,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 Console.Error.WriteLine($"{name} does not contain any translation");
             }
 
+            // Notify the user that a translation was not found for the current string
+            // only if logging is defined in options.MissingTranslationLogBehavior
+            if (_localizationOptions.Value.MissingTranslationLogBehavior ==
+                MissingTranslationLogBehavior.CollectToJSON)
+            {
+                if (_missingJsonValues is null)
+                    _missingJsonValues = new Dictionary<string, string>();
+                if (_missingJsonValues.TryAdd(name, name))
+                {
+                    Console.Error.WriteLine($"'{name}' added to missing values");
+                }
+            }
+
             return null;
         }
 
@@ -276,5 +296,45 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             }
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    if (!string.IsNullOrWhiteSpace(_missingTranslations))
+                    {
+                        try
+                        {
+                            // save missing values
+                            var json = JsonConvert.SerializeObject(_missingJsonValues);
+                            Console.Error.WriteLine($"Writing missing translations to {Path.GetFullPath(_missingTranslations)}");
+                            File.WriteAllText(_missingTranslations, json);
+                        } catch (Exception)
+                        {
+                            Console.Error.WriteLine($"Cannot write missing translations to {Path.GetFullPath(_missingTranslations)}");
+                        }
+                    }
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                _disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~JsonStringLocalizer()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

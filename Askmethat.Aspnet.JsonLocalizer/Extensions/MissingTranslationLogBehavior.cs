@@ -3,6 +3,7 @@
     public enum MissingTranslationLogBehavior
     {
         Ignore,
-        LogConsoleError
+        LogConsoleError,
+        CollectToJSON
     }
 }

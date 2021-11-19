@@ -14,6 +14,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         private const char PLURAL_SEPARATOR = '|';
         private const string DEFAULT_RESOURCES = "Resources";
         private const string DEFAULT_CULTURE = "en-US";
+        public const string DEFAULT_MISSING_TRANSLATIONS = "MissingTranslations.json";
 
         public new string ResourcesPath { get; set; } = DEFAULT_RESOURCES;
         /// We cache all values to memory to avoid loading files for each request, this parameter defines the time after which the cache is refreshed.
@@ -120,5 +121,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         /// Define JSON Files management. See documentation for more information
         /// </summary>
         public LocalizationMode LocalizationMode { get; set; } = LocalizationMode.Basic;
+
+        /// <summary>
+        /// Local file name where the missing translation JSON values can be written. See documentation for more information
+        /// </summary>
+        public string MissingTranslationsOutputFile { get; internal set; } = DEFAULT_MISSING_TRANSLATIONS;
     }
 }
