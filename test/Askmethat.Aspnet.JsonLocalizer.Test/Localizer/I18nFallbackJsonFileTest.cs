@@ -70,6 +70,26 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
         }
 
+        [TestMethod]
+        public void Should_Read_Luminosity_FallbackToParent()
+        {
+            InitLocalizer("fr-FR");
+            LocalizedString result = localizer.GetString("Luminosity");
+            Assert.AreEqual("Luminosité", result);
+            Assert.IsFalse(result.ResourceNotFound);
+
+            InitLocalizer("en-NZ");
+            result = localizer.GetString("Luminosity");
+            Assert.AreEqual("Luminosity", result);
+            Assert.IsFalse(result.ResourceNotFound);
+
+            InitLocalizer("zh-CN");
+            result = localizer.GetString("Luminosity");
+            Assert.AreEqual("Luminosity", result);
+            Assert.IsFalse(result.ResourceNotFound);
+
+        }
+
         //[TestMethod]
         public void Should_Read_ResourceMissingCulture_FallbackToResourceName()
         {
@@ -97,7 +117,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             LocalizedString[] results = localizer.GetAllStrings(includeParentCultures: true).ToArray();
             LocalizedString[] expected = new[] {
                 new LocalizedString("Color", "Colour (specific)", false),
-                new LocalizedString("Empty", "Empty", false)
+                new LocalizedString("Empty", "Empty", false),
+                new LocalizedString("Luminosity", "Luminosity", false)
             };
             CollectionAssert.AreEqual(expected, results.OrderBy(s => s.Name).ToArray(), new LocalizedStringComparer());
         }
