@@ -13,19 +13,18 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  tag: $[replace(variables['Build.SourceBranch'], 'refs/tags/', '')]
 
 
 steps:
-# - task: PowerShell@2
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       # Write your PowerShell commands here.
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your PowerShell commands here.
       
-#       $CI_BUILD_TAG = git describe --tags
-#       Write-Host $CI_BUILD_TAG
-#       Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
+      $CI_BUILD_TAG = git describe --tags --exact-match
+      Write-Host $CI_BUILD_TAG
+      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
 
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
