@@ -14,7 +14,19 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+
 steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your PowerShell commands here.
+
+      $tags = git tag --sort=-creatordate
+      $CI_BUILD_TAG = $tags[0]
+      Write-Host $CI_BUILD_TAG
+      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
+
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
   inputs:
@@ -34,7 +46,8 @@ steps:
     command: 'pack'
     packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
     nobuild: true
-    versioningScheme: 'off'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'CI_BUILD_TAG'
 
 - task: CopyFiles@2
   displayName: 'Copy packages'
