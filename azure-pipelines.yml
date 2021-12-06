@@ -22,9 +22,10 @@ steps:
     script: |
       # Write your PowerShell commands here.
 
-      $CI_BUILD_TAG = git tag --sort=-creatordate
-      Write-Host $CI_BUILD_TAG[0]
-      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG[0]"
+      $tags = git tag --sort=-creatordate
+      $CI_BUILD_TAG = $tags[0]
+      Write-Host $CI_BUILD_TAG
+      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
 
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
