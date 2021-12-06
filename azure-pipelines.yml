@@ -22,9 +22,9 @@ steps:
     script: |
       # Write your PowerShell commands here.
       
-      $CI_BUILD_TAG = git describe --tags --exact-match
-      Write-Host $CI_BUILD_TAG
-      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
+      $CI_BUILD_TAG = git describe --tag --sort=-creatordate
+      Write-Host $CI_BUILD_TAG[0]
+      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG[0]"
 
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
@@ -46,7 +46,7 @@ steps:
     packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.csproj'
     nobuild: true
     versioningScheme: 'byEnvVar'
-    versionEnvVar: 'Build.SourceBranch'
+    versionEnvVar: 'CI_BUILD_TAG'
 
 - task: CopyFiles@2
   displayName: 'Copy packages'
