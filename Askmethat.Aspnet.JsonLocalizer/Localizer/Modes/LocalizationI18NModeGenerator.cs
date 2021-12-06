@@ -29,8 +29,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             _options = options;
 
             var enumerable = myFiles as string[] ?? myFiles.ToArray();
-            var neutralFile = enumerable.FirstOrDefault(file => Path.GetFileName(file)
-                .Count(s => s.CompareTo('.') == 0) == 1);
+            var neutralFiles = enumerable.Where(file => Path.GetFileName(file)
+                .Count(s => s.CompareTo('.') == 0) == 1).ToList();
             var isInvariantCulture =
                 currentCulture.DisplayName == CultureInfo.InvariantCulture.ThreeLetterISOLanguageName;
 
@@ -61,9 +61,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             }
             else
             {
-                if (neutralFile != null)
+                if (neutralFiles.Any())
                 {
-                    AddValueToLocalization(options, neutralFile, true);
+                    foreach (var neutralFile in neutralFiles)
+                        AddValueToLocalization(options, neutralFile, true);
                 }
             }
 

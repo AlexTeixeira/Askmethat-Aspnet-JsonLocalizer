@@ -8,16 +8,8 @@
   "WeatherForecastDesc": "Ce volet montre comment obtenir des données à partir d'un service.",
   "Loading": "Chargement...",
   "Date": "Date",
-  "TempC": "Temp. (C)",
-  "TempF": "Temp. (F)",
   "Summary": "Sommaire",
   "CurrentCount": "Valeur courante",
   "ClickMe": "Cliquer",
-  "About": "À propos de",
-  "Freezing": "Geler",
-  "Bracing": "Bracing",
-  "Chilly": "Froid",
-  "Cool": "Frais",
-  "Mild": "Doux",
-  "Warm": "Chaud"
+  "About": "À propos de"
 }
