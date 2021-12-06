@@ -15,9 +15,14 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- powershell: |
-   $CI_BUILD_TAG = git describe --tags
-   Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
+
+  - task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $CI_BUILD_TAG = git describe --tags
+      Write-Host $CI_BUILD_TAG
+      Write-Host "##vso[task.setvariable variable=CI_BUILD_TAG]$CI_BUILD_TAG"
   displayName: 'Set the tag name as an environment variable'
 
 - task: DotNetCoreCLI@2
