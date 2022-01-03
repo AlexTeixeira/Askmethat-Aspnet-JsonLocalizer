@@ -17,7 +17,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer, IDisposable
     {
-        
+
 #if NETCORE
         private readonly IWebHostEnvironment _env;
 
@@ -120,13 +120,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             string format = name;
 
-            if(localization != null) {
+            if (localization != null)
+            {
                 // try get the localization for the specified rule
                 if (localization.TryGetValue(nameWithRule, out LocalizatedFormat localizedValue))
                 {
                     format = localizedValue.Value;
                 }
-                else 
+                else
                 {
                     // if no translation was found for that rule, try with the "Other" rule.
                     var nameWithOtherRule = $"{name}.{PluralizationConstants.Other}";
@@ -236,7 +237,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             return new MarkupString(GetString(name, shouldTryDefaultCulture));
         }
-        
+
         private void InitJsonFromCulture(CultureInfo cultureInfo)
         {
             InitJsonStringLocalizer(cultureInfo);
@@ -302,15 +303,16 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 if (disposing)
                 {
-                    if (!string.IsNullOrWhiteSpace(_missingTranslations))
+                    if (!string.IsNullOrWhiteSpace(_missingTranslations) && (_missingJsonValues?.Count ?? 0) > 0)
                     {
                         try
                         {
                             // save missing values
                             var json = JsonConvert.SerializeObject(_missingJsonValues);
-                            Console.Error.WriteLine($"Writing missing translations to {Path.GetFullPath(_missingTranslations)}");
+                            Console.Error.WriteLine($"Writing {_missingJsonValues?.Count} missing translations to {Path.GetFullPath(_missingTranslations)}");
                             File.WriteAllText(_missingTranslations, json);
-                        } catch (Exception)
+                        }
+                        catch (Exception)
                         {
                             Console.Error.WriteLine($"Cannot write missing translations to {Path.GetFullPath(_missingTranslations)}");
                         }
