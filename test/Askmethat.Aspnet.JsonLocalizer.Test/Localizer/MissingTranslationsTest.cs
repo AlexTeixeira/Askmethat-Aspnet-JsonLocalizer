@@ -45,7 +45,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             InitLocalizer("en-AU");
             var result = localizer.GetString("Colored",false);
             Assert.IsTrue(result.ResourceNotFound);
-            localizer.Dispose();
             Assert.IsTrue(File.Exists(defaultJsonFile));
         }
 

@@ -1,10 +1,11 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
+#if NETSTANDARD
 using Microsoft.AspNetCore.Hosting;
+#endif
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -16,20 +17,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         private readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
 #if NETCORE
-            private readonly IWebHostEnvironment _env;
+            private readonly EnvironmentWrapper _env;
         
          public JsonStringLocalizerFactory(
-            IWebHostEnvironment env,
-            IOptions<JsonLocalizationOptions> localizationOptions = null)
-        {
-            _env = env;
-            _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
-        }
-#elif BLAZORASM 
-        private readonly IWebAssemblyHostEnvironment _env;
-
-         public JsonStringLocalizerFactory(
-            IWebAssemblyHostEnvironment env,
+            EnvironmentWrapper env,
             IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             _env = env;

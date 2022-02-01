@@ -1,6 +1,7 @@
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+#if NETSTANDARD
 using Microsoft.AspNetCore.Hosting;
+#endif
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
@@ -10,12 +11,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal class JsonStringLocalizerOfT<T> : JsonStringLocalizer, IJsonStringLocalizer<T>, IStringLocalizer<T>
     {
 #if NETCORE
-         public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IWebHostEnvironment env, string baseName
- = null) : base(localizationOptions, env, ModifyBaseName)
-        {
-        }
-#elif BLAZORASM
-            public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IWebAssemblyHostEnvironment env, string baseName
+         public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, string baseName
  = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }

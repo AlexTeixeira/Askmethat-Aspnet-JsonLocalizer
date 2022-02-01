@@ -1,15 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
 	</PropertyGroup>
 
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.0;netcoreapp3.1;netstandard2.1</TargetFrameworks>
-        <PackageId>Askmethat.Aspnet.JsonLocalizer</PackageId>
+        <TargetFrameworks>net5.0</TargetFrameworks>
+        <PackageId>Askmethat.Aspnet.JsonLocalizer.Wasm</PackageId>
         <PackageVersion>$(Version)</PackageVersion>
         <Authors>TEIXEIRA Alexandre</Authors>
-        <Description>Json Localizer library for .NetStandard and .NetCore Asp.net projects</Description>
+        <Description>Json Localizer library for Wasm Asp.net projects</Description>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <PackageReleaseNotes>See associated version in https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/releases</PackageReleaseNotes>
         <PackageLicenseUrl>https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE</PackageLicenseUrl>
@@ -22,30 +22,29 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;NETCORE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;NETCORE</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' OR '$(TargetFramework)' == 'netcoreapp3.1'">
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.*" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.*" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.*" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.*" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.*" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="3.*" />
-        <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.*" />
-        <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.*" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.*" />
-    </ItemGroup>
-
-    <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netstandard\d'))">
-        <DefineConstants>NETSTANDARD</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netcoreapp\d'))">
-        <DefineConstants>NETCORE</DefineConstants>
-    </PropertyGroup>
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>$(MSBuildProjectName).Test</_Parameter1>

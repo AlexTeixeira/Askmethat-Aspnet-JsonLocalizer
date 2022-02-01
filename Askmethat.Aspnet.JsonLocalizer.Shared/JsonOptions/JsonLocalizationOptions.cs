@@ -125,6 +125,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         /// <summary>
         /// Local file name where the missing translation JSON values can be written. See documentation for more information
         /// </summary>
-        public string MissingTranslationsOutputFile { get; internal set; } = DEFAULT_MISSING_TRANSLATIONS;
+        public string MissingTranslationsOutputFile { get; set; } = DEFAULT_MISSING_TRANSLATIONS;
     }
 }

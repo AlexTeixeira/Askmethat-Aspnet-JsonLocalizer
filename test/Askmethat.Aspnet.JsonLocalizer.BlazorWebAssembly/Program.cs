@@ -11,15 +11,13 @@ using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
-namespace Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly
+namespace Askmethat.Aspnet.JsonLocalizer.Sample.BlazorWebAssembly
 {
     public class Program
     {
@@ -32,7 +30,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly
         public static async Task Main(string[] args)
         {
             _builder = WebAssemblyHostBuilder.CreateDefault(args);
-            _builder.RootComponents.Add<App>("app"); 
+            _builder.RootComponents.Add<App>("#app"); 
             ConfigureServices(_builder.Services);
             await ConfigureApplication(_builder.Services);
             
