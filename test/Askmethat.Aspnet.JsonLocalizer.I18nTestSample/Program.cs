@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Askmethat.Aspnet.JsonLocalizer.I18nTestSample
+namespace Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest
 {
     public class Program
     {

@@ -17,6 +17,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
 
 #endif
         public string ContentRootPath { get; internal set; }
+        public bool IsWasm { get; } = false;
+
 
     }
 }

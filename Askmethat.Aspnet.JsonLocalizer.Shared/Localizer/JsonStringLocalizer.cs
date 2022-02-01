@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using System.Net.Http;
 #if NETCORE
 using Microsoft.AspNetCore.Components;
 #endif
@@ -20,6 +21,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         private IDictionary<string, string> _missingJsonValues = null;
         private string _missingTranslations = null;
+        private HttpClient _httpClient;
 
         public LocalizedString this[string name]
         {
@@ -149,7 +151,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             CultureInfo.CurrentCulture = culture;
 
-            return new JsonStringLocalizer(_localizationOptions, _env);
+            return new JsonStringLocalizer(_localizationOptions, _env, _httpClient);
         }
 
         private string GetString(string name, bool shouldTryDefaultCulture = true)

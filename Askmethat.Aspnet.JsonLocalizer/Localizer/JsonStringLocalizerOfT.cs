@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 #endif
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -12,12 +13,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     {
 #if NETCORE
          public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, string baseName
- = null) : base(localizationOptions, env, ModifyBaseName)
+ = null) : base(localizationOptions, env, null, ModifyBaseName)
         {
         }
 #else
         public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,
-            string baseName = null) : base(localizationOptions, env, ModifyBaseName)
+            string baseName = null) : base(localizationOptions, env, null, ModifyBaseName)
         {
         }
 #endif

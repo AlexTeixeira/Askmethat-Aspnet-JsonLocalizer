@@ -1,6 +1,6 @@
 using System;
 
-namespace Askmethat.Aspnet.JsonLocalizer.I18nTestSample.Data
+namespace Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest.Data
 {
     public class WeatherForecast
     {

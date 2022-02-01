@@ -15,6 +15,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
             this.wasmEnvironment = hostingEnvironmentStub;
         }
 
+        public bool IsWasm { get; } = true;
 
         public string ContentRootPath { get; internal set; }
 

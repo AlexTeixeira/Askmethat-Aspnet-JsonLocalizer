@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using System.Net.Http;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -16,40 +17,31 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     {
         private readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
-#if NETCORE
-            private readonly EnvironmentWrapper _env;
-        
-         public JsonStringLocalizerFactory(
-            EnvironmentWrapper env,
-            IOptions<JsonLocalizationOptions> localizationOptions = null)
-        {
-            _env = env;
-            _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
-        }
-#else
 
-        //private readonly IHostingEnvironment _env;
-        private readonly IHostingEnvironment _env;
+            private readonly EnvironmentWrapper _env;
+        private readonly HttpClient _httpClient;
 
         public JsonStringLocalizerFactory(
-            IHostingEnvironment env,
+            EnvironmentWrapper env,
+            HttpClient httpClient,
             IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             _env = env;
+            _httpClient = httpClient;
             _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
         }
-#endif
+
 
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return new JsonStringLocalizer(_localizationOptions, _env);
+            return new JsonStringLocalizer(_localizationOptions, _env,_httpClient);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return new JsonStringLocalizer(_localizationOptions, _env, baseName);
+            return new JsonStringLocalizer(_localizationOptions, _env, _httpClient, baseName);
         }
     }
 }

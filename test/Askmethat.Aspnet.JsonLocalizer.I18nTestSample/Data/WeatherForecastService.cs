@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
-namespace Askmethat.Aspnet.JsonLocalizer.I18nTestSample.Data
+namespace Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest.Data
 {
     public class WeatherForecastService
     {

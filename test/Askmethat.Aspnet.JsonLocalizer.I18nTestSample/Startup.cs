@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Askmethat.Aspnet.JsonLocalizer.I18nTestSample.Data;
+using Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest.Data;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.AspNetCore.Localization;
 
-namespace Askmethat.Aspnet.JsonLocalizer.I18nTestSample
+namespace Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest
 {
     public class Startup
     {

@@ -126,5 +126,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         /// Local file name where the missing translation JSON values can be written. See documentation for more information
         /// </summary>
         public string MissingTranslationsOutputFile { get; set; } = DEFAULT_MISSING_TRANSLATIONS;
+
+        /// <summary>
+        /// If a list of files is provided, the localizer will not attempt to scan i18n directories. This option is required for Blazor Wasm.
+        /// </summary>
+        public string[] JsonFileList { get; set; } = null;
     }
 }

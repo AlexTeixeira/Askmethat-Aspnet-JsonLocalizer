@@ -17,11 +17,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\IPluralizationRuleSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\JsonStringLocalizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\JsonStringLocalizerBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Localizer\JsonStringLocalizerFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Localizer\JsonStringLocalizerOfT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\ILocalizationModeGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalisationModeHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationBasicModeGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationBlazorWasmModeGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationI18NModeGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationModeBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationModeFactory.cs" />
