@@ -23,7 +23,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 #if NETCORE
         private readonly EnvironmentWrapper _env;
 
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env,HttpClient http, string baseName
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, string baseName
 = null) : base(localizationOptions, env, baseName)
         {
             _env = env;
@@ -34,8 +34,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         private readonly IHostingEnvironment _env;
 
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,HttpClient http,
-            string baseName = null) : base(localizationOptions, null, baseName)
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, null, baseName)
         {
             _env = env;
             _missingTranslations = localizationOptions.Value.MissingTranslationsOutputFile;

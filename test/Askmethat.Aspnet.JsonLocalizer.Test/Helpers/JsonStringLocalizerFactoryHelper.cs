@@ -12,7 +12,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Helpers
 
         public static JsonStringLocalizer Create(JsonLocalizationOptions options, string baseName = null)
         {
-            return new JsonStringLocalizer(Options.Create(options), new EnvironmentWrapper(new HostingEnvironmentStub()), null, baseName);
+            return new JsonStringLocalizer(Options.Create(options), new EnvironmentWrapper(new HostingEnvironmentStub()), baseName);
         }
     }
 }

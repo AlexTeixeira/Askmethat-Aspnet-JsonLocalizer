@@ -13,12 +13,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     {
 #if NETCORE
          public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, string baseName
- = null) : base(localizationOptions, env, null, ModifyBaseName)
+ = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }
 #else
         public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env,
-            string baseName = null) : base(localizationOptions, env, null, ModifyBaseName)
+            string baseName = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }
 #endif

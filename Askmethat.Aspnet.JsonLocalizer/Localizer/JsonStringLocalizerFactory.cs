@@ -43,13 +43,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return new JsonStringLocalizer(_localizationOptions, _env, null);
+            return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return new JsonStringLocalizer(_localizationOptions, _env, null, baseName);
+            return new JsonStringLocalizer(_localizationOptions, _env, baseName);
         }
     }
 }

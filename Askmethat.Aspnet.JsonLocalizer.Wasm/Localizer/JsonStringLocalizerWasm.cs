@@ -10,6 +10,7 @@ using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Reflection;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -18,8 +19,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         private readonly EnvironmentWrapper _env;
 
-        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, HttpClient http, 
-            string baseName = null) : base(localizationOptions, env, baseName, http)
+        public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, 
+            string baseName = null) : base(localizationOptions, env, baseName)
         {
             _env = env;
             _missingTranslations = localizationOptions.Value.MissingTranslationsOutputFile;

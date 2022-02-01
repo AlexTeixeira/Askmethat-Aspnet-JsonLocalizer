@@ -19,15 +19,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
 
             private readonly EnvironmentWrapper _env;
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _resourceAssembly;
 
         public JsonStringLocalizerFactory(
             EnvironmentWrapper env,
-            HttpClient httpClient,
             IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             _env = env;
-            _httpClient = httpClient;
             _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
         }
 
@@ -35,13 +33,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return new JsonStringLocalizer(_localizationOptions, _env,_httpClient);
+            return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
             baseName = _localizationOptions.Value.UseBaseName ? baseName : string.Empty;
-            return new JsonStringLocalizer(_localizationOptions, _env, _httpClient, baseName);
+            return new JsonStringLocalizer(_localizationOptions, _env, baseName);
         }
     }
 }

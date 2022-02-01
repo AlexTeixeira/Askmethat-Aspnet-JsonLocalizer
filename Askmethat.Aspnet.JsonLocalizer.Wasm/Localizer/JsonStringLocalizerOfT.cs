@@ -12,7 +12,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal class JsonStringLocalizerOfT<T> : JsonStringLocalizer, IJsonStringLocalizer<T>, IStringLocalizer<T>
     {
          public JsonStringLocalizerOfT(IOptions<JsonLocalizationOptions> localizationOptions, EnvironmentWrapper env, string baseName
- = null, HttpClient httpClient = null) : base(localizationOptions, env, httpClient, ModifyBaseName)
+ = null) : base(localizationOptions, env, ModifyBaseName)
         {
         }
 

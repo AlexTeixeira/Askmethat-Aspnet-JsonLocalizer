@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Askmethat.Aspnet.JsonLocalizer.Format;
@@ -16,11 +17,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
     internal class LocalizationBlazorWasmModeGenerator : LocalizationModeBase, ILocalizationModeGenerator
     {
-        private HttpClient http;
+        private readonly Assembly resourceAssembly;
 
-        public LocalizationBlazorWasmModeGenerator(HttpClient http)
+        public LocalizationBlazorWasmModeGenerator(Assembly resourceAssembly)
         {
-            this.http = http;
+            this.resourceAssembly = resourceAssembly;
         }
 
         private LocalizatedFormat GetLocalizedValue(KeyValuePair<string, string> temp, bool isParent)
@@ -50,7 +51,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
                     s => (s.IndexOf(currentCulture.Name, StringComparison.OrdinalIgnoreCase) >= 0
                           || s.IndexOf(currentCulture.Parent.Name, StringComparison.OrdinalIgnoreCase) >= 0)
                 )).ToArray();
-
 
             if (files.Any() && !isInvariantCulture)
             {
@@ -83,7 +83,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 
         private void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
         {
-            var content = http.GetStringAsync(file).Result;
+            var resName = file.Replace('/', '.').Replace('\\', '.');
+            using var resource = resourceAssembly.GetManifestResourceStream(resName);
+            if (resource is null)
+                throw new ArgumentException($"Cannot embedded resource '{file}' from Assembly {resourceAssembly.FullName}");
+            using var reader = new StreamReader(resource, options.FileEncoding);
+            var content = reader.ReadToEnd();
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject(content);//File.ReadAllText(file, options.FileEncoding)
 
             if (json == null)

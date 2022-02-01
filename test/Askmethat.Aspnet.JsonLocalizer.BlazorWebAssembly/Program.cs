@@ -79,7 +79,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Sample.BlazorWebAssembly
                 options.SupportedCultureInfos = _supportedCultures;
                 options.FileEncoding = new UTF8Encoding();
                 options.IsAbsolutePath = true;
-                options.JsonFileList = new[] { "I18n/localization.en.json" };
+                options.Assembly = typeof(Program).Assembly;
+                options.JsonFileList = new[] { "Askmethat.Aspnet.JsonLocalizer.Sample.BlazorWebAssembly/I18n/localization.json" };
             });
 
             _ = services.Configure<RequestLocalizationOptions>(options =>

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using Askmethat.Aspnet.JsonLocalizer.Caching;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
@@ -22,7 +23,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected readonly CacheHelper _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
         private readonly EnvironmentWrapper _environment;
-        private readonly HttpClient _httpClient;
         protected readonly string _baseName;
         protected readonly TimeSpan _memCacheDuration;
 
@@ -35,12 +35,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, 
             EnvironmentWrapper environment = null,
-            string baseName = null, HttpClient httpClient = null)
+            string baseName = null)
         {
             _baseName = CleanBaseName(baseName);
             _localizationOptions = localizationOptions;
             _environment = environment;
-            _httpClient = httpClient;
             pluralizationRuleSets = new ConcurrentDictionary<string, IPluralizationRuleSet>();
 
             if (_localizationOptions.Value.LocalizationMode == LocalizationMode.I18n && _localizationOptions.Value.UseBaseName)
@@ -150,7 +149,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             else
                 myFiles = GetMatchingJsonFiles(jsonPath);
 
-            localization = LocalizationModeFactory.GetLocalisationFromMode(localizationMode,_httpClient)
+            localization = LocalizationModeFactory.GetLocalisationFromMode(localizationMode, _localizationOptions.Value.Assembly)
                 .ConstructLocalization(myFiles, currentCulture, _localizationOptions.Value);
         }
 

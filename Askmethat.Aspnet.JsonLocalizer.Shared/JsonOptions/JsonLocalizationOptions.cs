@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
@@ -131,5 +132,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         /// If a list of files is provided, the localizer will not attempt to scan i18n directories. This option is required for Blazor Wasm.
         /// </summary>
         public string[] JsonFileList { get; set; } = null;
+
+        public Assembly Assembly { get; set; } = null;
     }
 }
