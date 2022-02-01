@@ -83,7 +83,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 
         private void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
         {
-            var resource = new EmbeddedFileProvider();
+            var content = http.GetStringAsync(file).Result;
             var json = Newtonsoft.Json.JsonConvert.DeserializeObject(content);//File.ReadAllText(file, options.FileEncoding)
 
             if (json == null)
