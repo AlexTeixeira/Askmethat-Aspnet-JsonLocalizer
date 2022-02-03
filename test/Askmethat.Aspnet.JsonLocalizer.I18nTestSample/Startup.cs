@@ -53,6 +53,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest
                 options.SupportedCultureInfos = _jsonLocalizationOptions.SupportedCultureInfos;
                 options.FileEncoding = _jsonLocalizationOptions.FileEncoding;
                 options.IsAbsolutePath = _jsonLocalizationOptions.IsAbsolutePath;
+                options.MissingTranslationLogBehavior = MissingTranslationLogBehavior.CollectToJSON;
                 options.LocalizationMode = LocalizationMode.I18n;
             });
             
