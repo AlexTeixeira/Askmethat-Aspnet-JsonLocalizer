@@ -13,7 +13,6 @@ using System.Net.Http;
 #if NETCORE
 using Microsoft.AspNetCore.Components;
 #endif
-using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {

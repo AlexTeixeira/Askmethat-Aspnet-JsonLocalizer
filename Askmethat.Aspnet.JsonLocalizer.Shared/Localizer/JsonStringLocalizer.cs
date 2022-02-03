@@ -10,10 +10,11 @@ using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json;
 #if NETCORE
 using Microsoft.AspNetCore.Components;
 #endif
-using Newtonsoft.Json;
+
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -276,7 +277,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 try
                 {
                     // save missing values
-                    var json = JsonConvert.SerializeObject(_missingJsonValues);
+                    var json = JsonSerializer.Serialize(_missingJsonValues);
                     Console.Error.WriteLine($"Writing {_missingJsonValues?.Count} missing translations to {Path.GetFullPath(_missingTranslations)}");
                     lock (this)
                     {

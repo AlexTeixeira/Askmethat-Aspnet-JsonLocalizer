@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
@@ -11,7 +11,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         public static ConcurrentDictionary<T, U> ReadAndDeserializeFile<T,U>(string file, Encoding encoding)
         {
             return 
-                JsonConvert.DeserializeObject<ConcurrentDictionary<T, U>>(
+                JsonSerializer.Deserialize<ConcurrentDictionary<T, U>>(
                     File.ReadAllText(file, encoding));
         }
     }

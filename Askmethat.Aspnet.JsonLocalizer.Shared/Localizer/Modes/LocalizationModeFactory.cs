@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Reflection;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {

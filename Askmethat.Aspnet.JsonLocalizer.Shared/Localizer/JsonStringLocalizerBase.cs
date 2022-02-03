@@ -12,7 +12,6 @@ using Askmethat.Aspnet.JsonLocalizer.Format;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Askmethat.Aspnet.JsonLocalizer.Localizer.Modes;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {

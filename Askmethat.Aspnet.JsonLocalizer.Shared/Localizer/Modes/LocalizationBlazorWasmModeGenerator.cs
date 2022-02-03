@@ -6,16 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Newtonsoft.Json;
 
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
-    internal class LocalizationBlazorWasmModeGenerator : LocalizationModeBase, ILocalizationModeGenerator
+    internal class LocalizationBlazorWasmModeGenerator : LocalizationI18NModeGenerator
     {
         private readonly Assembly resourceAssembly;
 
@@ -24,16 +24,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             this.resourceAssembly = resourceAssembly;
         }
 
-        private LocalizatedFormat GetLocalizedValue(KeyValuePair<string, string> temp, bool isParent)
-        {
-            return new LocalizatedFormat()
-            {
-                IsParent = isParent,
-                Value = temp.Value as string
-            };
-        }
-
-        public ConcurrentDictionary<string, LocalizatedFormat> ConstructLocalization(IEnumerable<string> myFiles,
+        public new ConcurrentDictionary<string, LocalizatedFormat> ConstructLocalization(IEnumerable<string> myFiles,
             CultureInfo currentCulture,
             JsonLocalizationOptions options)
         {
@@ -79,83 +70,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             }
 
             return localization;
-        }
-
-        private void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
-        {
-            var resName = file.Replace('/', '.').Replace('\\', '.');
-            using var resource = resourceAssembly.GetManifestResourceStream(resName);
-            if (resource is null)
-                throw new ArgumentException($"Cannot embedded resource '{file}' from Assembly {resourceAssembly.FullName}");
-            using var reader = new StreamReader(resource, options.FileEncoding);
-            var content = reader.ReadToEnd();
-            var json = Newtonsoft.Json.JsonConvert.DeserializeObject(content);//File.ReadAllText(file, options.FileEncoding)
-
-            if (json == null)
-            {
-                return;
-            }
-
-            AddValues(json, null, isParent);
-        }
-
-        private void AddValues(dynamic input, string baseName, bool isParent)
-        {
-            // Json Object could either contain an array or an object or just values
-            // For the field names, navigate to the root or the first element
-            input = input.Root ?? input.First ?? input;
-
-            if (input != null)
-            {
-                // check if the object is of type JObject. 
-                // If yes, read the properties of that JObject
-                if (input.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
-                {
-                    // Create JObject from object
-                    Newtonsoft.Json.Linq.JObject inputJson =
-                        Newtonsoft.Json.Linq.JObject.FromObject(input);
-
-                    // Read Properties
-                    var properties = inputJson.Properties();
-
-                    // Loop through all the properties of that JObject
-                    foreach (var property in properties)
-                    {
-                        // Check if there are any sub-fields (nested)
-                        if (property.Value.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
-                        {
-                            // If yes, enter the recursive loop to extract sub-field names
-                            var newBaseName = String.IsNullOrEmpty(baseName)
-                                ? property.Name
-                                : String.Format("{0}.{1}", baseName, property.Name);
-                            AddValues(property.Value, newBaseName, isParent);
-                        }
-                        else if (property.Value.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
-                        {
-                            throw new ArgumentException("Invalid i18n Json");
-                        }
-                        else
-                        {
-                            // If there are no sub-fields, the property name is the field name
-                            var temp = new KeyValuePair<string, string>(
-                                String.IsNullOrEmpty(baseName)
-                                    ? property.Name
-                                    : $"{baseName}.{property.Name}",
-                                property.Value.ToString());
-
-                            LocalizatedFormat localizedValue = GetLocalizedValue(temp, isParent);
-                            AddOrUpdateLocalizedValue(
-                                localizedValue,
-                                temp
-                            );
-                        }
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid i18n Json");
-                }
-            }
         }
 
         public static T ExecuteSynchronously<T>(Func<Task<T>> taskFunc)
