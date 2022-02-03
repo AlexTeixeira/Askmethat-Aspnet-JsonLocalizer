@@ -1,4 +1,5 @@
-﻿using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+﻿using Askmethat.Aspnet.JsonLocalizer.Format;
+using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Askmethat.Aspnet.JsonLocalizer.Localizer.Modes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -22,6 +23,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
         //    var doc = JsonNode.Parse(File.ReadAllText(jsonFile, Encoding.UTF8));
            
         //}
+
+        [TestMethod]
+        public void Basic_ReadDict()
+        {
+            var dictionary = LocalisationModeHelpers.ReadAndDeserializeFile<string, JsonLocalizationFormat>($"path/localization.json", Encoding.UTF8);
+            Assert.AreEqual(2, dictionary.Count);
+            var e1 = dictionary["Name1"].Values;
+            Assert.AreEqual(2, e1.Count);
+        }
 
         [TestMethod]
         public void I18n_ReadJson_JsonDoc()

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
