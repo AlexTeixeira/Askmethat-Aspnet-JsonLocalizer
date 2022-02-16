@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
+using System.Net.Http;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -16,29 +17,18 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     {
         private readonly IOptions<JsonLocalizationOptions> _localizationOptions;
 
-#if NETCORE
+
             private readonly EnvironmentWrapper _env;
-        
-         public JsonStringLocalizerFactory(
+        private readonly HttpClient _resourceAssembly;
+
+        public JsonStringLocalizerFactory(
             EnvironmentWrapper env,
             IOptions<JsonLocalizationOptions> localizationOptions = null)
         {
             _env = env;
             _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
         }
-#else
 
-        //private readonly IHostingEnvironment _env;
-        private readonly IHostingEnvironment _env;
-
-        public JsonStringLocalizerFactory(
-            IHostingEnvironment env,
-            IOptions<JsonLocalizationOptions> localizationOptions = null)
-        {
-            _env = env;
-            _localizationOptions = localizationOptions ?? throw new ArgumentNullException(nameof(localizationOptions));
-        }
-#endif
 
 
         public IStringLocalizer Create(Type resourceSource)

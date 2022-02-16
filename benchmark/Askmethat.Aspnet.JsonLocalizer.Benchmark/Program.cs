@@ -44,7 +44,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
                 DefaultCulture = new CultureInfo("fr-FR"),
                 ResourcesPath = "Resources",
                 Caching = _cach2
-            }), new HostingEnvironmentStub());
+            }), new EnvironmentWrapper(new HostingEnvironmentStub()),null);
         }
 
         [Benchmark(Baseline = true)]
@@ -72,7 +72,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
                     new CultureInfo("en-US"),
                 },
                 LocalizationMode = LocalizationMode.I18n
-            }), new HostingEnvironmentStub());
+            }), new EnvironmentWrapper(new HostingEnvironmentStub()), null);
 
             return localizer.GetString("BaseName1");
         }
@@ -89,7 +89,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
                     new CultureInfo("fr-FR"),
                     new CultureInfo("en-US"),
                 }
-            }), new HostingEnvironmentStub());
+            }), new EnvironmentWrapper(new HostingEnvironmentStub()), null);
 
             return localizer.GetString("BaseName1");
         }
@@ -107,7 +107,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
                     new CultureInfo("en-US"),
                 },
                 Caching = _cach
-            }), new HostingEnvironmentStub());
+            }), new EnvironmentWrapper(new HostingEnvironmentStub()), null);
 
             return localizer.GetString("BaseName1");
         }

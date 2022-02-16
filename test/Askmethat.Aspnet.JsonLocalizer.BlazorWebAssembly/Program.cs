@@ -11,15 +11,13 @@ using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
-namespace Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly
+namespace Askmethat.Aspnet.JsonLocalizer.Sample.BlazorWebAssembly
 {
     public class Program
     {
@@ -32,7 +30,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly
         public static async Task Main(string[] args)
         {
             _builder = WebAssemblyHostBuilder.CreateDefault(args);
-            _builder.RootComponents.Add<App>("app"); 
+            _builder.RootComponents.Add<App>("#app");
+            _builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(_builder.HostEnvironment.BaseAddress) });
+
             ConfigureServices(_builder.Services);
             await ConfigureApplication(_builder.Services);
             
@@ -65,8 +65,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly
                 return config.GetSection("App").Get<AppConfiguration>();
             });
             
-            _defaultRequestCulture = new RequestCulture("en-US",
-                "en-US");
+            _defaultRequestCulture = new RequestCulture("en-US","en-US");
             _supportedCultures = new HashSet<CultureInfo>
             {
                 new CultureInfo("en-US"), new CultureInfo("fr-FR"), new CultureInfo("pt-PT")
@@ -74,12 +73,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.BlazorWebAssembly
 
             _ = services.AddJsonLocalization(options =>
             {
-                options.ResourcesPath = "i18n";
+                options.LocalizationMode = LocalizationMode.BlazorWasm;
                 options.UseBaseName = false;
                 options.CacheDuration = TimeSpan.FromMinutes(1);
                 options.SupportedCultureInfos = _supportedCultures;
                 options.FileEncoding = new UTF8Encoding();
                 options.IsAbsolutePath = true;
+                options.Assembly = typeof(Program).Assembly;
+                options.JsonFileList = new[] { "Askmethat.Aspnet.JsonLocalizer.Sample.BlazorWebAssembly/I18n/localization.json" };
             });
 
             _ = services.Configure<RequestLocalizationOptions>(options =>

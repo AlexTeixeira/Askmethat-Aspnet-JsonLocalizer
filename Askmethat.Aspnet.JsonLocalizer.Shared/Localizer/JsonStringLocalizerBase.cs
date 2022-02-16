@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 using Askmethat.Aspnet.JsonLocalizer.Caching;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 using Askmethat.Aspnet.JsonLocalizer.Localizer.Modes;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
@@ -20,6 +21,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         protected readonly CacheHelper _memCache;
         protected readonly IOptions<JsonLocalizationOptions> _localizationOptions;
+        private readonly EnvironmentWrapper _environment;
         protected readonly string _baseName;
         protected readonly TimeSpan _memCacheDuration;
 
@@ -30,10 +32,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected ConcurrentDictionary<string, IPluralizationRuleSet> pluralizationRuleSets;
 
 
-        public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
+        public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, 
+            EnvironmentWrapper environment = null,
+            string baseName = null)
         {
             _baseName = CleanBaseName(baseName);
             _localizationOptions = localizationOptions;
+            _environment = environment;
             pluralizationRuleSets = new ConcurrentDictionary<string, IPluralizationRuleSet>();
 
             if (_localizationOptions.Value.LocalizationMode == LocalizationMode.I18n && _localizationOptions.Value.UseBaseName)
@@ -129,9 +134,21 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 localization = new ConcurrentDictionary<string, LocalizatedFormat>();
             }
 
-            IEnumerable<string> myFiles = GetMatchingJsonFiles(jsonPath);
+            if (_environment != null && _environment.IsWasm && (_localizationOptions.Value.JsonFileList?.Length??0) == 0)
+                throw new ArgumentException($"JsonFileList is required in Client WASM mode");
 
-            localization = LocalizationModeFactory.GetLocalisationFromMode(_localizationOptions.Value.LocalizationMode)
+            IEnumerable<string> myFiles;
+            LocalizationMode localizationMode = _localizationOptions.Value.LocalizationMode;
+            if (_environment?.IsWasm ?? false)
+            {
+                myFiles = _localizationOptions.Value.JsonFileList;
+                if (localizationMode != LocalizationMode.BlazorWasm)
+                    throw new ArgumentException($"Only {nameof(LocalizationMode)}.{LocalizationMode.BlazorWasm} mode is supported in Client WASM mode");
+            }
+            else
+                myFiles = GetMatchingJsonFiles(jsonPath);
+
+            localization = LocalizationModeFactory.GetLocalisationFromMode(localizationMode, _localizationOptions.Value.Assembly)
                 .ConstructLocalization(myFiles, currentCulture, _localizationOptions.Value);
         }
 

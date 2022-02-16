@@ -3,6 +3,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
     public enum LocalizationMode
     {
         Basic,
-        I18n
+        I18n,
+        BlazorWasm
     }
 }

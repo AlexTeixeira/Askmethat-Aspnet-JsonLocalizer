@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text.Json;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Caching
 {
@@ -39,7 +39,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Caching
                     return false;
                 }
 
-                localization = JsonSerializer.Deserialize<ConcurrentDictionary<string, LocalizatedFormat>>(json);
+                localization = JsonConvert.DeserializeObject<ConcurrentDictionary<string, LocalizatedFormat>>(json);
                 return true;
             }
 
@@ -68,7 +68,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Caching
                 var cacheEntryOptions = new DistributedCacheEntryOptions()
                     .SetSlidingExpiration(cacheDuration);
 
-                var json = JsonSerializer.Serialize(localization);
+                var json = JsonConvert.SerializeObject(localization);
                 _distributedCache.SetString(cacheKey, json, cacheEntryOptions);
             }
         }

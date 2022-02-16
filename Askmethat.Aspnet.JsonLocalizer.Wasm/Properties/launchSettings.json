@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Askmethat.Aspnet.JsonLocalizer.Wasm": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:58317;http://localhost:58318"
+    }
+  }
+}

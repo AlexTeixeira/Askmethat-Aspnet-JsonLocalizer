@@ -4,12 +4,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Format
 {
     internal class JsonLocalizationFormat
     {
-        public Dictionary<string, string> Values = new Dictionary<string, string>();
+        public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
     }
 
     internal class LocalizationFormat
     {
-        public Dictionary<int, string> Values = new Dictionary<int, string>();
+        public Dictionary<int, string> Values { get; set; } = new Dictionary<int, string>();
     }
 
     internal class LocalizatedFormat

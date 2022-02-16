@@ -1,11 +1,12 @@
 ﻿@page "/fetchdata"
 
-@using Askmethat.Aspnet.JsonLocalizer.I18nTestSample.Data
+@using Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest.Data
 @inject WeatherForecastService ForecastService
 
 <h1>@Localizer.GetString("WeatherForecast")</h1>
 
 <p>@Localizer["WeatherForecastDesc"]</p>
+<p>@Localizer["MissingText4-Fetch"]</p>
 
 @if (forecasts == null)
 {

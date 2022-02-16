@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>04dfb351-a1de-48ce-91e2-c3ca53f03913</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Askmethat.Aspnet.JsonLocalizer.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Format\JsonLocalizationFormat.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonOptions\JsonLocalizationOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonOptions\LocalizationMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\DefaultPluralizationRuleSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\IJsonStringLocalizer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\IPluralizationRuleSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\JsonStringLocalizer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\JsonStringLocalizerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\ILocalizationModeGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalisationModeHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationBasicModeGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationBlazorWasmModeGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationI18NModeGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationModeBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\Modes\LocalizationModeFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Localizer\PluralizationConstants.cs" />
+  </ItemGroup>
+</Project>

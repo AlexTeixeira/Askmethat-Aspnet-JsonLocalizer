@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Newtonsoft.Json;
-
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
@@ -71,74 +70,64 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             return localization;
         }
 
-        private void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
+        internal void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
         {
-            var json = Newtonsoft.Json.JsonConvert.DeserializeObject(File.ReadAllText(file, options.FileEncoding));
-
-            if (json == null)
+            using var doc = JsonDocument.Parse(File.ReadAllText(file, options.FileEncoding));
+            if (doc is null)
             {
                 return;
             }
 
-            AddValues(json, null, isParent);
+            AddValues(doc.RootElement, null, isParent);
         }
 
-        private void AddValues(dynamic input, string baseName, bool isParent)
+        internal void AddValues(JsonElement element, string baseName, bool isParent)
         {
             // Json Object could either contain an array or an object or just values
             // For the field names, navigate to the root or the first element
-            input = input.Root ?? input.First ?? input;
+            var input = element;
 
-            if (input != null)
+
+            // check if the object is of type JObject. 
+            // If yes, read the properties of that JObject
+            if (input.ValueKind == JsonValueKind.Object)
             {
-                // check if the object is of type JObject. 
-                // If yes, read the properties of that JObject
-                if (input.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
+                // Read Properties
+                var properties = input.EnumerateObject();
+
+                // Loop through all the properties of that JObject
+                foreach (var property in properties)
                 {
-                    // Create JObject from object
-                    Newtonsoft.Json.Linq.JObject inputJson =
-                        Newtonsoft.Json.Linq.JObject.FromObject(input);
-
-                    // Read Properties
-                    var properties = inputJson.Properties();
-
-                    // Loop through all the properties of that JObject
-                    foreach (var property in properties)
+                    // Check if there are any sub-fields (nested)
+                    if (property.Value.ValueKind == JsonValueKind.Object)
                     {
-                        // Check if there are any sub-fields (nested)
-                        if (property.Value.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
-                        {
-                            // If yes, enter the recursive loop to extract sub-field names
-                            var newBaseName = String.IsNullOrEmpty(baseName)
+                        // If yes, enter the recursive loop to extract sub-field names
+                        var newBaseName = String.IsNullOrEmpty(baseName)
+                            ? property.Name
+                            : String.Format("{0}.{1}", baseName, property.Name);
+                        AddValues(property.Value, newBaseName, isParent);
+                    }
+                    else if (property.Value.ValueKind == JsonValueKind.Array)
+                    {
+                        throw new ArgumentException("Invalid i18n Json");
+                    }
+                    else
+                    {
+                        // If there are no sub-fields, the property name is the field name
+                        var temp = new KeyValuePair<string, string>(
+                            String.IsNullOrEmpty(baseName)
                                 ? property.Name
-                                : String.Format("{0}.{1}", baseName, property.Name);
-                            AddValues(property.Value, newBaseName, isParent);
-                        }
-                        else if (property.Value.GetType() == typeof(Newtonsoft.Json.Linq.JArray))
-                        {
-                            throw new ArgumentException("Invalid i18n Json");
-                        }
-                        else
-                        {
-                            // If there are no sub-fields, the property name is the field name
-                            var temp = new KeyValuePair<string, string>(
-                                String.IsNullOrEmpty(baseName)
-                                    ? property.Name
-                                    : $"{baseName}.{property.Name}",
-                                property.Value.ToString());
+                                : $"{baseName}.{property.Name}",
+                            property.Value.ToString());
 
-                            LocalizatedFormat localizedValue = GetLocalizedValue(temp, isParent);
-                            AddOrUpdateLocalizedValue(
-                                localizedValue,
-                                temp
-                            );
-                        }
+                        LocalizatedFormat localizedValue = GetLocalizedValue(temp, isParent);
+                        AddOrUpdateLocalizedValue(
+                            localizedValue,
+                            temp
+                        );
                     }
                 }
-                else
-                {
-                    throw new ArgumentException("Invalid i18n Json");
-                }
+
             }
         }
     }
