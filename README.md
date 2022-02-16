@@ -19,10 +19,10 @@ The library is compatible with NetStandard & NetCore.
 An extension method is available for `IServiceCollection`.
 You can have a look at the method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
 
-## Options 
+## Options
 
 A set of options is available.
-You can define them like this : 
+You can define them like this :
 
 ``` cs
 services.AddJsonLocalization(options => {
@@ -62,30 +62,30 @@ If UseBaseName is set to true, it will be searched for lingualization files by t
   - If there is a folder named "Your/Namespace/And/Classname", all contents of this folder will be used.
   - If there is a folder named "Your/Namespace" the folder will be searched for all json-files beginning with your classname.
   - Otherwise there will be searched for a json-file starting with "Your.Namespace.And.Classname" in your Resources-folder.
-  - If there any _.shared.json_ file at base path, all the keys that do not exist in other files will be added. 
+  - If there any _.shared.json_ file at base path, all the keys that do not exist in other files will be added.
 
 - If you need a base shared files, just add a file named _localization.shared.json_ in your **ResourcesPath**
 
 ### Pluralization
 
 In version 2.0.0, Pluralization was introduced.
-You are now able to manage a singular (left) and plural (right) version for the same Key. 
+You are now able to manage a singular (left) and plural (right) version for the same Key.
 *PluralSeparator* is used as separator between the two strings.
 
 For example : User|Users for key Users
 
-To use plural string, use paramters from [IStringLocalizer](https://github.com/aspnet/AspNetCore/blob/def36fab1e45ef7f169dfe7b59604d0002df3b7c/src/Mvc/Mvc.Localization/src/LocalizedHtmlString.cs), if last parameters is a boolean, pluralization will be activated.
+To use plural string, use parameters from [IStringLocalizer](https://github.com/aspnet/AspNetCore/blob/def36fab1e45ef7f169dfe7b59604d0002df3b7c/src/Mvc/Mvc.Localization/src/LocalizedHtmlString.cs), if last parameters is a boolean, pluralization will be activated.
 
 Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringLocalizer :
 
-In version 3.1.1 and above you can have multiple pluralization, to use it, you should 
+In version 3.1.1 and above you can have multiple pluralization, to use it, you should
 use IJsonStringLocalizer interface and this method ```LocalizedString GetPlural(string key, double count, params object[] arguments)```
 
 **localizer.GetString("Users", true)**;
 
 ### Clean Memory Cache
 
-Version 2.2.0+ allows you to clean cache. 
+Version 2.2.0+ allows you to clean cache.
 It's usefull when you want's tu update in live some translations.
 
 **Example**
@@ -107,7 +107,7 @@ public class HomeController{
 
 # Blazor Server HTML parsing
 
-As you know, Blazor Server does not provide IHtmlLocalizer. To avoid this, you can now use 
+As you know, Blazor Server does not provide IHtmlLocalizer. To avoid this, you can now use
 from **IJsonStringLocalizer** this method ```MarkupString GetHtmlBlazorString(string name, bool shouldTryDefaultCulture = true)```
 
 # Information
@@ -126,18 +126,18 @@ from **IJsonStringLocalizer** this method ```MarkupString GetHtmlBlazorString(st
 
 **WhithCulture** method is not implemented and will not be implemented. ASP.NET Team, start to set this method **Obsolete** for version 3 and will be removed in version 4 of asp.net core.
 
-For more information : 
+For more information :
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
 
 # Localization mode
 
-As asked on the request #64, Some user want to have the possiblities to manage file with i18n way. 
+As asked on the request #64, Some user want to have the possiblities to manage file with i18n way.
 To answer this demand, a localization mode was introduced with default value Basic. Basic version means the the one describe in the previous parts
 
 ## I18n
 
 To use the i18n file management, use the the option Localization mode like this : ``` cs LocalizationMode = LocalizationMode.I18n ```.
-After that, you should be able to use this json : 
+After that, you should be able to use this json :
 
 ``` json
 {
@@ -156,33 +156,32 @@ If you need a fallback culture that target all culture, you can create a file na
 **Important: In this mode, the UseBaseName options should be False.**
 
 
-For more information : 
+For more information :
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/64
 
 # Performances
 
 After talking with others Devs about my package, they asked my about performance.
 
-
 ``` ini
 
-BenchmarkDotNet=v0.12.0, OS=macOS 10.15.4 (19E287) [Darwin 19.4.0]
-Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=3.1.101
-  [Host]     : .NET Core 3.1.1 (CoreCLR 4.700.19.60701, CoreFX 4.700.19.60801), X64 RyuJIT
-  DefaultJob : .NET Core 3.1.1 (CoreCLR 4.700.19.60701, CoreFX 4.700.19.60801), X64 RyuJIT
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.22000
+Intel Core i7-10870H CPU 2.20GHz, 1 CPU, 16 logical and 8 physical cores
+.NET SDK=6.0.101
+  [Host]     : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+  DefaultJob : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
 
 
 ```
-|                                          Method |          Mean |        Error |       StdDev |           Min |           Max |    Ratio | RatioSD |   Gen 0 |   Gen 1 |  Gen 2 | Allocated |
-|------------------------------------------------ |--------------:|-------------:|-------------:|--------------:|--------------:|---------:|--------:|--------:|--------:|-------:|----------:|
-|                                       Localizer |     108.02 ns |     0.240 ns |     0.187 ns |     107.74 ns |     108.44 ns |     1.00 |    0.00 |       - |       - |      - |         - |
-|                                   JsonLocalizer |      72.37 ns |     0.422 ns |     0.352 ns |      72.08 ns |      73.19 ns |     0.67 |    0.00 |  0.0229 |       - |      - |      48 B |
-|                       JsonLocalizerWithCreation | 177,880.37 ns | 2,095.010 ns | 1,959.674 ns | 175,159.17 ns | 181,548.27 ns | 1,645.06 |   16.23 | 26.3672 | 13.1836 | 0.9766 |   55231 B |
-|                   I18nJsonLocalizerWithCreation | 257,434.74 ns | 1,743.759 ns | 1,545.797 ns | 255,822.30 ns | 260,643.68 ns | 2,384.22 |   13.97 | 45.4102 | 22.4609 | 1.4648 |   95942 B |
-| JsonLocalizerWithCreationAndExternalMemoryCache |   3,951.97 ns |    33.265 ns |    29.488 ns |   3,909.51 ns |   4,010.62 ns |    36.54 |    0.22 |  1.4954 |  0.7477 |      - |    3137 B |
-|                JsonLocalizerDefaultCultureValue |     256.51 ns |     2.619 ns |     2.322 ns |     254.03 ns |     261.52 ns |     2.37 |    0.02 |  0.1335 |       - |      - |     280 B |
-|                    LocalizerDefaultCultureValue |     277.03 ns |     0.889 ns |     0.694 ns |     276.42 ns |     278.72 ns |     2.56 |    0.01 |  0.1030 |       - |      - |     216 B |
+|                                          Method |          Mean |        Error |       StdDev |           Min |           Max |    Ratio | RatioSD |   Gen 0 |  Gen 1 |  Gen 2 | Allocated |
+|------------------------------------------------ |--------------:|-------------:|-------------:|--------------:|--------------:|---------:|--------:|--------:|-------:|-------:|----------:|
+|                                       Localizer |      57.34 ns |     0.590 ns |     0.523 ns |      56.65 ns |      58.46 ns |     1.00 |    0.00 |       - |      - |      - |         - |
+|                                   JsonLocalizer |      41.50 ns |     0.552 ns |     0.516 ns |      40.60 ns |      42.46 ns |     0.72 |    0.01 |  0.0057 |      - |      - |      48 B |
+|                       JsonLocalizerWithCreation | 169,174.60 ns | 1,070.840 ns | 1,001.664 ns | 167,445.80 ns | 170,873.85 ns | 2,950.03 |   33.21 |  4.6387 | 2.1973 | 0.2441 |  40,706 B |
+|                   I18nJsonLocalizerWithCreation | 228,438.65 ns | 4,188.350 ns | 6,643.166 ns | 218,070.12 ns | 245,103.20 ns | 4,026.62 |  130.32 | 12.2070 | 6.1035 | 0.4883 | 104,172 B |
+| JsonLocalizerWithCreationAndExternalMemoryCache |   2,813.26 ns |    51.894 ns |    48.541 ns |   2,731.36 ns |   2,920.27 ns |    49.04 |    0.92 |  0.5264 | 0.2632 |      - |   4,424 B |
+|                JsonLocalizerDefaultCultureValue |     145.34 ns |     1.284 ns |     1.201 ns |     142.61 ns |     146.81 ns |     2.53 |    0.04 |  0.0315 |      - |      - |     264 B |
+|                    LocalizerDefaultCultureValue |     159.06 ns |     0.919 ns |     0.859 ns |     157.63 ns |     160.51 ns |     2.77 |    0.03 |  0.0257 |      - |      - |     216 B |
 
 
 # Contributors
@@ -267,10 +266,11 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
             </a>
         </td>
   </tr>
-  
+
 </table>
 
-A special thanks to @Compufreak345 for its hard work. He did a lot for this repo.
+A special thanks to @Compufreak345 for is hard work. He did a lot for this repo.<br/><br/>
+A special thanks to @EricApption for is work to improve the repo and making a very good stuff on migrating to net6 and System.Text.Json & making it working for blazor wasm
 
 # License
 

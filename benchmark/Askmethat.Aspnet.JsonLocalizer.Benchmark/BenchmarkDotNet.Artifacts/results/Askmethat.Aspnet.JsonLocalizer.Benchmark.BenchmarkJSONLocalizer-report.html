@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Askmethat.Aspnet.JsonLocalizer.Benchmark.BenchmarkJSONLocalizer-20200425-204139</title>
+<title>Askmethat.Aspnet.JsonLocalizer.Benchmark.BenchmarkJSONLocalizer-20220216-112143</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -13,24 +13,24 @@
 </head>
 <body>
 <pre><code>
-BenchmarkDotNet=v0.12.0, OS=macOS 10.15.4 (19E287) [Darwin 19.4.0]
-Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=3.1.101
-  [Host]     : .NET Core 3.1.1 (CoreCLR 4.700.19.60701, CoreFX 4.700.19.60801), X64 RyuJIT
-  DefaultJob : .NET Core 3.1.1 (CoreCLR 4.700.19.60701, CoreFX 4.700.19.60801), X64 RyuJIT
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.22000
+Intel Core i7-10870H CPU 2.20GHz, 1 CPU, 16 logical and 8 physical cores
+.NET SDK=6.0.101
+  [Host]     : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+  DefaultJob : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
 </code></pre>
 <pre><code></code></pre>
 
 <table>
 <thead><tr><th>                                   Method</th><th>   Mean</th><th> Error</th><th>StdDev</th><th>    Min</th><th>    Max</th><th>Ratio</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>Localizer</td><td>106.92 ns</td><td>1.939 ns</td><td>1.719 ns</td><td>104.82 ns</td><td>111.35 ns</td><td>1.00</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
-</tr><tr><td>JsonLocalizer</td><td>72.25 ns</td><td>0.388 ns</td><td>0.363 ns</td><td>71.84 ns</td><td>73.14 ns</td><td>0.68</td><td>0.01</td><td>0.0229</td><td>-</td><td>-</td><td>48 B</td>
-</tr><tr><td>JsonLocalizerWithCreation</td><td>181,926.57 ns</td><td>1,810.931 ns</td><td>1,605.343 ns</td><td>180,374.02 ns</td><td>185,809.62 ns</td><td>1,701.93</td><td>34.00</td><td>26.1230</td><td>12.9395</td><td>4.3945</td><td>54999 B</td>
-</tr><tr><td>I18nJsonLocalizerWithCreation</td><td>260,527.13 ns</td><td>1,295.787 ns</td><td>1,082.040 ns</td><td>258,829.38 ns</td><td>262,368.86 ns</td><td>2,436.50</td><td>43.15</td><td>45.4102</td><td>22.4609</td><td>7.8125</td><td>95644 B</td>
-</tr><tr><td>JsonLocalizerWithCreationAndExternalMemoryCache</td><td>4,172.26 ns</td><td>77.594 ns</td><td>72.582 ns</td><td>4,092.12 ns</td><td>4,300.93 ns</td><td>39.08</td><td>0.93</td><td>1.4954</td><td>0.7477</td><td>0.0229</td><td>3136 B</td>
-</tr><tr><td>JsonLocalizerDefaultCultureValue</td><td>249.02 ns</td><td>2.381 ns</td><td>2.111 ns</td><td>246.74 ns</td><td>253.38 ns</td><td>2.33</td><td>0.04</td><td>0.1335</td><td>-</td><td>-</td><td>280 B</td>
-</tr><tr><td>LocalizerDefaultCultureValue</td><td>280.40 ns</td><td>3.926 ns</td><td>3.673 ns</td><td>277.42 ns</td><td>289.81 ns</td><td>2.62</td><td>0.06</td><td>0.1030</td><td>-</td><td>-</td><td>216 B</td>
+</thead><tbody><tr><td>Localizer</td><td>57.34 ns</td><td>0.590 ns</td><td>0.523 ns</td><td>56.65 ns</td><td>58.46 ns</td><td>1.00</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>JsonLocalizer</td><td>41.50 ns</td><td>0.552 ns</td><td>0.516 ns</td><td>40.60 ns</td><td>42.46 ns</td><td>0.72</td><td>0.01</td><td>0.0057</td><td>-</td><td>-</td><td>48 B</td>
+</tr><tr><td>JsonLocalizerWithCreation</td><td>169,174.60 ns</td><td>1,070.840 ns</td><td>1,001.664 ns</td><td>167,445.80 ns</td><td>170,873.85 ns</td><td>2,950.03</td><td>33.21</td><td>4.6387</td><td>2.1973</td><td>0.2441</td><td>40,706 B</td>
+</tr><tr><td>I18nJsonLocalizerWithCreation</td><td>228,438.65 ns</td><td>4,188.350 ns</td><td>6,643.166 ns</td><td>218,070.12 ns</td><td>245,103.20 ns</td><td>4,026.62</td><td>130.32</td><td>12.2070</td><td>6.1035</td><td>0.4883</td><td>104,172 B</td>
+</tr><tr><td>JsonLocalizerWithCreationAndExternalMemoryCache</td><td>2,813.26 ns</td><td>51.894 ns</td><td>48.541 ns</td><td>2,731.36 ns</td><td>2,920.27 ns</td><td>49.04</td><td>0.92</td><td>0.5264</td><td>0.2632</td><td>-</td><td>4,424 B</td>
+</tr><tr><td>JsonLocalizerDefaultCultureValue</td><td>145.34 ns</td><td>1.284 ns</td><td>1.201 ns</td><td>142.61 ns</td><td>146.81 ns</td><td>2.53</td><td>0.04</td><td>0.0315</td><td>-</td><td>-</td><td>264 B</td>
+</tr><tr><td>LocalizerDefaultCultureValue</td><td>159.06 ns</td><td>0.919 ns</td><td>0.859 ns</td><td>157.63 ns</td><td>160.51 ns</td><td>2.77</td><td>0.03</td><td>0.0257</td><td>-</td><td>-</td><td>216 B</td>
 </tr></tbody></table>
 </body>
 </html>
