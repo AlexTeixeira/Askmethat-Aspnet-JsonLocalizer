@@ -6,8 +6,7 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Build
 
-[![Build status](https://ci.appveyor.com/api/projects/status/gt8vg0e2f9gapr2d/branch/master?svg=true)](https://ci.appveyor.com/project/AlexTeixeira/askmethat-aspnet-jsonlocalizer/branch/master)
-
+[![Build Status](https://askmethat.visualstudio.com/Askmethat.Aspnet.JsonLocalizer/_apis/build/status/AlexTeixeira.Askmethat-Aspnet-JsonLocalizer?branchName=master)](https://askmethat.visualstudio.com/Askmethat.Aspnet.JsonLocalizer/_build/latest?definitionId=7&branchName=master)
 # Project
 
 This library allows users to use JSON files instead of RESX in an ASP.NET application.
@@ -114,12 +113,23 @@ from **IJsonStringLocalizer** this method ```MarkupString GetHtmlBlazorString(st
 
 **Platform Support**
 
+**Version 3.2 and bellow**
 
 |Platform|Version|
 | -------------------  | :------------------: |
 |NetCore|3.0.0+|
 |NetStandard|2.1.0+|
 |Blazor Server|3.0.0+|
+
+**Version 4 and above**
+
+| Platform      | Version |
+|---------------|:-------:|
+| NetCore       | 5.0.0+  |
+| NetStandard   | 2.1.0+  |
+| Blazor Server | 5.0.0+  |
+| Blazor Wasm   | 5.0.0+  |
+
 
 
 **WithCulture method**
