@@ -70,9 +70,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             return localization;
         }
 
+        private static readonly JsonDocumentOptions Options = new JsonDocumentOptions() { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true };
+
         internal void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
         {
-            using var doc = JsonDocument.Parse(File.ReadAllText(file, options.FileEncoding));
+            using var doc = JsonDocument.Parse(File.ReadAllText(file, options.FileEncoding), Options);
             if (doc is null)
             {
                 return;

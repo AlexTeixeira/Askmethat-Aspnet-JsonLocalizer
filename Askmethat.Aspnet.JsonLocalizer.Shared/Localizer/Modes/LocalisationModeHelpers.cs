@@ -12,7 +12,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         {
             return 
                 JsonSerializer.Deserialize<ConcurrentDictionary<T, U>>(
-                    File.ReadAllText(file, encoding));
+                    File.ReadAllText(file, encoding), new JsonSerializerOptions() { ReadCommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true});
         }
     }
 }
