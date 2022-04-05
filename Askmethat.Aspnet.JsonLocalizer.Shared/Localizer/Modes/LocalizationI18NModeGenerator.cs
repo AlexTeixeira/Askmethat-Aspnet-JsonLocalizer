@@ -74,13 +74,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 
         internal void AddValueToLocalization(JsonLocalizationOptions options, string file, bool isParent)
         {
-            using var doc = JsonDocument.Parse(File.ReadAllText(file, options.FileEncoding), Options);
-            if (doc is null)
+            try
             {
-                return;
-            }
+                using var doc = JsonDocument.Parse(File.ReadAllText(file, options.FileEncoding), Options);
+                if (doc is null)
+                {
+                    return;
+                }
 
-            AddValues(doc.RootElement, null, isParent);
+                AddValues(doc.RootElement, null, isParent);
+            } catch (Exception ex)
+            {
+                throw new InvalidDataException($"Error reading file '{file}'",ex);
+            }
         }
 
         internal void AddValues(JsonElement element, string baseName, bool isParent)
