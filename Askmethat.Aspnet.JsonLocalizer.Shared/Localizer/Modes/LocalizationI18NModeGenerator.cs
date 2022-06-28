@@ -10,7 +10,7 @@ using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
 {
-    internal class LocalizationI18NModeGenerator : LocalizationModeBase, ILocalizationModeGenerator
+    internal partial class LocalizationI18NModeGenerator : LocalizationModeBase, ILocalizationModeGenerator
     {
         private LocalizatedFormat GetLocalizedValue(KeyValuePair<string, string> temp, bool isParent)
         {
@@ -76,17 +76,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
         {
             try
             {
-                using var doc = JsonDocument.Parse(File.ReadAllText(file, options.FileEncoding), Options);
+                using var doc = JsonDocument.Parse(ReadFile(options, file), Options);
                 if (doc is null)
                 {
                     return;
                 }
 
                 AddValues(doc.RootElement, null, isParent);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new InvalidDataException($"Error reading file '{file}'",ex);
             }
+
         }
 
         internal void AddValues(JsonElement element, string baseName, bool isParent)

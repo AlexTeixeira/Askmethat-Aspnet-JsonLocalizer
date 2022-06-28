@@ -8,7 +8,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Reflection;
 

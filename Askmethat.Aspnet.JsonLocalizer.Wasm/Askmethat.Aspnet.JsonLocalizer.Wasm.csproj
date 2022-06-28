@@ -42,7 +42,6 @@
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.*" />
         <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.*" />
         <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.*" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>

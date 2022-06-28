@@ -40,6 +40,7 @@ services.AddJsonLocalization(options => {
 
 - **SupportedCultureInfos** : _Default value : _List containing only default culture_ and CurrentUICulture. Optionnal array of cultures that you should provide to plugin. _(Like RequestLocalizationOptions)
 - **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files.
+- **AdditionalResourcePaths** : _Default value : null_. Optionnal array of additional paths to search for resources.
 - **CacheDuration** : _Default value : 30 minutes_. We cache all values to memory to avoid loading files for each request, this parameter defines the time after which the cache is refreshed.
 - **FileEncoding** : _default value : UTF8_. Specify the file encoding.
 - **IsAbsolutePath** : *_default value : false*. Look for an absolute path instead of project path.
