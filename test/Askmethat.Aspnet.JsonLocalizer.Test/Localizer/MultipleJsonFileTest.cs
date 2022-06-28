@@ -24,6 +24,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                      new CultureInfo("it-IT"),
                 },
                 ResourcesPath = "multiple",
+                AdditionalResourcePaths = new[] { "multiple2" },
             });
         }
 
@@ -36,6 +37,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("Mon Nom 1", result);
+
+            Assert.AreEqual("Mon Nom 3", localizer.GetString("Name3"));
         }
 
 
@@ -48,6 +51,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             LocalizedString result = localizer.GetString("Name1");
 
             Assert.AreEqual("o meu nome 1", result);
+
+            Assert.AreEqual("o meu nome 3", localizer.GetString("Name3"));
         }
 
         [TestMethod]
@@ -59,6 +64,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
             LocalizedString result = localizer.GetString("Name2");
 
             Assert.AreEqual("il mio nome 2", result);
+
+            Assert.AreEqual("il mio nome 3", localizer.GetString("Name3"));
+
         }
 
     }

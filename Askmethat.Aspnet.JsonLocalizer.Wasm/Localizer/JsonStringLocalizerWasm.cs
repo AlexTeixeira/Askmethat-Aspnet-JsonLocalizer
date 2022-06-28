@@ -24,7 +24,14 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             _env = env;
             _missingTranslations = localizationOptions.Value.MissingTranslationsOutputFile;
-            resourcesRelativePath = GetJsonRelativePath(_localizationOptions.Value.ResourcesPath);
+            resourcesRelativePaths.Add(GetJsonRelativePath(_localizationOptions.Value.ResourcesPath));
+            if (_localizationOptions.Value.AdditionalResourcePaths != null)
+            {
+                foreach (var path in _localizationOptions.Value.AdditionalResourcePaths)
+                {
+                    resourcesRelativePaths.Add(GetJsonRelativePath(path));
+                }
+            }
         }
 
     }
