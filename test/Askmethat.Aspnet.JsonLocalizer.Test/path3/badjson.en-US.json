@@ -1,0 +1,8 @@
+{
+  "Name/Bad1": "Name",,
+  "Color/Bad2": "Color",
+  "Restricted/Bad3": {
+    //test for reading hierarchy and comments should be allowed
+    "Sentence": "You are not available is this area"
+  }
+}

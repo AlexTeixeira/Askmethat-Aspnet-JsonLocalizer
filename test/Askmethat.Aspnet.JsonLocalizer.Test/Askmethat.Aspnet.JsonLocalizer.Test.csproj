@@ -53,6 +53,9 @@
     <None Update="path2\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="path3\badjson.en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="pluralization\localization.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -140,5 +140,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         public string[] JsonFileList { get; set; } = null;
 
         public Assembly Assembly { get; set; } = null;
+
+        /// <summary>
+        /// This properly will ignore the JSON errors if set to true. Recommended in production but not in development.
+        /// </summary>
+        public bool IgnoreJsonErrors { get; set; } = false;
     }
 }
