@@ -18,9 +18,19 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer.Modes
             
             foreach (string file in myFiles)
             {
-                ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization =
-                    LocalisationModeHelpers.ReadAndDeserializeFile<string, JsonLocalizationFormat>(file,
-                        options.FileEncoding);
+                ConcurrentDictionary<string, JsonLocalizationFormat> tempLocalization = null;
+                try
+                {
+                    tempLocalization =
+                        LocalisationModeHelpers.ReadAndDeserializeFile<string, JsonLocalizationFormat>(file,
+                            options.FileEncoding);
+                }
+                catch (Exception ex)
+                {
+                    if (!options.IgnoreJsonErrors)
+                        throw;
+                        
+                }
 
                 if (tempLocalization == null)
                 {

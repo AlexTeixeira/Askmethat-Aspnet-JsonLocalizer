@@ -19,12 +19,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocali
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Askmethat.Aspnet.JsonLocalizer.Shared", "Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.shproj", "{04DFB351-A1DE-48CE-91E2-C3CA53F03913}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github", "Github", "{3ECBD0D1-CF2E-4349-92AA-F3B09495F1F8}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.projitems*{04dfb351-a1de-48ce-91e2-c3ca53f03913}*SharedItemsImports = 13
-		Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.projitems*{0fb2924b-389a-40c3-81d9-8dc74a971e20}*SharedItemsImports = 5
-		Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.projitems*{e0931c8c-79ed-4de7-a70a-c06ae092b218}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -64,5 +66,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C12FA747-265B-45D8-82EA-15C108B0C1A8}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.projitems*{04dfb351-a1de-48ce-91e2-c3ca53f03913}*SharedItemsImports = 13
+		Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.projitems*{0fb2924b-389a-40c3-81d9-8dc74a971e20}*SharedItemsImports = 5
+		Askmethat.Aspnet.JsonLocalizer.Shared\Askmethat.Aspnet.JsonLocalizer.Shared.projitems*{e0931c8c-79ed-4de7-a70a-c06ae092b218}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

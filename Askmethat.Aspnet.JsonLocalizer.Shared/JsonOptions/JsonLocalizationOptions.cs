@@ -18,6 +18,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         public const string DEFAULT_MISSING_TRANSLATIONS = "MissingTranslations.json";
 
         public new string ResourcesPath { get; set; } = DEFAULT_RESOURCES;
+
+        /// <summary>
+        /// This property enables to configure additional resource paths to look for localizations files
+        /// </summary>        
+        public string[] AdditionalResourcePaths { get; set; }
+        
         /// We cache all values to memory to avoid loading files for each request, this parameter defines the time after which the cache is refreshed.
         public TimeSpan CacheDuration { get; set; } = TimeSpan.FromMinutes(30);
 
@@ -134,5 +140,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.JsonOptions
         public string[] JsonFileList { get; set; } = null;
 
         public Assembly Assembly { get; set; } = null;
+
+        /// <summary>
+        /// This properly will ignore the JSON errors if set to true. Recommended in production but not in development.
+        /// </summary>
+        public bool IgnoreJsonErrors { get; set; } = false;
     }
 }

@@ -48,6 +48,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Sample.I18nTest
             services.AddJsonLocalization(options =>
             {
                 options.ResourcesPath = _jsonLocalizationOptions.ResourcesPath;
+                options.AdditionalResourcePaths = _jsonLocalizationOptions.AdditionalResourcePaths;
                 options.UseBaseName = _jsonLocalizationOptions.UseBaseName;
                 options.CacheDuration = _jsonLocalizationOptions.CacheDuration;
                 options.SupportedCultureInfos = _jsonLocalizationOptions.SupportedCultureInfos;

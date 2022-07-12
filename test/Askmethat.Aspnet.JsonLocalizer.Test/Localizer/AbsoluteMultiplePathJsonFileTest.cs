@@ -9,7 +9,7 @@ using Askmethat.Aspnet.JsonLocalizer.JsonOptions;
 namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 {
     [TestClass]
-    public class AbsolutePathJsonFileTest
+    public class AbsoluteMultiplePathJsonFileTest
     {
         private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo)
@@ -23,6 +23,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
                      new CultureInfo("fr-FR")
                 },
                 ResourcesPath = $"{AppContext.BaseDirectory}/path",
+                AdditionalResourcePaths = new[] { $"{AppContext.BaseDirectory}/path2" } ,
                 IsAbsolutePath = true
             });
         }
@@ -38,19 +39,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
 
             LocalizedString result2 = localizer.GetString("Name3");
 
-            Assert.IsTrue(result2.ResourceNotFound);
-
+            Assert.AreEqual("Mon Nom 3", result2);
         }
-
-        //[TestMethod]
-        //public void TestReadName1_AbsolutePath_TypeLocalizer()
-        //{
-        //    InitLocalizer(new CultureInfo("fr-FR"));
-
-        //    LocalizedString result = localizer.GetString("Name1");
-
-        //    Assert.AreEqual("Mon Nom 1", result);
-        //}
 
     }
 }

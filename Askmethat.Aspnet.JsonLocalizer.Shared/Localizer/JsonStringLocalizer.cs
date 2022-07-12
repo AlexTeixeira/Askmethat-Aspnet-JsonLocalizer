@@ -21,7 +21,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
     internal partial class JsonStringLocalizer : JsonStringLocalizerBase, IJsonStringLocalizer
     {
 
-        private IDictionary<string, string> _missingJsonValues = null;
+        private IDictionary<string, IDictionary<string, string>> _missingJsonValues = null;
         private string _missingTranslations = null;
 
         public LocalizedString this[string name]
@@ -162,9 +162,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 throw new ArgumentNullException(nameof(name));
             }
 
+            CultureInfo? culture = null;
             if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
-                InitJsonFromCulture(CultureInfo.CurrentUICulture);
+                culture = CultureInfo.CurrentUICulture;
+                InitJsonFromCulture(culture);
             }
 
             if (localization != null && localization.TryGetValue(name, out LocalizatedFormat localizedValue))
@@ -174,7 +176,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
             if (shouldTryDefaultCulture)
             {
-                InitJsonFromCulture(_localizationOptions.Value.DefaultCulture);
+                culture = _localizationOptions.Value.DefaultCulture;
+                InitJsonFromCulture(culture);
                 return GetString(name, false);
             }
 
@@ -183,7 +186,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             if (_localizationOptions.Value.MissingTranslationLogBehavior ==
                 MissingTranslationLogBehavior.LogConsoleError)
             {
-                Console.Error.WriteLine($"'{name}' does not contain any translation");
+                Console.Error.WriteLine($"'{name}' does not contain any translation for {culture?.TwoLetterISOLanguageName}");
             }
 
             // Notify the user that a translation was not found for the current string
@@ -191,9 +194,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             if (_localizationOptions.Value.MissingTranslationLogBehavior ==
                 MissingTranslationLogBehavior.CollectToJSON)
             {
+                var key = culture?.TwoLetterISOLanguageName ?? "default";
                 if (_missingJsonValues is null)
-                    _missingJsonValues = new Dictionary<string, string>();
-                if (_missingJsonValues.TryAdd(name, name))
+                    _missingJsonValues = new Dictionary<string, IDictionary<string, string>>();
+                if (!_missingJsonValues.TryGetValue(key, out var localeMissingValues))
+                {
+                    localeMissingValues = new Dictionary<string, string>();
+                    _missingJsonValues.Add(key, localeMissingValues);
+                }
+                if (localeMissingValues.TryAdd(name, name))
                 {
                     Console.Error.WriteLine($"'{name}' added to missing values");
                     WriteMissingTranslations();
@@ -276,12 +285,15 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 try
                 {
-                    // save missing values
-                    var json = JsonSerializer.Serialize(_missingJsonValues);
-                    Console.Error.WriteLine($"Writing {_missingJsonValues?.Count} missing translations to {Path.GetFullPath(_missingTranslations)}");
-                    lock (this)
+                    foreach (var locale in _missingTranslations)
                     {
-                        File.WriteAllText(_missingTranslations, json);
+                        // save missing values
+                        var json = JsonSerializer.Serialize(_missingJsonValues);
+                        Console.Error.WriteLine($"Writing {_missingJsonValues?.Count} missing translations to {Path.GetFullPath(_missingTranslations)}");
+                        lock (this)
+                        {
+                            File.WriteAllText(_missingTranslations, json);
+                        }
                     }
                 }
                 catch (Exception)

@@ -1,0 +1,14 @@
+﻿{
+  "Name3": {
+    "Values": {
+      "en-US": "My Name 3",
+      "fr-FR": "Mon Nom 3"
+    }
+  },
+  "Name4": {
+    "Values": {
+      "en-US": "My Name 4",
+      "fr-FR": "Mon Nom 4"
+    }
+  }
+}

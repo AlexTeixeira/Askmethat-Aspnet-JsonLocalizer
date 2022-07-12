@@ -26,7 +26,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected readonly TimeSpan _memCacheDuration;
 
         protected const string CACHE_KEY = "LocalizationBlob";
-        protected string resourcesRelativePath;
+        protected List<string> resourcesRelativePaths = new List<string>();
         protected string currentCulture = string.Empty;
         protected ConcurrentDictionary<string, LocalizatedFormat> localization;
         protected ConcurrentDictionary<string, IPluralizationRuleSet> pluralizationRuleSets;
@@ -115,7 +115,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             //Look for cache key.
             if (!_memCache.TryGetValue(GetCacheKey(currentCulture), out localization))
             {
-                ConstructLocalizationObject(resourcesRelativePath, currentCulture);
+                ConstructLocalizationObject(resourcesRelativePaths, currentCulture);
 
                 // Save data in cache.
                 _memCache.Set(GetCacheKey(currentCulture), localization, _memCacheDuration);
@@ -126,7 +126,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Construct localization object from json files
         /// </summary>
         /// <param name="jsonPath">Json file path</param>
-        private void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
+        private void ConstructLocalizationObject(List<string> jsonPath, CultureInfo currentCulture)
         {
             //be sure that localization is always initialized
             if (localization == null)
@@ -152,64 +152,68 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 .ConstructLocalization(myFiles, currentCulture, _localizationOptions.Value);
         }
 
-        private IEnumerable<string> GetMatchingJsonFiles(string jsonPath)
+        private IEnumerable<string> GetMatchingJsonFiles(List<string> jsonPaths)
         {
             string searchPattern = "*.json";
             SearchOption searchOption = SearchOption.AllDirectories;
-            string basePath = jsonPath;
             const string sharedSearchPattern = "*.shared.json";
             List<string> files = new List<string>();
-            if (_localizationOptions.Value.UseBaseName && !string.IsNullOrWhiteSpace(_baseName))
+            foreach (var jsonPath in jsonPaths)
             {
-                /*
-                 https://docs.microsoft.com/de-de/aspnet/core/fundamentals/localization?view=aspnetcore-2.2#dataannotations-localization
-                    Using the option ResourcesPath = "Resources", the error messages in RegisterViewModel can be stored in either of the following paths:
-                    Resources/ViewModels.Account.RegisterViewModel.fr.resx
-                    Resources/ViewModels/Account/RegisterViewModel.fr.resx
-                 */
-
-                searchOption = SearchOption.TopDirectoryOnly;
-                string friendlyName = AppDomain.CurrentDomain.FriendlyName;
-
-                string shortName = _baseName.Replace($"{friendlyName}.", "");
-
-                basePath = Path.Combine(jsonPath, TransformNameToPath(shortName));
-                if (Directory.Exists(basePath))
+                string basePath = jsonPath;
+                if (_localizationOptions.Value.UseBaseName && !string.IsNullOrWhiteSpace(_baseName))
                 {
-                    // We can search something like Resources/ViewModels/Account/RegisterViewModel/*.json
-                    searchPattern = "*.json";
-                }
-                else
-                {  // We search something like Resources/ViewModels/Account/RegisterViewModel.json
-                    int lastDot = shortName.LastIndexOf('.');
-                    string className = shortName.Substring(lastDot + 1);
-                    // Remove class name from shortName so we can use it as folder.
-                    string baseFolder = shortName.Substring(0, lastDot);
-                    baseFolder = TransformNameToPath(baseFolder);
+                    /*
+                     https://docs.microsoft.com/de-de/aspnet/core/fundamentals/localization?view=aspnetcore-2.2#dataannotations-localization
+                        Using the option ResourcesPath = "Resources", the error messages in RegisterViewModel can be stored in either of the following paths:
+                        Resources/ViewModels.Account.RegisterViewModel.fr.resx
+                        Resources/ViewModels/Account/RegisterViewModel.fr.resx
+                     */
 
-                    basePath = Path.Combine(jsonPath, baseFolder);
+                    searchOption = SearchOption.TopDirectoryOnly;
+                    string friendlyName = AppDomain.CurrentDomain.FriendlyName;
 
+                    string shortName = _baseName.Replace($"{friendlyName}.", "");
+
+                    basePath = Path.Combine(jsonPath, TransformNameToPath(shortName));
                     if (Directory.Exists(basePath))
                     {
-                        searchPattern = $"{className}?.json";
+                        // We can search something like Resources/ViewModels/Account/RegisterViewModel/*.json
+                        searchPattern = "*.json";
                     }
                     else
-                    { 
-                        // We search something like Resources/ViewModels.Account.RegisterViewModel.json
-                        basePath = jsonPath;
-                        searchPattern = $"{shortName}?.json";
+                    {  // We search something like Resources/ViewModels/Account/RegisterViewModel.json
+                        int lastDot = shortName.LastIndexOf('.');
+                        string className = shortName.Substring(lastDot + 1);
+                        // Remove class name from shortName so we can use it as folder.
+                        string baseFolder = shortName.Substring(0, lastDot);
+                        baseFolder = TransformNameToPath(baseFolder);
+
+                        basePath = Path.Combine(jsonPath, baseFolder);
+
+                        if (Directory.Exists(basePath))
+                        {
+                            searchPattern = $"{className}?.json";
+                        }
+                        else
+                        {
+                            // We search something like Resources/ViewModels.Account.RegisterViewModel.json
+                            basePath = jsonPath;
+                            searchPattern = $"{shortName}?.json";
+                        }
                     }
+
+                    files = Directory.GetFiles(basePath, searchPattern, searchOption).ToList();
+                    //add sharedfile that should be found in base path
+                    files.AddRange(Directory.GetFiles(basePath, sharedSearchPattern, SearchOption.TopDirectoryOnly));
+                    //get the base shared files
+                    files.AddRange(Directory.GetFiles(jsonPath, $"localization.shared.json", SearchOption.TopDirectoryOnly));
                 }
-					
-                files = Directory.GetFiles(basePath, searchPattern, searchOption).ToList();
-                //add sharedfile that should be found in base path
-                files.AddRange(Directory.GetFiles(basePath, sharedSearchPattern, SearchOption.TopDirectoryOnly));
-                //get the base shared files
-                files.AddRange(Directory.GetFiles(jsonPath, $"localization.shared.json", SearchOption.TopDirectoryOnly));
-            }
-            else
-            {
-                files = Directory.GetFiles(basePath, searchPattern, searchOption).ToList();
+                else
+                {
+                    files.AddRange(Directory.GetFiles(basePath, searchPattern, searchOption));
+                }
+
             }
 
             // Get all files ending by json extension

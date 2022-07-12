@@ -13,8 +13,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="I18n\localization.json" />
+    </ItemGroup>
+
+    <ItemGroup>
       <EmbeddedResource Include="I18n\localization.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
 
