@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
     <PropertyGroup>
-        <TargetFrameworks>net5.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks>net6.0;net5.0;netstandard2.1</TargetFrameworks>
         <PackageId>Askmethat.Aspnet.JsonLocalizer</PackageId>
         <PackageVersion>$(Version)</PackageVersion>
         <Authors>TEIXEIRA Alexandre</Authors>
