@@ -54,6 +54,15 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'CI_BUILD_TAG'
 
+- task: DotNetCoreCLI@2
+  displayName: 'Pack WASM'
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Askmethat.Aspnet.JsonLocalizer/Askmethat.Aspnet.JsonLocalizer.Wasm.csproj'
+    nobuild: true
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'CI_BUILD_TAG'
+
 - task: CopyFiles@2
   displayName: 'Copy packages'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
