@@ -58,7 +58,7 @@ steps:
   displayName: 'Copy packages'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   inputs:
-    Contents: '**/*.nupkg'
+    Contents: '**/*.$(CI_BUILD_TAG).nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     flattenFolders: true
 - task: PublishBuildArtifacts@1
