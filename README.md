@@ -1,3 +1,7 @@
+# Obsolete
+
+This repository was moved to : [AlexTeixeira/Askmethat-Aspnet-JsonLocalize](https://github.com/AskmethatFR/AspNetCore.Localizer.Json)
+
 # Askmethat-Aspnet-JsonLocalizer
 Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
